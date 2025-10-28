@@ -1,0 +1,18 @@
+@startuml
+class CreateEmailDTO{
+    - Long templateId
+    - String recipient
+    - Map<String, String> variables
+}
+note right of CreateEmailDTO
+Example:
+{
+        "templateId": 1,
+        "recipient": "email@email.com",
+        "variables": {
+        "title": "THIS IS A TITLE",
+        "content": "THIS IS THE CONTENT"
+        }
+}
+end note
+@enduml

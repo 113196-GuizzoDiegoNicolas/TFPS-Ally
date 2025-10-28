@@ -1,0 +1,7 @@
+@startuml
+
+actor actor
+actor -> ContactController: createContactType(ContactTypeDTO)
+actor <- ContactController: (200) ContactTypeDTO
+
+@enduml

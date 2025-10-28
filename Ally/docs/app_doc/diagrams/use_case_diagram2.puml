@@ -1,0 +1,17 @@
+@startuml
+actor User
+
+usecase getSubscriptions as UC1
+usecase subscriptionRepositoryFindAll as UC2
+
+usecase createSubscription as UC3
+usecase subscriptionRepositorySave as UC4
+
+
+User --> UC1
+User --> UC3
+
+UC1 ..|> UC2
+
+UC3 ..|> UC4
+@enduml
