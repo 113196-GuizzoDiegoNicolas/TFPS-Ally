@@ -1,0 +1,15 @@
+@startuml
+class ContactController {
+    + createContactType(ContactTypeDTO)
+
+    + createContact(CreateContactDTO)
+
+    + updateContact(String value, Long id)
+
+    + getContact(Long id)
+
+    + getContacts()
+
+    + deleteContact(Long id)
+}
+@enduml

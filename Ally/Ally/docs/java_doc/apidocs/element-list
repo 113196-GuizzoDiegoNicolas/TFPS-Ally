@@ -1,0 +1,14 @@
+ar.edu.utn.frc.tup.lc.iv
+ar.edu.utn.frc.tup.lc.iv.configs
+ar.edu.utn.frc.tup.lc.iv.controllers
+ar.edu.utn.frc.tup.lc.iv.dtos.common
+ar.edu.utn.frc.tup.lc.iv.dtos.common.contact
+ar.edu.utn.frc.tup.lc.iv.dtos.common.contact.audit
+ar.edu.utn.frc.tup.lc.iv.dtos.common.exceptions
+ar.edu.utn.frc.tup.lc.iv.dtos.common.subscription
+ar.edu.utn.frc.tup.lc.iv.entities
+ar.edu.utn.frc.tup.lc.iv.models
+ar.edu.utn.frc.tup.lc.iv.repositories
+ar.edu.utn.frc.tup.lc.iv.services
+ar.edu.utn.frc.tup.lc.iv.services.impl
+ar.edu.utn.frc.tup.lc.iv.services.utils

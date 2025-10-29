@@ -1,0 +1,17 @@
+@startuml
+
+class Contact {
+    Long id
+    String value
+    ContactType contactType
+}
+
+class ContactType {
+    Long id
+    String description
+
+}
+
+Contact-->ContactType : ManyToOne
+
+@enduml

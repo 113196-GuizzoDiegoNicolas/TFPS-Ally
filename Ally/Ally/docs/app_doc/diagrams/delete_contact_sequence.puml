@@ -1,0 +1,7 @@
+@startuml
+
+actor actor
+actor -> ContactController: deleteContact(Long id)
+actor <- ContactController: (200) true/false
+
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+
+actor actor
+actor -> ContactController: updateContact(String value, Long id)
+actor <- ContactController: (200) ContactDTO
+
+@enduml
