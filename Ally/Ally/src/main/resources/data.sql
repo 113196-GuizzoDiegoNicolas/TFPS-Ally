@@ -1,18 +1,21 @@
--- Datos iniciales para patients
-INSERT INTO patients (id, nombre, apellido, fecha_nacimiento, id_usuario, numero_historia_clinica, codigo_obra_social, nro_afiliado_obra_social, tipo_discapacidad)
-VALUES (1, 'Juan', 'Pérez', '1990-05-15', 1, 'HC12345', 'OS001', 'AF123', 'Visual');
+-- data.sql CORREGIDO
+INSERT INTO usuarios (id, usuario, password, email, activo, bloqueado, intentos_fallidos, fecha_creacion, rol)
+VALUES
+    (1, 'maria_paciente', '$2a$10$exampleHashedPassword1', 'maria@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
+    (2, 'carlos_paciente', '$2a$10$exampleHashedPassword2', 'carlos@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
+    (3, 'ana_paciente', '$2a$10$exampleHashedPassword3', 'ana@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
+    (4, 'roberto_prestador', '$2a$10$exampleHashedPassword4', 'roberto@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'),
+    (5, 'laura_prestador', '$2a$10$exampleHashedPassword5', 'laura@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'),
+    (6, 'pedro_prestador', '$2a$10$exampleHashedPassword6', 'pedro@email.com', false, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'),
+    (7, 'juan_transportista', '$2a$10$exampleHashedPassword7', 'juan@email.com', true, false, 0, CURRENT_TIMESTAMP, 'TRANSPORTISTA'),
+    (8, 'miguel_transportista', '$2a$10$exampleHashedPassword8', 'miguel@email.com', true, false, 0, CURRENT_TIMESTAMP, 'TRANSPORTISTA'),
+    (9, 'sofia_transportista', '$2a$10$exampleHashedPassword9', 'sofia@email.com', false, false, 0, CURRENT_TIMESTAMP, 'TRANSPORTISTA');
 
-INSERT INTO patients (id, nombre, apellido, fecha_nacimiento, id_usuario, numero_historia_clinica, codigo_obra_social, nro_afiliado_obra_social, tipo_discapacidad)
-VALUES (2, 'María', 'Gómez', '1985-08-22', 2, 'HC12346', 'OS002', 'AF124', 'Auditiva');
-
--- Datos iniciales para specialties
-INSERT INTO specialties (id, nombre) VALUES (1, 'Cardiología');
-INSERT INTO specialties (id, nombre) VALUES (2, 'Pediatría');
-INSERT INTO specialties (id, nombre) VALUES (3, 'Dermatología');
-
--- Datos iniciales para providers
-INSERT INTO providers (id, nombre, apellido, fecha_nacimiento, id_usuario, id_especialidad, estado)
-VALUES (1, 'Carlos', 'López', '1980-03-10', 3, 1, 'ACTIVO');
-
-INSERT INTO providers (id, nombre, apellido, fecha_nacimiento, id_usuario, id_especialidad, estado)
-VALUES (2, 'Ana', 'Martínez', '1975-11-30', 4, 2, 'ACTIVO');
+-- Especialidades médicas
+INSERT INTO specialties (id, nombre)
+VALUES
+    (1, 'Cardiología'),
+    (2, 'Pediatría'),
+    (3, 'Dermatología'),
+    (4, 'Traumatología'),
+    (5, 'Oftalmología');

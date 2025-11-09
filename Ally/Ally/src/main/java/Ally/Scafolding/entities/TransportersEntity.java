@@ -6,36 +6,33 @@ import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 
 /**
- * Represents a medical provider in the database.
+ * Represents a transporter in the database.
  * <p>
- *     This entity stores medical provider information including specialty and availability.
+ *     This entity stores transporter information including coverage zone and availability.
  * </p>
  */
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "providers")
-@Audited
-public class ProvidersEntity extends PersonsEntity {
-
+@Table(name = "transportistas")
+public class TransportersEntity extends PersonsEntity {
 
     /**
-     * Identificador único del prestador.
+     * Unique identifier for the transporter.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * Specialty code of the medical provider.
+     * Coverage zone where the transporter operates.
      */
-    @ManyToOne
-    @JoinColumn(name = "codigo_especialidad")
-    private SpecialtyEntity especialidad;
+    @Column(name = "zona_cobertura", nullable = false)
+    private String zonaCobertura;
 
     /**
-     * Indicates if the provider is currently active.
+     * Indicates if the transporter is currently active.
      */
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;

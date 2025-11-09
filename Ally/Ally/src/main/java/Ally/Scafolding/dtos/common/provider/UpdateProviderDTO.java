@@ -1,4 +1,4 @@
-package Ally.Scafolding.dtos.common.contact;
+package Ally.Scafolding.dtos.common.provider;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdatePatientDTO {
+public class UpdateProviderDTO {
 
     /**
      * The unique identifier of the contact.

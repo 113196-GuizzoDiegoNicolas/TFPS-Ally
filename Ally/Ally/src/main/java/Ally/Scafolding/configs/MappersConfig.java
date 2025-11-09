@@ -1,9 +1,12 @@
 package Ally.Scafolding.configs;
 
+import Ally.Scafolding.entities.ProvidersEntity;
+import Ally.Scafolding.entities.UsersEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,7 +22,154 @@ public class MappersConfig {
      */
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
+
+        // Configuración para mapeo entre UsersEntity y User (model)
+        modelMapper.addMappings(new PropertyMap<UsersEntity, Ally.Scafolding.models.User>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+                map().setUsername(source.getUsuario());
+                map().setPassword(source.getPassword());
+                map().setEmail(source.getEmail());
+                map().setRole(source.getRol());
+                map().setActive(source.getActivo());
+                map().setLocked(source.getBloqueado());
+                map().setCreatedAt(source.getFechaCreacion());
+                map().setLastLogin(source.getUltimoLogin());
+                map().setFailedAttempts(source.getIntentosFallidos());
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<Ally.Scafolding.models.User, UsersEntity>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+                map().setUsuario(source.getUsername());
+                map().setPassword(source.getPassword());
+                map().setEmail(source.getEmail());
+                map().setRol(source.getRole());
+                map().setActivo(source.isActive());
+                map().setBloqueado(source.isLocked());
+                map().setFechaCreacion(source.getCreatedAt());
+                map().setUltimoLogin(source.getLastLogin());
+                map().setIntentosFallidos(source.getFailedAttempts());
+            }
+        });
+
+        // Configuración para mapeo entre UsersEntity y UserDTO
+        modelMapper.addMappings(new PropertyMap<UsersEntity, Ally.Scafolding.dtos.common.login.UserDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+                map().setUsername(source.getUsuario());
+                map().setEmail(source.getEmail());
+                map().setRole(source.getRol());
+                map().setActive(source.getActivo());
+                map().setLocked(source.getBloqueado());
+                // Password no se mapea por seguridad - se deja como null
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<Ally.Scafolding.dtos.common.login.UserDTO, UsersEntity>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+                map().setUsuario(source.getUsername());
+                map().setEmail(source.getEmail());
+                map().setRol(source.getRole());
+                map().setActivo(source.isActive());
+                map().setBloqueado(source.isLocked());
+                // Password se maneja por separado en el servicio
+            }
+        });
+
+        // Configuración para mapeo entre User (model) y UserDTO
+        modelMapper.addMappings(new PropertyMap<Ally.Scafolding.models.User, Ally.Scafolding.dtos.common.login.UserDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+                map().setUsername(source.getUsername());
+                map().setEmail(source.getEmail());
+                map().setRole(source.getRole());
+                map().setActive(source.isActive());
+                map().setLocked(source.isLocked());
+                // Password no se mapea por seguridad - se deja como null
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<Ally.Scafolding.dtos.common.login.UserDTO, Ally.Scafolding.models.User>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+                map().setUsername(source.getUsername());
+                map().setEmail(source.getEmail());
+                map().setRole(source.getRole());
+                map().setActive(source.isActive());
+                map().setLocked(source.isLocked());
+                // Password se maneja por separado
+            }
+        });
+
+        // CONFIGURACIONES PARA PROVIDERS - CORREGIDAS
+
+// Configuración para mapeo entre ProvidersEntity y ProviderDTO
+        modelMapper.addMappings(new PropertyMap<ProvidersEntity, Ally.Scafolding.dtos.common.provider.ProviderDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+                map().setNombre(source.getNombre());
+                map().setApellido(source.getApellido());
+                map().setEmail(source.getCorreoElectronico());
+                map().setTelefono(source.getTelefono());
+                map().setDireccion(source.getDireccion());
+
+                // ✅ CORREGIDO: Convertir Long a String
+                if (source.getEspecialidad() != null && source.getEspecialidad().getId() != null) {
+                    map().setCodigoEspecialidad(source.getEspecialidad().getId().toString());
+                }
+
+                map().setActivo(source.getActivo());
+
+                if (source.getUsersEntity() != null) {
+                    map().setUsuarioId(source.getUsersEntity().getId());
+                    map().setNombreUsuario(source.getUsersEntity().getUsuario());
+                }
+            }
+        });
+
+// Configuración para mapeo entre ProviderCreateDTO y ProvidersEntity
+        modelMapper.addMappings(new PropertyMap<Ally.Scafolding.dtos.common.provider.ProviderCreateDTO, ProvidersEntity>() {
+            @Override
+            protected void configure() {
+                map().setNombre(source.getNombre());
+                map().setApellido(source.getApellido());
+                map().setCorreoElectronico(source.getEmail());
+                map().setTelefono(source.getTelefono());
+                map().setDireccion(source.getDireccion());
+
+
+            }
+        });
+
+// Configuración para mapeo entre ProviderDTO y ProvidersEntity
+        modelMapper.addMappings(new PropertyMap<Ally.Scafolding.dtos.common.provider.ProviderDTO, ProvidersEntity>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+                map().setNombre(source.getNombre());
+                map().setApellido(source.getApellido());
+                map().setCorreoElectronico(source.getEmail());
+                map().setTelefono(source.getTelefono());
+                map().setDireccion(source.getDireccion());
+
+
+
+                map().setActivo(source.getActivo());
+            }
+        });
+
+        return modelMapper;
     }
 
     /**
@@ -28,9 +178,37 @@ public class MappersConfig {
      */
     @Bean("mergerMapper")
     public ModelMapper mergerMapper() {
-        ModelMapper mapper =  new ModelMapper();
+        ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration()
                 .setPropertyCondition(Conditions.isNotNull());
+
+        // Configuraciones para UserDTO -> UsersEntity
+        mapper.addMappings(new PropertyMap<Ally.Scafolding.dtos.common.login.UserDTO, UsersEntity>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+                map().setUsuario(source.getUsername());
+                map().setEmail(source.getEmail());
+                map().setRol(source.getRole());
+                map().setActivo(source.isActive());
+                map().setBloqueado(source.isLocked());
+            }
+        });
+
+        // Configuraciones para ProviderDTO -> ProvidersEntity (para updates)
+        mapper.addMappings(new PropertyMap<Ally.Scafolding.dtos.common.provider.ProviderDTO, ProvidersEntity>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+                map().setNombre(source.getNombre());
+                map().setApellido(source.getApellido());
+                map().setCorreoElectronico(source.getEmail());
+                map().setTelefono(source.getTelefono());
+                map().setDireccion(source.getDireccion());
+                map().setActivo(source.getActivo());
+            }
+        });
+
         return mapper;
     }
 
@@ -44,5 +222,4 @@ public class MappersConfig {
         objectMapper.registerModule(new JavaTimeModule());
         return objectMapper;
     }
-
 }

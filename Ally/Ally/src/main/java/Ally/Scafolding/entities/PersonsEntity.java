@@ -1,7 +1,9 @@
 package Ally.Scafolding.entities;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -57,8 +59,9 @@ public abstract class PersonsEntity {
     private String correoElectronico;
 
     /**
-     * User ID for system access.
+     * Reference to user login credentials.
      */
-    @Column(name = "id_usuario", nullable = false)
-    private Long idUsuario;
+    @OneToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private UsersEntity usersEntity;
 }

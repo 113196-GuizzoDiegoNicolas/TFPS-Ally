@@ -4,9 +4,12 @@ import Ally.Scafolding.entities.ProvidersEntity;
 import Ally.Scafolding.entities.SpecialtyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Repository interface for managing {@link ProvidersEntity} entities.
@@ -18,31 +21,48 @@ import java.util.List;
 public interface ProvidersRepository extends JpaRepository<ProvidersEntity, Long>,
         JpaSpecificationExecutor<ProvidersEntity> {
 
-    /**
-     * Finds providers whose last name contains the given value (case insensitive).
-     * @param apellido the last name to search for
-     * @return a list of providers matching the condition
-     */
-    List<ProvidersEntity> findByApellidoContainingIgnoreCase(String apellido);
 
     /**
-     * Finds providers whose first name contains the given value (case insensitive).
-     * @param nombre the first name to search for
-     * @return a list of providers matching the condition
+     * Finds providers by specialty code (String) - CORREGIDO
      */
-    List<ProvidersEntity> findByNombreContainingIgnoreCase(String nombre);
+    List<ProvidersEntity> findByEspecialidad(SpecialtyEntity especialidad);
 
     /**
-     * Finds providers by specialty.
-     * @param specialty the specialty to search for
-     * @return a list of providers matching the condition
+     * Finds active providers by specialty code
      */
-    List<ProvidersEntity> findBySpecialty(SpecialtyEntity specialty);
+    List<ProvidersEntity> findByEspecialidadAndActivoTrue(SpecialtyEntity especialidad);
 
     /**
-     * Finds providers by status.
-     * @param estado the status to search for
-     * @return a list of providers matching the condition
+     * Finds providers by activation status
      */
-    List<ProvidersEntity> findByEstado(String estado);
+    List<ProvidersEntity> findByActivo(Boolean activo);
+
+    /**
+     * Finds active providers
+     */
+    List<ProvidersEntity> findByActivoTrue();
+
+    /**
+     * Finds providers by email
+     */
+    @Query("SELECT p FROM ProvidersEntity p WHERE p.correoElectronico = :email")
+    Optional<ProvidersEntity> findByEmail(@Param("email") String email);
+
+    /**
+     * Checks if email exists
+     */
+    @Query("SELECT COUNT(p) > 0 FROM ProvidersEntity p WHERE p.correoElectronico = :email")
+    boolean existsByEmail(@Param("email") String email);
+
+    /**
+     * Finds provider by associated user ID
+     */
+    @Query("SELECT p FROM ProvidersEntity p WHERE p.usersEntity.id = :usuarioId")
+    Optional<ProvidersEntity> findByUsuarioId(@Param("usuarioId") Long usuarioId);
+
+    /**
+     * Finds providers by name or last name containing (case insensitive)
+     */
+    @Query("SELECT p FROM ProvidersEntity p WHERE LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%')) OR LOWER(p.apellido) LIKE LOWER(CONCAT('%', :nombre, '%'))")
+    List<ProvidersEntity> findByNombreOrApellidoContainingIgnoreCase(@Param("nombre") String nombre);
 }

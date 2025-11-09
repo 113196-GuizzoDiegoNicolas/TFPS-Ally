@@ -7,12 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 /**
- * Represents a notification in the database.
+ * Represents a patient in the database.
  * <p>
- *     This entity stores its ID as well its name and body.
+ *     This entity stores patient information including medical and insurance data.
  * </p>
  */
 @Entity
