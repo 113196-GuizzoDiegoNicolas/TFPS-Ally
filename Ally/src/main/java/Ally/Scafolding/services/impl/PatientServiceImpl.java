@@ -3,6 +3,7 @@ package Ally.Scafolding.services.impl;
 import Ally.Scafolding.models.Patient;
 import Ally.Scafolding.entities.PatientsEntity;
 import Ally.Scafolding.repositories.PatientsRepository;
+import Ally.Scafolding.repositories.UsersRepository;
 import Ally.Scafolding.services.PatientService;
 import Ally.Scafolding.dtos.common.exceptions.NotFoundException;
 import org.modelmapper.ModelMapper;
@@ -27,13 +28,24 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private ModelMapper modelMapper;
-
+    // cambio indi -con front
+    @Autowired
+    private UsersRepository usersRepository; // Asegurate de tenerlo
     /**
      * Creates a new patient.
      */
     @Override
     public Patient createPatient(Patient patient) {
         PatientsEntity entity = modelMapper.map(patient, PatientsEntity.class);
+
+        // 🔹 Asociar el usuario (ya que el front envía idUsuario)
+        if (patient.getIdUsuario() != null) {
+            entity.setUsersEntity(usersRepository.findById(patient.getIdUsuario())
+                    .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + patient.getIdUsuario())));
+        } else {
+            throw new IllegalArgumentException("El campo idUsuario es obligatorio para crear un paciente.");
+        }
+
         PatientsEntity saved = patientsRepository.save(entity);
         return modelMapper.map(saved, Patient.class);
     }

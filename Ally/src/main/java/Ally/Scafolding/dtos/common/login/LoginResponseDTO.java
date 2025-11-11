@@ -26,6 +26,6 @@ public class LoginResponseDTO {
     /**
      * Role of the authenticated user.
      */
-    private String rol;
+    private String role;
 
 }

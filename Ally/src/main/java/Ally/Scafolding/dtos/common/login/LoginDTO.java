@@ -21,5 +21,6 @@ public class LoginDTO {
      * Password for system access.
      */
     private String password;
+    private String email;   // cambio para coincidir con el front
 
 }

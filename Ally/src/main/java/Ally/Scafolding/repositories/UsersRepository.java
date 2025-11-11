@@ -43,6 +43,7 @@ public interface UsersRepository extends JpaRepository<UsersEntity, Long>,
     List<UsersEntity> findByRolAndActivoTrue(String rol);
 
     boolean existsByEmail(String email);
-
+    // impl.login-10-11
+    Optional<UsersEntity> findByEmail(String email);
 
 }
