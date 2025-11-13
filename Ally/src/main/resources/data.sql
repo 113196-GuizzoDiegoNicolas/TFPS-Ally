@@ -1,49 +1,50 @@
 -- =====================================
 -- USUARIOS BASE
 -- =====================================
-INSERT INTO usuarios (id, usuario, password, email, activo, bloqueado, intentos_fallidos, fecha_creacion, rol)
+INSERT INTO usuarios (usuario, password, email, activo, bloqueado, intentos_fallidos, fecha_creacion, rol)
 VALUES
-    (1, 'maria_paciente', '$2a$10$exampleHashedPassword1', 'maria@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
-    (2, 'roberto_prestador', '$2a$10$exampleHashedPassword2', 'roberto@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'),
-    (3, 'laura_prestador', '$2a$10$exampleHashedPassword3', 'laura@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'),
-    (4, 'juan_transportista', '$2a$10$exampleHashedPassword4', 'juan@email.com', true, false, 0, CURRENT_TIMESTAMP, 'TRANSPORTISTA');
-ALTER TABLE usuarios ALTER COLUMN id RESTART WITH 8;
+    ('maria_paciente', '$2a$10$exampleHashedPassword1', 'maria@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
+    ('roberto_prestador', '$2a$10$exampleHashedPassword2', 'roberto@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'),
+    ('laura_prestador', '$2a$10$exampleHashedPassword3', 'laura@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'),
+    ('juan_transportista', '$2a$10$exampleHashedPassword4', 'juan@email.com', true, false, 0, CURRENT_TIMESTAMP, 'TRANSPORTISTA');
+
 -- =====================================
 -- ESPECIALIDADES
 -- =====================================
-INSERT INTO specialties (id, codigo, nombre)
+INSERT INTO specialties (codigo, nombre)
 VALUES
-    (1, 'KINESIOLOGIA', 'Kinesiología'),
-    (2, 'TERAPIA_OCUPACIONAL', 'Terapia Ocupacional'),
-    (3, 'FISIATRIA', 'Fisiatría'),
-    (4, 'TRANSPORTE_SANITARIO', 'Transporte Sanitario'),
-    (5, 'PSICOLOGIA', 'Psicología'),
-    (6, 'NEUROLOGIA', 'Neurología');
+    ('KINESIOLOGIA', 'Kinesiología'),
+    ('TERAPIA_OCUPACIONAL', 'Terapia Ocupacional'),
+    ('FISIATRIA', 'Fisiatría'),
+    ('TRANSPORTE_SANITARIO', 'Transporte Sanitario'),
+    ('PSICOLOGIA', 'Psicología'),
+    ('NEUROLOGIA', 'Neurología');
 
 -- =====================================
 -- PRESTADORES
 -- =====================================
-INSERT INTO providers (id, nombre, apellido, correo_electronico, direccion, telefono, activo, usuario_id, codigo_especialidad, fecha_nacimiento)
+-- Nota: los usuario_id deben coincidir con los IDs reales generados arriba
+-- Si estás en H2 y el autoincrement empieza en 1, los IDs se asignarán en ese orden
+-- (1 = María paciente, 2 = Roberto prestador, 3 = Laura prestador, 4 = Juan transportista)
+INSERT INTO providers (nombre, apellido, correo_electronico, direccion, telefono, activo, usuario_id, codigo_especialidad, fecha_nacimiento)
 VALUES
-    (1, 'Roberto', 'Pérez', 'roberto@email.com', 'Av. Colón 1234', '3515551111', true, 2, 1, '1980-05-12'),
-    (2, 'Laura', 'Sosa', 'laura@email.com', 'Bv. San Juan 345', '3515552222', true, 3, 2, '1985-08-25');
-
+    ('Roberto', 'Pérez', 'roberto@email.com', 'Av. Colón 1234', '3515551111', true, 2, 1, '1980-05-12'),
+    ('Laura', 'Sosa', 'laura@email.com', 'Bv. San Juan 345', '3515552222', true, 3, 2, '1985-08-25');
 
 -- =====================================
 -- PACIENTES
 -- =====================================
 INSERT INTO patients (
-    id, nombre, apellido, fecha_nacimiento, direccion, telefono, telegram,
+    nombre, apellido, fecha_nacimiento, direccion, telefono, telegram,
     correo_electronico, usuario_id, numero_historia_clinica, codigo_obra_social,
     nro_afiliado_obra_social, tipo_discapacidad
 ) VALUES
-    (1, 'María', 'Gómez', '1990-04-10', 'Córdoba 500', '3516000001', '@maria',
+    ('María', 'Gómez', '1990-04-10', 'Córdoba 500', '3516000001', '@maria',
      'maria@email.com', 1, 'H1234', 'OSDE', 'A001', 'Motora');
-
 
 -- =====================================
 -- SERVICIOS (opcional)
 -- =====================================
-INSERT INTO services (id, paciente_id, prestador_id, especialidad, descripcion, estado, fecha_solicitud)
+INSERT INTO services (paciente_id, prestador_id, especialidad, descripcion, estado, fecha_solicitud)
 VALUES
-    (1, 1, 1, 'KINESIOLOGIA', 'Rehabilitación post operatoria rodilla derecha', 'PENDIENTE', CURRENT_TIMESTAMP);
+    (1, 1, 'KINESIOLOGIA', 'Rehabilitación post operatoria rodilla derecha', 'PENDIENTE', CURRENT_TIMESTAMP);
