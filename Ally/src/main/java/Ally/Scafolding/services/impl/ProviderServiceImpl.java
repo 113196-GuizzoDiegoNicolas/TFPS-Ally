@@ -58,28 +58,31 @@ public class ProviderServiceImpl implements ProviderService {
     public ProviderDTO create(ProviderCreateDTO providerCreateDTO) {
         validateProviderCreation(providerCreateDTO);
 
-        // Verificar que el usuario existe
+        //  Buscar usuario
         UsersEntity usuarioEntity = usersRepository.findById(providerCreateDTO.getUsuarioId())
                 .orElseThrow(() -> new IllegalArgumentException("El usuario asociado no existe"));
 
-        // Verificar que no existe otro provider con el mismo usuario
-        if (providersRepository.findByUsuarioId(providerCreateDTO.getUsuarioId()).isPresent()) {
-            throw new IllegalArgumentException("Ya existe un proveedor asociado a este usuario");
-        }
+        // Buscar la especialidad por su código o nombre
+        SpecialtyEntity especialidad = specialtyRepository.findByCodigo(providerCreateDTO.getCodigoEspecialidad())
+                .orElseGet(() -> specialtyRepository.findByNombre(providerCreateDTO.getCodigoEspecialidad())
+                        .orElseThrow(() -> new IllegalArgumentException("Especialidad no encontrada: " + providerCreateDTO.getCodigoEspecialidad()))
+                );
 
-        // Verificar que no existe otro provider con el mismo email
-        if (providersRepository.existsByEmail(providerCreateDTO.getEmail())) {
-            throw new IllegalArgumentException("El email ya está registrado");
-        }
-
-        // Convertir DTO a Entity usando ModelMapper
-        ProvidersEntity entity = modelMapper.map(providerCreateDTO, ProvidersEntity.class);
-        entity.setUsersEntity(usuarioEntity);
+        // Crear manualmente el provider
+        ProvidersEntity entity = new ProvidersEntity();
+        entity.setNombre(providerCreateDTO.getNombre());
+        entity.setApellido(providerCreateDTO.getApellido());
+        entity.setCorreoElectronico(providerCreateDTO.getEmail());
+        entity.setTelefono(providerCreateDTO.getTelefono());
+        entity.setDireccion(providerCreateDTO.getDireccion());
+        entity.setEspecialidad(especialidad); // ahora sí es una entidad válida
         entity.setActivo(true);
+        entity.setUsersEntity(usuarioEntity);
 
-        ProvidersEntity saved = providersRepository.save(entity);
+        ProvidersEntity saved = providersRepository.saveAndFlush(entity);
         return modelMapper.map(saved, ProviderDTO.class);
     }
+
 
     @Override
     public ProviderDTO update(Long id, ProviderDTO providerDTO) {

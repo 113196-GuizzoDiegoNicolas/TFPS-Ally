@@ -1,0 +1,4 @@
+2025-11-12 01:08:41.875091-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "([*]7, 'NEUROLOGIA', 'Neurología')"; se esperaba "(, SELECT, TABLE, VALUES"
+Syntax error in SQL statement "([*]7, 'NEUROLOGIA', 'Neurología')"; expected "(, SELECT, TABLE, VALUES"; SQL statement:
+(7, 'NEUROLOGIA', 'Neurología') [42001-232]

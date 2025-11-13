@@ -1,14 +1,16 @@
 package Ally.Scafolding.entities;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 /**
  * Represents a medical provider in the database.
  * <p>
- *     This entity stores medical provider information including specialty and availability.
+ * This entity stores medical provider information including specialty and availability.
  * </p>
  */
 @Entity
@@ -18,7 +20,6 @@ import org.hibernate.envers.Audited;
 @Table(name = "providers")
 @Audited
 public class ProvidersEntity extends PersonsEntity {
-
 
     /**
      * Identificador único del prestador.
@@ -30,8 +31,9 @@ public class ProvidersEntity extends PersonsEntity {
     /**
      * Specialty code of the medical provider.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "codigo_especialidad")
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private SpecialtyEntity especialidad;
 
     /**
@@ -40,4 +42,5 @@ public class ProvidersEntity extends PersonsEntity {
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;
 }
+
 
