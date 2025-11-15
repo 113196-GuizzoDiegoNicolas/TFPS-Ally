@@ -18,16 +18,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Provider {
 
-
+    // Datos personales
     private Long id;
     private String nombre;
     private String apellido;
     private String email;
     private String telefono;
     private String direccion;
+    // Datos médicos
     private String codigoEspecialidad;
     private Boolean activo;
     private LocalDateTime fechaRegistro;
+    // Relación con usuario
     private User usuario;
 
 }

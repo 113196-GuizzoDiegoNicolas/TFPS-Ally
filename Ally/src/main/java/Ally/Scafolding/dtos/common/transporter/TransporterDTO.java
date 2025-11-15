@@ -1,7 +1,5 @@
+package Ally.Scafolding.dtos.common.transporter;
 
-package Ally.Scafolding.dtos.common.person;
-
-import Ally.Scafolding.dtos.common.login.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,16 +7,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 /**
- * Base DTO class for person entities.
- * <p>
- *     Contains common attributes for patients, providers and transporters.
- * </p>
+ * Data Transfer Object for Transporter entities
+ * Used to transfer transporter data between layers
  */
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-public class PersonDTO {
+@AllArgsConstructor
+@NoArgsConstructor
 
+public class TransporterDTO {
     private Long id;
     private String nombre;
     private String apellido;
@@ -27,5 +23,7 @@ public class PersonDTO {
     private String telefono;
     private String telegram;
     private String correoElectronico;
-    private UserDTO usuario;
+    private Long usuarioId;
+    private String zonaCobertura;
+    private Boolean activo;
 }
