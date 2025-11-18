@@ -1,10 +1,7 @@
 package Ally.Scafolding.services;
 
-import Ally.Scafolding.dtos.common.login.LoginDTO;
+import Ally.Scafolding.dtos.common.login.UserLoginDTO;
 import Ally.Scafolding.dtos.common.login.LoginResponseDTO;
-
-import org.springframework.stereotype.Service;
-
 
 
 /**
@@ -13,16 +10,16 @@ import org.springframework.stereotype.Service;
  *     Handles user login and token generation.
  * </p>
  */
-@Service
+
 public interface AuthService {
 
     /**
      * Authenticates a user with provided credentials.
-     * @param loginDTO the login credentials
+     * @param userLoginDTO the login credentials
      * @return LoginResponseDTO with token and user information if authentication is successful
      * @throws RuntimeException if authentication fails
      */
-    LoginResponseDTO login(LoginDTO loginDTO);
+    LoginResponseDTO login(UserLoginDTO userLoginDTO);
 
     /**
      * Validates a JWT token.

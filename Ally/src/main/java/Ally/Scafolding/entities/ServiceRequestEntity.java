@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "turnos")
-public class TurnsEntity {
+@Table(name = "service_requests")
+public class ServiceRequestEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,18 +25,16 @@ public class TurnsEntity {
     @JoinColumn(name = "prestador_id", nullable = false)
     private ProvidersEntity prestador;
 
-    @ManyToOne
-    @JoinColumn(name = "transportista_id")
-    private TransportersEntity transportista;
+    private String especialidad;
+    private String descripcion;
+    private String tipo;
+    private String modalidad;
 
-    @Column(name = "fecha_hora", nullable = false)
-    private LocalDateTime fechaHora;
-
-    @Column(name = "estado", nullable = false)
+    @Column(nullable = false)
     private String estado = "PENDIENTE";
 
-    private String observaciones;
+    @Column(nullable = false)
+    private boolean activo = true;
 
-    @Column(name = "fecha_creacion", nullable = false)
-    private LocalDateTime fechaCreacion = LocalDateTime.now();
+    private LocalDateTime fechaSolicitud = LocalDateTime.now();
 }

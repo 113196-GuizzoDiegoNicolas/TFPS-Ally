@@ -13,7 +13,7 @@ import java.util.List;
  * Provides methods for creating, retrieving, updating, and deleting patients.
  * </p>
  */
-@Service
+
 public interface PatientService {
 
     /**

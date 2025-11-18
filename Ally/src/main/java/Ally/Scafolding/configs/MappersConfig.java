@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 /**
  * ModelMapper and ObjectMapper configuration class.
@@ -20,11 +21,12 @@ public class MappersConfig {
      * The ModelMapper bean by default.
      * @return the ModelMapper by default.
      */
+    @Primary
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
-        // Configuración para mapeo entre UsersEntity y User (model)
+        // USERS ↔ MODELS
         modelMapper.addMappings(new PropertyMap<UsersEntity, Ally.Scafolding.models.User>() {
             @Override
             protected void configure() {
@@ -57,7 +59,7 @@ public class MappersConfig {
             }
         });
 
-        // Configuración para mapeo entre UsersEntity y UserDTO
+        // USERS ↔ DTOs
         modelMapper.addMappings(new PropertyMap<UsersEntity, Ally.Scafolding.dtos.common.login.UserDTO>() {
             @Override
             protected void configure() {
@@ -82,18 +84,18 @@ public class MappersConfig {
             }
         });
 
-        // ✅ NUEVO: Configuración para mapeo entre UserCreateDTO y UsersEntity
+        // USERCREATE DTO → ENTITY
         modelMapper.addMappings(new PropertyMap<Ally.Scafolding.dtos.common.login.UserCreateDTO, UsersEntity>() {
             @Override
             protected void configure() {
                 map().setUsuario(source.getUsername());
                 map().setEmail(source.getEmail());
                 map().setPassword(source.getPassword());
-                map().setRol(source.getRole()); // 👈 clave: role → rol
+                map().setRol(source.getRole());
             }
         });
 
-        // Configuración para mapeo entre User (model) y UserDTO
+        // USER ↔ DTO
         modelMapper.addMappings(new PropertyMap<Ally.Scafolding.models.User, Ally.Scafolding.dtos.common.login.UserDTO>() {
             @Override
             protected void configure() {
@@ -117,7 +119,6 @@ public class MappersConfig {
                 map().setLocked(source.isLocked());
             }
         });
-
         // CONFIGURACIONES PARA PROVIDERS - CORREGIDAS
         modelMapper.addMappings(new PropertyMap<ProvidersEntity, Ally.Scafolding.dtos.common.provider.ProviderDTO>() {
             @Override

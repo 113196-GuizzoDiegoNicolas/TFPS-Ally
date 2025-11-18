@@ -1,58 +1,28 @@
 package Ally.Scafolding.entities;
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-
-/**
- * Represents a patient in the database.
- * <p>
- *     This entity stores patient information including medical and insurance data.
- * </p>
- */
 @Entity
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "patients")
 @Audited
 public class PatientsEntity extends PersonsEntity {
 
-    /**
-     * Unique identifier for the patient.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    /**
-     * Clinical history number of the patient.
-     */
     @Column(name = "numero_historia_clinica", nullable = false)
     private String numeroHistoriaClinica;
 
-    /**
-     * Social security code.
-     */
     @Column(name = "codigo_obra_social", nullable = false)
     private String codigoObraSocial;
 
-    /**
-     * Social security affiliate number.
-     */
     @Column(name = "nro_afiliado_obra_social", nullable = false)
     private String nroAfiliadoObraSocial;
 
-
-
-    /**
-     * Type of disability.
-     */
-    @Column(name = "tipo_discapacidad", nullable = true)
+    @Column(name = "tipo_discapacidad")
     private String tipoDiscapacidad;
-
 }

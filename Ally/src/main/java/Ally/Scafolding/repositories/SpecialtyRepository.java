@@ -14,7 +14,8 @@ import java.util.Optional;
 
 @Repository
 public interface SpecialtyRepository extends JpaRepository<SpecialtyEntity, Long>,
-        JpaSpecificationExecutor<ProvidersEntity> {
+        JpaSpecificationExecutor<SpecialtyEntity> {
+
 
     /**
      * Finds a specialty by its exact name.

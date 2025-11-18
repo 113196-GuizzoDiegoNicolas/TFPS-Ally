@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
     @Override
     public List<UserDTO> findAll() {
         return usersRepository.findAll().stream()
@@ -51,26 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO create(UserDTO userDTO) {  // Cambiado de createUser a create
-        if (usersRepository.existsByUsuario(userDTO.getUsername())) {
-            throw new RuntimeException("El usuario ya existe");
-        }
-
-        if (usersRepository.existsByEmail(userDTO.getEmail())) {
-            throw new RuntimeException("El email ya está registrado");
-        }
-
-        UsersEntity entity = modelMapper.map(userDTO, UsersEntity.class);
-        // Encriptar la contraseña
-        entity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-
-        UsersEntity saved = usersRepository.save(entity);
-        return modelMapper.map(saved, UserDTO.class);
-    }
-
-
-    @Override
-    public UserDTO createUser(UserCreateDTO userCreateDTO) {  // Cambiado de createUser a create
+    public UserDTO createUser(UserCreateDTO userCreateDTO) {
         if (usersRepository.existsByUsuario(userCreateDTO.getUsername())) {
             throw new RuntimeException("El usuario ya existe");
         }
@@ -80,7 +62,6 @@ public class UserServiceImpl implements UserService {
         }
 
         UsersEntity entity = modelMapper.map(userCreateDTO, UsersEntity.class);
-        // Encriptar la contraseña
         entity.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
 
         UsersEntity saved = usersRepository.save(entity);
@@ -91,10 +72,8 @@ public class UserServiceImpl implements UserService {
     public UserDTO update(Long id, UserDTO userDTO) {
         return usersRepository.findById(id)
                 .map(existing -> {
-                    // Usar mergerMapper para actualizar solo campos no nulos
-                    mergerMapper.map(userDTO, existing);
 
-                    // Validaciones de unicidad
+                    // Validaciones unicidad
                     if (userDTO.getUsername() != null &&
                             !existing.getUsuario().equals(userDTO.getUsername()) &&
                             usersRepository.existsByUsuario(userDTO.getUsername())) {
@@ -107,10 +86,7 @@ public class UserServiceImpl implements UserService {
                         throw new RuntimeException("El email ya está en uso");
                     }
 
-                    // La contraseña se maneja por separado
-                    if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
-                        existing.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-                    }
+                    mergerMapper.map(userDTO, existing);
 
                     UsersEntity updated = usersRepository.save(existing);
                     return modelMapper.map(updated, UserDTO.class);
@@ -133,6 +109,5 @@ public class UserServiceImpl implements UserService {
                 })
                 .orElse(null);
     }
-
 
 }
