@@ -83,10 +83,15 @@ INSERT INTO transportistas (
 -- =====================================
 -- SERVICIOS (opcional)
 -- =====================================
-INSERT INTO services (paciente_id, prestador_id, especialidad, descripcion, estado, fecha_solicitud)
+INSERT INTO service_requests
+(paciente_id, prestador_id, especialidad, descripcion, estado, activo, fecha_solicitud)
 VALUES
-    (1, 1, 'KINESIOLOGIA', 'Rehabilitación post operatoria rodilla derecha', 'PENDIENTE', CURRENT_TIMESTAMP),
-    (2, 2, 'TERAPIA_OCUPACIONAL', 'Terapia para mejora de habilidades motoras finas', 'CONFIRMADO', CURRENT_TIMESTAMP);
+    (1, 1, 'KINESIOLOGIA', 'Rehabilitación post operatoria rodilla derecha', 'PENDIENTE', true, CURRENT_TIMESTAMP);
+
+INSERT INTO service_requests
+(paciente_id, prestador_id, especialidad, descripcion, estado, activo, fecha_solicitud)
+VALUES
+    (2, 2, 'TERAPIA_OCUPACIONAL', 'Terapia para mejora de habilidades motoras finas', 'CONFIRMADO', true, CURRENT_TIMESTAMP);
 
 -- =====================================
 -- COMENTADO: SERVICIOS DE TRANSPORTE
