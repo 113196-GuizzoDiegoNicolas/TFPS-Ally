@@ -1,483 +1,16 @@
-2025-11-11 20:54:49.347123-03:00 database: close
-org.h2.message.DbException: IO Exception: "Closing"
-IO Exception: "Closing" [90028-232]
-	at org.h2.message.DbException.get(DbException.java:212)
-	at org.h2.mvstore.db.Store.close(Store.java:374)
-	at org.h2.engine.Database.closeOpenFilesAndUnlock(Database.java:1292)
-	at org.h2.engine.Database.closeImpl(Database.java:1254)
-	at org.h2.engine.Database.close(Database.java:1173)
-	at org.h2.engine.Database.close(Database.java:1150)
-	at org.h2.engine.Database.removeSession(Database.java:1077)
-	at org.h2.engine.SessionLocal.close(SessionLocal.java:916)
-	at org.h2.jdbc.JdbcConnection.close(JdbcConnection.java:390)
-	at com.zaxxer.hikari.pool.PoolBase.quietlyCloseConnection(PoolBase.java:144)
-	at com.zaxxer.hikari.pool.HikariPool.lambda$closeConnection$1(HikariPool.java:462)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: org.h2.jdbc.JdbcSQLNonTransientException: IO Exception: "Closing"
-IO Exception: "Closing" [90028-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	... 14 more
-Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError [2.3.232/3]
-	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
-	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:926)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:463)
-	at org.h2.mvstore.RandomAccessStore.compactStore(RandomAccessStore.java:443)
-	at org.h2.mvstore.FileStore.compactStore(FileStore.java:890)
-	at org.h2.mvstore.FileStore.stop(FileStore.java:275)
-	at org.h2.mvstore.MVStore.closeStore(MVStore.java:693)
-	at org.h2.mvstore.MVStore.close(MVStore.java:643)
-	at org.h2.mvstore.db.Store.close(Store.java:364)
-	... 12 more
-Caused by: java.lang.AssertionError
-	at org.h2.mvstore.RandomAccessStore.moveChunkInside(RandomAccessStore.java:630)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:569)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:481)
-	at org.h2.mvstore.RandomAccessStore.lambda$compactMoveChunks$1(RandomAccessStore.java:468)
-	at org.h2.mvstore.FileStore.executeFileStoreOperation(FileStore.java:1893)
-	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:922)
-	... 19 more
-2025-11-11 23:38:13.697432-03:00 jdbc[16]: exception
-org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'KINESIOLOGIA' (PROVIDERS: ""CODIGO_ESPECIALIDAD"" BIGINT)"
-Data conversion error converting "'KINESIOLOGIA' (PROVIDERS: ""CODIGO_ESPECIALIDAD"" BIGINT)"; SQL statement:
-INSERT INTO PROVIDERS 
-(NOMBRE, APELLIDO, CORREO_ELECTRONICO, DIRECCION, TELEFONO, CODIGO_ESPECIALIDAD, ACTIVO, FECHA_NACIMIENTO)
-VALUES 
-('Laura', 'Sosa', 'laura.sosa@example.com', 'Av. Colón 1234', '3515558888', 'KINESIOLOGIA', TRUE, '1990-05-20') [22018-232]
-2025-11-11 23:41:20.721304-03:00 jdbc[16]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT * FROM PROVIDERS \000d\000aINSERT [*]INTO PROVIDERS \000d\000a(NOMBRE, APELLIDO, CORREO_ELECTRONICO, DIRECCION, TELEFONO, CODIGO_ESPECIALIDAD, ACTIVO, FECHA_NACIMIENTO)\000d\000aVALUES \000d\000a('Laura', 'Sosa', 'laura.sosa@example.com', 'Av. Colón 1234', '3515558888', 1, TRUE, '1990-05-20')"
-Syntax error in SQL statement "SELECT * FROM PROVIDERS \000d\000aINSERT [*]INTO PROVIDERS \000d\000a(NOMBRE, APELLIDO, CORREO_ELECTRONICO, DIRECCION, TELEFONO, CODIGO_ESPECIALIDAD, ACTIVO, FECHA_NACIMIENTO)\000d\000aVALUES \000d\000a('Laura', 'Sosa', 'laura.sosa@example.com', 'Av. Colón 1234', '3515558888', 1, TRUE, '1990-05-20')"; SQL statement:
-SELECT * FROM PROVIDERS 
-INSERT INTO PROVIDERS 
-(NOMBRE, APELLIDO, CORREO_ELECTRONICO, DIRECCION, TELEFONO, CODIGO_ESPECIALIDAD, ACTIVO, FECHA_NACIMIENTO)
-VALUES 
-('Laura', 'Sosa', 'laura.sosa@example.com', 'Av. Colón 1234', '3515558888', 1, TRUE, '1990-05-20') [42000-232]
-2025-11-11 23:48:09.316035-03:00 jdbc[16]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Columna "USERNAME" no encontrada
-Column "USERNAME" not found; SQL statement:
-INSERT INTO USUARIOS (USERNAME, PASSWORD, EMAIL, ROLE, ACTIVE, LOCKED)
-VALUES ('laura.sosa', '1234', 'laura.sosa@example.com', 'PRESTADOR', TRUE, FALSE) [42122-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+2025-11-17 21:06:05.538888-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Imposible eliminar "SPECIALTIES" debido a que "FK1NYA5DIOE5GUFI72YJ4S4S361" depende de él.
+Cannot drop "SPECIALTIES" because "FK1NYA5DIOE5GUFI72YJ4S4S361" depends on it; SQL statement:
+DROP TABLE IF EXISTS specialties [90107-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:644)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	at org.h2.message.DbException.get(DbException.java:223)
-	at org.h2.message.DbException.get(DbException.java:199)
-	at org.h2.table.Table.getColumn(Table.java:786)
-	at org.h2.command.Parser.parseColumn(Parser.java:1171)
-	at org.h2.command.Parser.parseColumnList(Parser.java:1156)
-	at org.h2.command.Parser.parseInsert(Parser.java:1530)
-	at org.h2.command.Parser.parsePrepared(Parser.java:698)
-	at org.h2.command.Parser.parse(Parser.java:581)
-	at org.h2.command.Parser.parse(Parser.java:556)
-	at org.h2.command.Parser.prepareCommand(Parser.java:484)
-	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:645)
-	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:561)
-	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1164)
-	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:245)
-	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
-	at org.h2.server.web.WebApp.getResult(WebApp.java:1344)
-	at org.h2.server.web.WebApp.query(WebApp.java:1142)
-	at org.h2.server.web.WebApp.query(WebApp.java:1118)
-	at org.h2.server.web.WebApp.process(WebApp.java:244)
-	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
-	at org.h2.server.web.JakartaWebServlet.doGet(JakartaWebServlet.java:129)
-	at org.h2.server.web.JakartaWebServlet.doPost(JakartaWebServlet.java:166)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
-	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
-	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
-	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.authentication.www.BasicAuthenticationFilter.doFilterInternal(BasicAuthenticationFilter.java:181)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
-	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
-	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
-	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$4(HandlerMappingIntrospector.java:267)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
-	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
-	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
-	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1776)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:975)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:493)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-2025-11-11 23:49:30.176528-03:00 jdbc[16]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Columna "USER_NAME" no encontrada
-Column "USER_NAME" not found; SQL statement:
-INSERT INTO USUARIOS (USER_NAME, PASSWORD, CORREO_ELECTRONICO, ROLE, ACTIVE, LOCKED)
-VALUES ('laura.sosa', '1234', 'laura.sosa@example.com', 'PRESTADOR', TRUE, FALSE) [42122-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	at org.h2.message.DbException.get(DbException.java:223)
-	at org.h2.message.DbException.get(DbException.java:199)
-	at org.h2.table.Table.getColumn(Table.java:786)
-	at org.h2.command.Parser.parseColumn(Parser.java:1171)
-	at org.h2.command.Parser.parseColumnList(Parser.java:1156)
-	at org.h2.command.Parser.parseInsert(Parser.java:1530)
-	at org.h2.command.Parser.parsePrepared(Parser.java:698)
-	at org.h2.command.Parser.parse(Parser.java:581)
-	at org.h2.command.Parser.parse(Parser.java:556)
-	at org.h2.command.Parser.prepareCommand(Parser.java:484)
-	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:645)
-	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:561)
-	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1164)
-	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:245)
-	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
-	at org.h2.server.web.WebApp.getResult(WebApp.java:1344)
-	at org.h2.server.web.WebApp.query(WebApp.java:1142)
-	at org.h2.server.web.WebApp.query(WebApp.java:1118)
-	at org.h2.server.web.WebApp.process(WebApp.java:244)
-	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
-	at org.h2.server.web.JakartaWebServlet.doGet(JakartaWebServlet.java:129)
-	at org.h2.server.web.JakartaWebServlet.doPost(JakartaWebServlet.java:166)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
-	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
-	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
-	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.authentication.www.BasicAuthenticationFilter.doFilterInternal(BasicAuthenticationFilter.java:181)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
-	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
-	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
-	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$4(HandlerMappingIntrospector.java:267)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
-	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
-	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
-	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1776)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:975)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:493)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-2025-11-12 00:26:38.488733-03:00 database: close
-org.h2.message.DbException: IO Exception: "Closing"
-IO Exception: "Closing" [90028-232]
-	at org.h2.message.DbException.get(DbException.java:212)
-	at org.h2.mvstore.db.Store.close(Store.java:374)
-	at org.h2.engine.Database.closeOpenFilesAndUnlock(Database.java:1292)
-	at org.h2.engine.Database.closeImpl(Database.java:1254)
-	at org.h2.engine.Database.close(Database.java:1173)
-	at org.h2.engine.Database.close(Database.java:1150)
-	at org.h2.engine.Database.removeSession(Database.java:1077)
-	at org.h2.engine.SessionLocal.close(SessionLocal.java:916)
-	at org.h2.jdbc.JdbcConnection.close(JdbcConnection.java:390)
-	at com.zaxxer.hikari.pool.PoolBase.quietlyCloseConnection(PoolBase.java:144)
-	at com.zaxxer.hikari.pool.HikariPool.lambda$closeConnection$1(HikariPool.java:462)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: org.h2.jdbc.JdbcSQLNonTransientException: IO Exception: "Closing"
-IO Exception: "Closing" [90028-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	... 14 more
-Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError [2.3.232/3]
-	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
-	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:926)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:463)
-	at org.h2.mvstore.RandomAccessStore.compactStore(RandomAccessStore.java:443)
-	at org.h2.mvstore.FileStore.compactStore(FileStore.java:890)
-	at org.h2.mvstore.FileStore.stop(FileStore.java:275)
-	at org.h2.mvstore.MVStore.closeStore(MVStore.java:693)
-	at org.h2.mvstore.MVStore.close(MVStore.java:643)
-	at org.h2.mvstore.db.Store.close(Store.java:364)
-	... 12 more
-Caused by: java.lang.AssertionError
-	at org.h2.mvstore.RandomAccessStore.moveChunkInside(RandomAccessStore.java:630)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:569)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:481)
-	at org.h2.mvstore.RandomAccessStore.lambda$compactMoveChunks$1(RandomAccessStore.java:468)
-	at org.h2.mvstore.FileStore.executeFileStoreOperation(FileStore.java:1893)
-	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:922)
-	... 19 more
-2025-11-12 00:56:00.355902-03:00 database: close
-org.h2.message.DbException: IO Exception: "Closing"
-IO Exception: "Closing" [90028-232]
-	at org.h2.message.DbException.get(DbException.java:212)
-	at org.h2.mvstore.db.Store.close(Store.java:374)
-	at org.h2.engine.Database.closeOpenFilesAndUnlock(Database.java:1292)
-	at org.h2.engine.Database.closeImpl(Database.java:1254)
-	at org.h2.engine.Database.close(Database.java:1173)
-	at org.h2.engine.Database.close(Database.java:1150)
-	at org.h2.engine.Database.removeSession(Database.java:1077)
-	at org.h2.engine.SessionLocal.close(SessionLocal.java:916)
-	at org.h2.jdbc.JdbcConnection.close(JdbcConnection.java:390)
-	at com.zaxxer.hikari.pool.PoolBase.quietlyCloseConnection(PoolBase.java:144)
-	at com.zaxxer.hikari.pool.HikariPool.lambda$closeConnection$1(HikariPool.java:462)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: org.h2.jdbc.JdbcSQLNonTransientException: IO Exception: "Closing"
-IO Exception: "Closing" [90028-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	... 14 more
-Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError [2.3.232/3]
-	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
-	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:926)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:463)
-	at org.h2.mvstore.RandomAccessStore.compactStore(RandomAccessStore.java:443)
-	at org.h2.mvstore.FileStore.compactStore(FileStore.java:890)
-	at org.h2.mvstore.FileStore.stop(FileStore.java:275)
-	at org.h2.mvstore.MVStore.closeStore(MVStore.java:693)
-	at org.h2.mvstore.MVStore.close(MVStore.java:643)
-	at org.h2.mvstore.db.Store.close(Store.java:364)
-	... 12 more
-Caused by: java.lang.AssertionError
-	at org.h2.mvstore.RandomAccessStore.moveChunkInside(RandomAccessStore.java:630)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:569)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:481)
-	at org.h2.mvstore.RandomAccessStore.lambda$compactMoveChunks$1(RandomAccessStore.java:468)
-	at org.h2.mvstore.FileStore.executeFileStoreOperation(FileStore.java:1893)
-	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:922)
-	... 19 more
-2025-11-12 01:05:58.295868-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "([*]7, 'NEUROLOGIA', 'NeurologÃ\00ada')"; se esperaba "(, SELECT, TABLE, VALUES"
-Syntax error in SQL statement "([*]7, 'NEUROLOGIA', 'NeurologÃ\00ada')"; expected "(, SELECT, TABLE, VALUES"; SQL statement:
-(7, 'NEUROLOGIA', 'NeurologÃ­a') [42001-232]
-2025-11-12 01:07:05.317743-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "([*]7, 'NEUROLOGIA', 'NeurologÃ\00ada')"; se esperaba "(, SELECT, TABLE, VALUES"
-Syntax error in SQL statement "([*]7, 'NEUROLOGIA', 'NeurologÃ\00ada')"; expected "(, SELECT, TABLE, VALUES"; SQL statement:
-(7, 'NEUROLOGIA', 'NeurologÃ­a') [42001-232]
-2025-11-12 01:07:41.908279-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "([*]7, 'NEUROLOGIA', 'NeurologÃ\00ada')"; se esperaba "(, SELECT, TABLE, VALUES"
-Syntax error in SQL statement "([*]7, 'NEUROLOGIA', 'NeurologÃ\00ada')"; expected "(, SELECT, TABLE, VALUES"; SQL statement:
-(7, 'NEUROLOGIA', 'NeurologÃ­a') [42001-232]
-2025-11-12 01:14:56.696309-03:00 database: close
-org.h2.message.DbException: IO Exception: "Closing"
-IO Exception: "Closing" [90028-232]
-	at org.h2.message.DbException.get(DbException.java:212)
-	at org.h2.mvstore.db.Store.close(Store.java:374)
-	at org.h2.engine.Database.closeOpenFilesAndUnlock(Database.java:1292)
-	at org.h2.engine.Database.closeImpl(Database.java:1254)
-	at org.h2.engine.Database.close(Database.java:1173)
-	at org.h2.engine.Database.close(Database.java:1150)
-	at org.h2.engine.Database.removeSession(Database.java:1077)
-	at org.h2.engine.SessionLocal.close(SessionLocal.java:916)
-	at org.h2.jdbc.JdbcConnection.close(JdbcConnection.java:390)
-	at com.zaxxer.hikari.pool.PoolBase.quietlyCloseConnection(PoolBase.java:144)
-	at com.zaxxer.hikari.pool.HikariPool.lambda$closeConnection$1(HikariPool.java:462)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: org.h2.jdbc.JdbcSQLNonTransientException: IO Exception: "Closing"
-IO Exception: "Closing" [90028-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	... 14 more
-Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError [2.3.232/3]
-	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
-	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:926)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:463)
-	at org.h2.mvstore.RandomAccessStore.compactStore(RandomAccessStore.java:443)
-	at org.h2.mvstore.FileStore.compactStore(FileStore.java:890)
-	at org.h2.mvstore.FileStore.stop(FileStore.java:275)
-	at org.h2.mvstore.MVStore.closeStore(MVStore.java:693)
-	at org.h2.mvstore.MVStore.close(MVStore.java:643)
-	at org.h2.mvstore.db.Store.close(Store.java:364)
-	... 12 more
-Caused by: java.lang.AssertionError
-	at org.h2.mvstore.RandomAccessStore.moveChunkInside(RandomAccessStore.java:630)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:569)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:481)
-	at org.h2.mvstore.RandomAccessStore.lambda$compactMoveChunks$1(RandomAccessStore.java:468)
-	at org.h2.mvstore.FileStore.executeFileStoreOperation(FileStore.java:1893)
-	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:922)
-	... 19 more
-2025-11-12 01:23:17.033551-03:00 database: close
-org.h2.message.DbException: IO Exception: "Closing"
-IO Exception: "Closing" [90028-232]
-	at org.h2.message.DbException.get(DbException.java:212)
-	at org.h2.mvstore.db.Store.close(Store.java:374)
-	at org.h2.engine.Database.closeOpenFilesAndUnlock(Database.java:1292)
-	at org.h2.engine.Database.closeImpl(Database.java:1254)
-	at org.h2.engine.Database.close(Database.java:1173)
-	at org.h2.engine.Database.close(Database.java:1150)
-	at org.h2.engine.Database.removeSession(Database.java:1077)
-	at org.h2.engine.SessionLocal.close(SessionLocal.java:916)
-	at org.h2.jdbc.JdbcConnection.close(JdbcConnection.java:390)
-	at com.zaxxer.hikari.pool.PoolBase.quietlyCloseConnection(PoolBase.java:144)
-	at com.zaxxer.hikari.pool.HikariPool.lambda$closeConnection$1(HikariPool.java:462)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: org.h2.jdbc.JdbcSQLNonTransientException: IO Exception: "Closing"
-IO Exception: "Closing" [90028-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	... 14 more
-Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError [2.3.232/3]
-	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
-	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:926)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:463)
-	at org.h2.mvstore.RandomAccessStore.compactStore(RandomAccessStore.java:443)
-	at org.h2.mvstore.FileStore.compactStore(FileStore.java:890)
-	at org.h2.mvstore.FileStore.stop(FileStore.java:275)
-	at org.h2.mvstore.MVStore.closeStore(MVStore.java:693)
-	at org.h2.mvstore.MVStore.close(MVStore.java:643)
-	at org.h2.mvstore.db.Store.close(Store.java:364)
-	... 12 more
-Caused by: java.lang.AssertionError
-	at org.h2.mvstore.RandomAccessStore.moveChunkInside(RandomAccessStore.java:630)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:569)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:481)
-	at org.h2.mvstore.RandomAccessStore.lambda$compactMoveChunks$1(RandomAccessStore.java:468)
-	at org.h2.mvstore.FileStore.executeFileStoreOperation(FileStore.java:1893)
-	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:922)
-	... 19 more
-2025-11-12 01:34:10.714097-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Columna "ID_USUARIO" no encontrada
-Column "ID_USUARIO" not found; SQL statement:
-INSERT INTO patients (id, nombre, apellido, fecha_nacimiento, direccion, telefono, telegram, correo_electronico, id_usuario, numero_historia_clinica, codigo_obra_social, nro_afiliado_obra_social, tipo_discapacidad) VALUES (1, 'MarÃ­a', 'GÃ³mez', '1990-04-10', 'CÃ³rdoba 500', '3516000001', '@maria', 'maria@email.com', 1, 'H1234', 'OSDE', 'A001', 'Motora') [42122-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	at org.h2.message.DbException.get(DbException.java:223)
-	at org.h2.message.DbException.get(DbException.java:199)
-	at org.h2.table.Table.getColumn(Table.java:786)
-	at org.h2.command.Parser.parseColumn(Parser.java:1171)
-	at org.h2.command.Parser.parseColumnList(Parser.java:1156)
-	at org.h2.command.Parser.parseInsert(Parser.java:1530)
-	at org.h2.command.Parser.parsePrepared(Parser.java:698)
-	at org.h2.command.Parser.parse(Parser.java:581)
-	at org.h2.command.Parser.parse(Parser.java:556)
-	at org.h2.command.Parser.prepareCommand(Parser.java:484)
-	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:645)
-	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:561)
-	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1164)
-	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:245)
+	at org.h2.command.ddl.DropTable.prepareDrop(DropTable.java:108)
+	at org.h2.command.ddl.DropTable.update(DropTable.java:133)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:139)
+	at org.h2.command.Command.executeUpdate(Command.java:304)
+	at org.h2.command.Command.executeUpdate(Command.java:248)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:262)
 	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
 	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:95)
 	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
@@ -487,8 +20,8 @@ INSERT INTO patients (id, nombre, apellido, fecha_nacimiento, direccion, telefon
 	at org.springframework.boot.jdbc.init.DataSourceScriptDatabaseInitializer.runScripts(DataSourceScriptDatabaseInitializer.java:87)
 	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.runScripts(AbstractScriptDatabaseInitializer.java:146)
 	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.applyScripts(AbstractScriptDatabaseInitializer.java:108)
-	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.applyDataScripts(AbstractScriptDatabaseInitializer.java:102)
-	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.initializeDatabase(AbstractScriptDatabaseInitializer.java:77)
+	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.applySchemaScripts(AbstractScriptDatabaseInitializer.java:98)
+	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.initializeDatabase(AbstractScriptDatabaseInitializer.java:76)
 	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.afterPropertiesSet(AbstractScriptDatabaseInitializer.java:66)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
@@ -597,7 +130,7 @@ INSERT INTO patients (id, nombre, apellido, fecha_nacimiento, direccion, telefon
 	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
-2025-11-12 20:26:34.264239-03:00 database: close
+2025-11-17 21:06:05.656352-03:00 database: close
 org.h2.message.DbException: IO Exception: "Closing"
 IO Exception: "Closing" [90028-232]
 	at org.h2.message.DbException.get(DbException.java:212)
@@ -638,63 +171,19 @@ Caused by: java.lang.AssertionError
 	at org.h2.mvstore.FileStore.executeFileStoreOperation(FileStore.java:1893)
 	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:922)
 	... 19 more
-2025-11-12 22:57:44.090673-03:00 database: close
-org.h2.message.DbException: IO Exception: "Closing"
-IO Exception: "Closing" [90028-232]
-	at org.h2.message.DbException.get(DbException.java:212)
-	at org.h2.mvstore.db.Store.close(Store.java:374)
-	at org.h2.engine.Database.closeOpenFilesAndUnlock(Database.java:1292)
-	at org.h2.engine.Database.closeImpl(Database.java:1254)
-	at org.h2.engine.Database.close(Database.java:1173)
-	at org.h2.engine.Database.close(Database.java:1150)
-	at org.h2.engine.Database.removeSession(Database.java:1077)
-	at org.h2.engine.SessionLocal.close(SessionLocal.java:916)
-	at org.h2.jdbc.JdbcConnection.close(JdbcConnection.java:390)
-	at com.zaxxer.hikari.pool.PoolBase.quietlyCloseConnection(PoolBase.java:144)
-	at com.zaxxer.hikari.pool.HikariPool.lambda$closeConnection$1(HikariPool.java:462)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: org.h2.jdbc.JdbcSQLNonTransientException: IO Exception: "Closing"
-IO Exception: "Closing" [90028-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	... 14 more
-Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError [2.3.232/3]
-	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
-	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:926)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:463)
-	at org.h2.mvstore.RandomAccessStore.compactStore(RandomAccessStore.java:443)
-	at org.h2.mvstore.FileStore.compactStore(FileStore.java:890)
-	at org.h2.mvstore.FileStore.stop(FileStore.java:275)
-	at org.h2.mvstore.MVStore.closeStore(MVStore.java:693)
-	at org.h2.mvstore.MVStore.close(MVStore.java:643)
-	at org.h2.mvstore.db.Store.close(Store.java:364)
-	... 12 more
-Caused by: java.lang.AssertionError
-	at org.h2.mvstore.RandomAccessStore.moveChunkInside(RandomAccessStore.java:630)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:569)
-	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:481)
-	at org.h2.mvstore.RandomAccessStore.lambda$compactMoveChunks$1(RandomAccessStore.java:468)
-	at org.h2.mvstore.FileStore.executeFileStoreOperation(FileStore.java:1893)
-	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:922)
-	... 19 more
-2025-11-13 00:35:01.846933-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: La cantidad de columnas no coincide
-Column count does not match; SQL statement:
-INSERT INTO usuarios (id, usuario, password, email, activo, bloqueado, intentos_fallidos, fecha_creacion, rol) VALUES ('lgomez', '$2a$10$exampleHash1', 'laura.gomez@salud.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'), ('jmartinez', '$2a$10$exampleHash2', 'jorge.martinez@rehab.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'), ( 'arossi', '$2a$10$exampleHash3', 'ana.rossi@terapia.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'), ('admin', '$2a$10$exampleHash4', 'admin@ally.com', true, false, 0, CURRENT_TIMESTAMP, 'ADMIN') [21002-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+2025-11-17 21:08:23.207566-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Imposible eliminar "SPECIALTIES" debido a que "FK1NYA5DIOE5GUFI72YJ4S4S361" depende de él.
+Cannot drop "SPECIALTIES" because "FK1NYA5DIOE5GUFI72YJ4S4S361" depends on it; SQL statement:
+DROP TABLE IF EXISTS specialties [90107-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:644)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	at org.h2.message.DbException.get(DbException.java:223)
-	at org.h2.message.DbException.get(DbException.java:199)
-	at org.h2.message.DbException.get(DbException.java:188)
-	at org.h2.command.dml.Insert.doPrepare(Insert.java:294)
-	at org.h2.command.dml.DataChangeStatement.prepare(DataChangeStatement.java:37)
-	at org.h2.command.Parser.prepareCommand(Parser.java:489)
-	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:645)
-	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:561)
-	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1164)
-	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:245)
+	at org.h2.command.ddl.DropTable.prepareDrop(DropTable.java:108)
+	at org.h2.command.ddl.DropTable.update(DropTable.java:133)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:139)
+	at org.h2.command.Command.executeUpdate(Command.java:304)
+	at org.h2.command.Command.executeUpdate(Command.java:248)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:262)
 	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
 	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:95)
 	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
@@ -704,8 +193,8 @@ INSERT INTO usuarios (id, usuario, password, email, activo, bloqueado, intentos_
 	at org.springframework.boot.jdbc.init.DataSourceScriptDatabaseInitializer.runScripts(DataSourceScriptDatabaseInitializer.java:87)
 	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.runScripts(AbstractScriptDatabaseInitializer.java:146)
 	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.applyScripts(AbstractScriptDatabaseInitializer.java:108)
-	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.applyDataScripts(AbstractScriptDatabaseInitializer.java:102)
-	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.initializeDatabase(AbstractScriptDatabaseInitializer.java:77)
+	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.applySchemaScripts(AbstractScriptDatabaseInitializer.java:98)
+	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.initializeDatabase(AbstractScriptDatabaseInitializer.java:76)
 	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.afterPropertiesSet(AbstractScriptDatabaseInitializer.java:66)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
@@ -814,7 +303,11 @@ INSERT INTO usuarios (id, usuario, password, email, activo, bloqueado, intentos_
 	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
-2025-11-13 00:35:01.958720-03:00 database: close
+2025-11-17 21:24:05.545791-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "PRESTADOR_SPECIALTIES" no encontrada
+Table "PRESTADOR_SPECIALTIES" not found; SQL statement:
+INSERT INTO prestador_specialties (prestador_id, specialty_id) VALUES (5, 1), (5, 3), (6, 2) [42102-232]
+2025-11-17 21:24:05.809213-03:00 database: close
 org.h2.message.DbException: IO Exception: "Closing"
 IO Exception: "Closing" [90028-232]
 	at org.h2.message.DbException.get(DbException.java:212)
@@ -855,3 +348,48 @@ Caused by: java.lang.AssertionError
 	at org.h2.mvstore.FileStore.executeFileStoreOperation(FileStore.java:1893)
 	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:922)
 	... 19 more
+2025-11-17 23:33:34.900515-03:00 database: close
+org.h2.message.DbException: IO Exception: "Closing"
+IO Exception: "Closing" [90028-232]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.mvstore.db.Store.close(Store.java:374)
+	at org.h2.engine.Database.closeOpenFilesAndUnlock(Database.java:1292)
+	at org.h2.engine.Database.closeImpl(Database.java:1254)
+	at org.h2.engine.Database.close(Database.java:1173)
+	at org.h2.engine.Database.close(Database.java:1150)
+	at org.h2.engine.Database.removeSession(Database.java:1077)
+	at org.h2.engine.SessionLocal.close(SessionLocal.java:916)
+	at org.h2.jdbc.JdbcConnection.close(JdbcConnection.java:390)
+	at com.zaxxer.hikari.pool.PoolBase.quietlyCloseConnection(PoolBase.java:144)
+	at com.zaxxer.hikari.pool.HikariPool.lambda$closeConnection$1(HikariPool.java:462)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: IO Exception: "Closing"
+IO Exception: "Closing" [90028-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 14 more
+Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError [2.3.232/3]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:926)
+	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:463)
+	at org.h2.mvstore.RandomAccessStore.compactStore(RandomAccessStore.java:443)
+	at org.h2.mvstore.FileStore.compactStore(FileStore.java:890)
+	at org.h2.mvstore.FileStore.stop(FileStore.java:275)
+	at org.h2.mvstore.MVStore.closeStore(MVStore.java:693)
+	at org.h2.mvstore.MVStore.close(MVStore.java:643)
+	at org.h2.mvstore.db.Store.close(Store.java:364)
+	... 12 more
+Caused by: java.lang.AssertionError
+	at org.h2.mvstore.RandomAccessStore.moveChunkInside(RandomAccessStore.java:630)
+	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:569)
+	at org.h2.mvstore.RandomAccessStore.compactMoveChunks(RandomAccessStore.java:481)
+	at org.h2.mvstore.RandomAccessStore.lambda$compactMoveChunks$1(RandomAccessStore.java:468)
+	at org.h2.mvstore.FileStore.executeFileStoreOperation(FileStore.java:1893)
+	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:922)
+	... 19 more
+2025-11-18 02:36:26.551546-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "[*]IINSERT INTO specialties (id, nombre) VALUES (1, 'KinesiologÃ\00ada'), (2, 'Terapia Ocupacional'), (3, 'FisiatrÃ\00ada'), (4, 'Transporte Sanitario'), (5, 'PsicologÃ\00ada'), (6, 'NeurologÃ\00ada')"; se esperaba "INSERT"
+Syntax error in SQL statement "[*]IINSERT INTO specialties (id, nombre) VALUES (1, 'KinesiologÃ\00ada'), (2, 'Terapia Ocupacional'), (3, 'FisiatrÃ\00ada'), (4, 'Transporte Sanitario'), (5, 'PsicologÃ\00ada'), (6, 'NeurologÃ\00ada')"; expected "INSERT"; SQL statement:
+IINSERT INTO specialties (id, nombre) VALUES (1, 'KinesiologÃ­a'), (2, 'Terapia Ocupacional'), (3, 'FisiatrÃ­a'), (4, 'Transporte Sanitario'), (5, 'PsicologÃ­a'), (6, 'NeurologÃ­a') [42001-232]

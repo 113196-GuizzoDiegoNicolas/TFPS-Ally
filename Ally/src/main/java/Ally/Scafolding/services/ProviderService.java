@@ -11,7 +11,7 @@ import java.util.List;
  *     Handles CRUD operations for medical provider entities.
  * </p>
  */
-@Service
+
 public interface ProviderService {
 
     /**

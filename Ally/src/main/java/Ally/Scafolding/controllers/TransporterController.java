@@ -1,7 +1,7 @@
 package Ally.Scafolding.controllers;
 
-import Ally.Scafolding.dtos.common.transporter.TransporterDTO;
 import Ally.Scafolding.dtos.common.transporter.TransporterCreateDTO;
+import Ally.Scafolding.dtos.common.transporter.TransporterDTO;
 import Ally.Scafolding.services.TransporterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

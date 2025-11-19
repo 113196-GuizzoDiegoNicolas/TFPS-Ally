@@ -3,6 +3,7 @@ import Ally.Scafolding.dtos.common.service.ServiceCreateDTO;
 import Ally.Scafolding.dtos.common.service.ServiceDTO;
 
 import java.util.List;
+
 public interface ServiceService {
     ServiceDTO crear(ServiceCreateDTO dto);
     List<ServiceDTO> listarPorPaciente(Long pacienteId);

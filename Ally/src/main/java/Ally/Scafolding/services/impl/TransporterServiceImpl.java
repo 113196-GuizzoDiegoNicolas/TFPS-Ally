@@ -1,7 +1,7 @@
 package Ally.Scafolding.services.impl;
 
-import Ally.Scafolding.dtos.common.transporter.TransporterDTO;
 import Ally.Scafolding.dtos.common.transporter.TransporterCreateDTO;
+import Ally.Scafolding.dtos.common.transporter.TransporterDTO;
 import Ally.Scafolding.entities.TransportersEntity;
 import Ally.Scafolding.entities.UsersEntity;
 import Ally.Scafolding.repositories.TransportersRepository;

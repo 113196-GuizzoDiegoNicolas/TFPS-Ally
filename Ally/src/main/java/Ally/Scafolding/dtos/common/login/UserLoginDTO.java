@@ -11,16 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class LoginDTO {
+public class UserLoginDTO {
+
+
     /**
      * Username for system access.
      */
-    private String usuario;
-
-    /**
-     * Password for system access.
-     */
+    private String email;
     private String password;
-    private String email;   // cambio para coincidir con el front
 
 }

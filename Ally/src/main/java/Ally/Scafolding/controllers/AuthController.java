@@ -1,6 +1,6 @@
 package Ally.Scafolding.controllers;
 
-import Ally.Scafolding.dtos.common.login.LoginDTO;
+import Ally.Scafolding.dtos.common.login.UserLoginDTO;
 import Ally.Scafolding.dtos.common.login.LoginResponseDTO;
 import Ally.Scafolding.dtos.common.login.UserDTO;
 import Ally.Scafolding.entities.UsersEntity;
@@ -20,9 +20,8 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO request) {
+    public ResponseEntity<?> login(@RequestBody UserLoginDTO request) {
 
-        // Buscar por email
         UsersEntity user = usersRepository.findByEmail(request.getEmail())
                 .orElse(null);
 
@@ -30,23 +29,22 @@ public class AuthController {
             return ResponseEntity.status(401).body("Credenciales inválidas");
         }
 
-        // Armar DTO de respuesta
-        UserDTO userDTO = new UserDTO(
-                user.getId(),
-                user.getUsuario(),
-                user.getEmail(),
-                user.getRol(),
-                null, // no mandes password
-                user.getActivo(),
-                user.getBloqueado()
-        );
+        UserDTO userDTO = UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsuario())
+                .email(user.getEmail())
+                .role(user.getRol())
+                .active(user.getActivo())
+                .locked(user.getBloqueado())
+                .build();
 
         LoginResponseDTO response = new LoginResponseDTO(
-                null, // token, si lo implementás más adelante
+                null, // token cuando se implemente JWT
                 userDTO,
                 user.getRol()
         );
 
         return ResponseEntity.ok(response);
     }
+
 }

@@ -2,65 +2,53 @@ package Ally.Scafolding.services.impl;
 
 import Ally.Scafolding.dtos.common.service.ServiceCreateDTO;
 import Ally.Scafolding.dtos.common.service.ServiceDTO;
-import Ally.Scafolding.models.ServiceEntity;
-import Ally.Scafolding.repositories.ServiceRepository;
+import Ally.Scafolding.entities.ServiceRequestEntity;
+import Ally.Scafolding.repositories.ServiceRequestRepository;
 import Ally.Scafolding.services.ServiceService;
-import org.springframework.beans.factory.annotation.Autowired;
+import Ally.Scafolding.dtos.common.exceptions.NotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ServiceServiceImpl implements ServiceService {
 
-    @Autowired
-    private ServiceRepository repository;
+    private final ServiceRequestRepository repository;
+    @Qualifier("modelMapper")
+    private final ModelMapper mapper;
 
     @Override
     public ServiceDTO crear(ServiceCreateDTO dto) {
-        ServiceEntity entity = new ServiceEntity();
-        entity.setPacienteId(dto.getPacienteId());
-        entity.setPrestadorId(dto.getPrestadorId());
-        entity.setEspecialidad(dto.getEspecialidad());
-        entity.setDescripcion(dto.getDescripcion());
+        ServiceRequestEntity entity = mapper.map(dto, ServiceRequestEntity.class);
         entity.setEstado("PENDIENTE");
-        entity.setFechaSolicitud(LocalDateTime.now());
-
-        ServiceEntity saved = repository.save(entity);
-        return mapToDTO(saved);
+        entity.setActivo(true);
+        return mapper.map(repository.save(entity), ServiceDTO.class);
     }
 
     @Override
     public List<ServiceDTO> listarPorPaciente(Long pacienteId) {
-        return repository.findByPacienteId(pacienteId)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+        return repository.findByPaciente_IdAndActivoTrue(pacienteId)
+                .stream().map(e -> mapper.map(e, ServiceDTO.class)).toList();
     }
 
     @Override
     public List<ServiceDTO> listarPorPrestador(Long prestadorId) {
-        return repository.findByPrestadorId(prestadorId)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+        return repository.findByPrestador_Id(prestadorId)
+                .stream().map(e -> mapper.map(e, ServiceDTO.class)).toList();
     }
 
     @Override
-    public ServiceDTO actualizarEstado(Long id, String nuevoEstado) {
-        ServiceEntity entity = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Servicio no encontrado"));
-        entity.setEstado(nuevoEstado);
-        return mapToDTO(repository.save(entity));
-    }
-
-    private ServiceDTO mapToDTO(ServiceEntity entity) {
-        return new ServiceDTO(
-                entity.getId(),
-                entity.getPacienteId(),
-                entity.getPrestadorId(),
-                entity.getEspecialidad(),
-                entity.getDescripcion(),
-                entity.getEstado(),
-                entity.getFechaSolicitud()
-        );
+    public ServiceDTO actualizarEstado(Long id, String estado) {
+        return repository.findById(id)
+                .map(s -> {
+                    s.setEstado(estado);
+                    return mapper.map(repository.save(s), ServiceDTO.class);
+                })
+                .orElseThrow(() -> new NotFoundException("Servicio no encontrado"));
     }
 }
+
