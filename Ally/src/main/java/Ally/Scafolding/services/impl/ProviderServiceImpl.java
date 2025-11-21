@@ -19,7 +19,9 @@ import java.util.stream.Collectors;
 
 /**
  * Implementation of medical provider management service.
- * Handles CRUD operations for medical provider entities.
+ * <p>
+ *     Handles CRUD operations for medical provider entities.
+ * </p>
  */
 @Service
 public class ProviderServiceImpl implements ProviderService {
@@ -29,10 +31,8 @@ public class ProviderServiceImpl implements ProviderService {
 
     @Autowired
     private UsersRepository usersRepository;
-
     @Autowired
     private SpecialtyRepository specialtyRepository;
-
     @Autowired
     private ModelMapper modelMapper;
 
@@ -40,57 +40,17 @@ public class ProviderServiceImpl implements ProviderService {
     @Qualifier("mergerMapper")
     private ModelMapper mergerMapper;
 
-    /**
-     * Obtiene todos los prestadores (mapeo manual para evitar errores de ModelMapper).
-     */
     @Override
     public List<ProviderDTO> findAll() {
         return providersRepository.findAll().stream()
-                .map(entity -> {
-                    ProviderDTO dto = new ProviderDTO();
-                    dto.setId(entity.getId());
-                    dto.setNombre(entity.getNombre());
-                    dto.setApellido(entity.getApellido());
-                    dto.setEmail(entity.getCorreoElectronico());
-                    dto.setTelefono(entity.getTelefono());
-                    dto.setDireccion(entity.getDireccion());
-                    dto.setActivo(entity.getActivo());
-                    dto.setCodigoEspecialidad(
-                            entity.getEspecialidad() != null ? entity.getEspecialidad().getCodigo() : null
-                    );
-                    if (entity.getUsersEntity() != null) {
-                        dto.setUsuarioId(entity.getUsersEntity().getId());
-                        dto.setNombreUsuario(entity.getUsersEntity().getUsuario());
-                    }
-                    return dto;
-                })
+                .map(entity -> modelMapper.map(entity, ProviderDTO.class))
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Obtiene un prestador por ID (mapeo manual).
-     */
     @Override
     public ProviderDTO findById(Long id) {
         return providersRepository.findById(id)
-                .map(entity -> {
-                    ProviderDTO dto = new ProviderDTO();
-                    dto.setId(entity.getId());
-                    dto.setNombre(entity.getNombre());
-                    dto.setApellido(entity.getApellido());
-                    dto.setEmail(entity.getCorreoElectronico());
-                    dto.setTelefono(entity.getTelefono());
-                    dto.setDireccion(entity.getDireccion());
-                    dto.setActivo(entity.getActivo());
-                    dto.setCodigoEspecialidad(
-                            entity.getEspecialidad() != null ? entity.getEspecialidad().getCodigo() : null
-                    );
-                    if (entity.getUsersEntity() != null) {
-                        dto.setUsuarioId(entity.getUsersEntity().getId());
-                        dto.setNombreUsuario(entity.getUsersEntity().getUsuario());
-                    }
-                    return dto;
-                })
+                .map(entity -> modelMapper.map(entity, ProviderDTO.class))
                 .orElse(null);
     }
 
@@ -98,29 +58,26 @@ public class ProviderServiceImpl implements ProviderService {
     public ProviderDTO create(ProviderCreateDTO providerCreateDTO) {
         validateProviderCreation(providerCreateDTO);
 
-        // Buscar usuario
+        // Verificar que el usuario existe
         UsersEntity usuarioEntity = usersRepository.findById(providerCreateDTO.getUsuarioId())
                 .orElseThrow(() -> new IllegalArgumentException("El usuario asociado no existe"));
 
-        // Buscar la especialidad por su código o nombre
-        SpecialtyEntity especialidad = specialtyRepository.findByCodigo(providerCreateDTO.getCodigoEspecialidad())
-                .orElseGet(() -> specialtyRepository.findByNombre(providerCreateDTO.getCodigoEspecialidad())
-                        .orElseThrow(() -> new IllegalArgumentException(
-                                "Especialidad no encontrada: " + providerCreateDTO.getCodigoEspecialidad()))
-                );
+        // Verificar que no existe otro provider con el mismo usuario
+        if (providersRepository.findByUsuarioId(providerCreateDTO.getUsuarioId()).isPresent()) {
+            throw new IllegalArgumentException("Ya existe un proveedor asociado a este usuario");
+        }
 
-        // Crear manualmente el provider
-        ProvidersEntity entity = new ProvidersEntity();
-        entity.setNombre(providerCreateDTO.getNombre());
-        entity.setApellido(providerCreateDTO.getApellido());
-        entity.setCorreoElectronico(providerCreateDTO.getEmail());
-        entity.setTelefono(providerCreateDTO.getTelefono());
-        entity.setDireccion(providerCreateDTO.getDireccion());
-        entity.setEspecialidad(especialidad);
-        entity.setActivo(true);
+        // Verificar que no existe otro provider con el mismo email
+        if (providersRepository.existsByEmail(providerCreateDTO.getEmail())) {
+            throw new IllegalArgumentException("El email ya está registrado");
+        }
+
+        // Convertir DTO a Entity usando ModelMapper
+        ProvidersEntity entity = modelMapper.map(providerCreateDTO, ProvidersEntity.class);
         entity.setUsersEntity(usuarioEntity);
+        entity.setActivo(true);
 
-        ProvidersEntity saved = providersRepository.saveAndFlush(entity);
+        ProvidersEntity saved = providersRepository.save(entity);
         return modelMapper.map(saved, ProviderDTO.class);
     }
 
@@ -129,7 +86,10 @@ public class ProviderServiceImpl implements ProviderService {
         return providersRepository.findById(id)
                 .map(existing -> {
                     validateProviderUpdate(providerDTO, existing);
+
+                    // Usar mergerMapper para actualizar solo campos no nulos
                     mergerMapper.map(providerDTO, existing);
+
                     ProvidersEntity updated = providersRepository.save(existing);
                     return modelMapper.map(updated, ProviderDTO.class);
                 })
@@ -154,6 +114,7 @@ public class ProviderServiceImpl implements ProviderService {
 
     @Override
     public List<ProviderDTO> findByEspecialidad(String nombreEspecialidad) {
+
         SpecialtyEntity especialidad = specialtyRepository.findByNombre(nombreEspecialidad)
                 .orElseThrow(() -> new IllegalArgumentException("Especialidad no encontrada: " + nombreEspecialidad));
 
@@ -164,13 +125,17 @@ public class ProviderServiceImpl implements ProviderService {
 
     @Override
     public List<ProviderDTO> findActiveByEspecialidad(String nombreEspecialidad) {
+        // 1. Buscar la especialidad por nombre
         SpecialtyEntity especialidad = specialtyRepository.findByNombre(nombreEspecialidad)
                 .orElseThrow(() -> new IllegalArgumentException("Especialidad no encontrada: " + nombreEspecialidad));
 
+        // 2. Buscar solo los providers activos de esa especialidad
         return providersRepository.findByEspecialidadAndActivoTrue(especialidad).stream()
                 .map(entity -> modelMapper.map(entity, ProviderDTO.class))
                 .collect(Collectors.toList());
     }
+
+
 
     @Override
     public ProviderDTO findByEmail(String email) {
@@ -178,6 +143,8 @@ public class ProviderServiceImpl implements ProviderService {
                 .map(entity -> modelMapper.map(entity, ProviderDTO.class))
                 .orElse(null);
     }
+
+
 
     @Override
     public ProviderDTO findByUsuarioId(Long usuarioId) {
@@ -200,25 +167,26 @@ public class ProviderServiceImpl implements ProviderService {
                 .collect(Collectors.toList());
     }
 
-    // VALIDACIONES
+    // VALIDACIONES EN EL SERVICIO
     private void validateProviderCreation(ProviderCreateDTO providerCreateDTO) {
-        if (providerCreateDTO.getNombre() == null || providerCreateDTO.getNombre().trim().isEmpty())
+        if (providerCreateDTO.getNombre() == null || providerCreateDTO.getNombre().trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre no puede estar vacío");
-
-        if (providerCreateDTO.getApellido() == null || providerCreateDTO.getApellido().trim().isEmpty())
+        }
+        if (providerCreateDTO.getApellido() == null || providerCreateDTO.getApellido().trim().isEmpty()) {
             throw new IllegalArgumentException("El apellido no puede estar vacío");
-
-        if (providerCreateDTO.getEmail() == null || providerCreateDTO.getEmail().trim().isEmpty())
+        }
+        if (providerCreateDTO.getEmail() == null || providerCreateDTO.getEmail().trim().isEmpty()) {
             throw new IllegalArgumentException("El email no puede estar vacío");
-
-        if (providerCreateDTO.getCodigoEspecialidad() == null || providerCreateDTO.getCodigoEspecialidad().trim().isEmpty())
+        }
+        if (providerCreateDTO.getCodigoEspecialidad() == null || providerCreateDTO.getCodigoEspecialidad().trim().isEmpty()) {
             throw new IllegalArgumentException("El código de especialidad no puede estar vacío");
-
-        if (providerCreateDTO.getUsuarioId() == null)
+        }
+        if (providerCreateDTO.getUsuarioId() == null) {
             throw new IllegalArgumentException("El ID de usuario no puede estar vacío");
-
-        if (!isValidEmail(providerCreateDTO.getEmail()))
+        }
+        if (!isValidEmail(providerCreateDTO.getEmail())) {
             throw new IllegalArgumentException("El formato del email no es válido");
+        }
     }
 
     private void validateProviderUpdate(ProviderDTO providerDTO, ProvidersEntity existing) {
@@ -227,9 +195,9 @@ public class ProviderServiceImpl implements ProviderService {
                 providersRepository.existsByEmail(providerDTO.getEmail())) {
             throw new IllegalArgumentException("El email ya está en uso por otro proveedor");
         }
-
-        if (providerDTO.getEmail() != null && !isValidEmail(providerDTO.getEmail()))
+        if (providerDTO.getEmail() != null && !isValidEmail(providerDTO.getEmail())) {
             throw new IllegalArgumentException("El formato del email no es válido");
+        }
     }
 
     private boolean isValidEmail(String email) {
