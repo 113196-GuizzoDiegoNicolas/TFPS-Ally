@@ -1,4 +1,4 @@
-package Ally.Scafolding.models;
+package Ally.Scafolding.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,11 @@ public class ServiceEntity {
     private Long id;
 
     private Long pacienteId;
+
+    // Prestador o Transportista (uno de los dos será null)
     private Long prestadorId;
+    private Long transportistaId;
+
     private String especialidad;
 
     @Column(length = 500)
