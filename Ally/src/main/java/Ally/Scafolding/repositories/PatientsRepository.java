@@ -52,4 +52,5 @@ public interface PatientsRepository extends JpaRepository<PatientsEntity, Long>,
      * @return a list of patients matching the condition
      */
     List<PatientsEntity> findByCodigoObraSocial(String codigoObraSocial);
+    Optional<PatientsEntity> findByUsersEntityId(Long usuarioId);
 }

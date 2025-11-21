@@ -1,5 +1,6 @@
 package Ally.Scafolding.services.impl;
 
+import Ally.Scafolding.dtos.common.patient.UpdatePatientDTO;
 import Ally.Scafolding.models.Patient;
 import Ally.Scafolding.entities.PatientsEntity;
 import Ally.Scafolding.repositories.PatientsRepository;
@@ -110,5 +111,30 @@ public class PatientServiceImpl implements PatientService {
         }
         patientsRepository.deleteById(id);
         return true;
+    }
+    @Override
+    public Patient getPatientByUsuarioId(Long usuarioId) {
+        PatientsEntity entity = patientsRepository.findByUsersEntityId(usuarioId)
+                .orElseThrow(() -> new NotFoundException("Paciente no encontrado con usuarioId: " + usuarioId));
+
+        return modelMapper.map(entity, Patient.class);
+    }
+    @Override
+    public Patient updatePatientPartial(UpdatePatientDTO dto) {
+        PatientsEntity entity = patientsRepository.findById(dto.getId())
+                .orElseThrow(() -> new NotFoundException("Paciente no encontrado con id: " + dto.getId()));
+
+        // Actualizamos solo si el valor no es null
+        if (dto.getNombre() != null) entity.setNombre(dto.getNombre());
+        if (dto.getApellido() != null) entity.setApellido(dto.getApellido());
+        if (dto.getTelefono() != null) entity.setTelefono(dto.getTelefono());
+        if (dto.getDireccion() != null) entity.setDireccion(dto.getDireccion());
+        if (dto.getTipoDiscapacidad() != null) entity.setTipoDiscapacidad(dto.getTipoDiscapacidad());
+        if (dto.getNroAfiliadoObraSocial() != null) entity.setNroAfiliadoObraSocial(dto.getNroAfiliadoObraSocial());
+        if (dto.getCodigoObraSocial() != null) entity.setCodigoObraSocial(dto.getCodigoObraSocial());
+
+        PatientsEntity actualizado = patientsRepository.save(entity);
+
+        return modelMapper.map(actualizado, Patient.class);
     }
 }
