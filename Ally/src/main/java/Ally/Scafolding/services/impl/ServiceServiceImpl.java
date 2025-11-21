@@ -2,7 +2,7 @@ package Ally.Scafolding.services.impl;
 
 import Ally.Scafolding.dtos.common.service.ServiceCreateDTO;
 import Ally.Scafolding.dtos.common.service.ServiceDTO;
-import Ally.Scafolding.models.ServiceEntity;
+import Ally.Scafolding.entities.ServiceEntity;
 import Ally.Scafolding.repositories.ServiceRepository;
 import Ally.Scafolding.services.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +24,7 @@ public class ServiceServiceImpl implements ServiceService {
         ServiceEntity entity = new ServiceEntity();
         entity.setPacienteId(dto.getPacienteId());
         entity.setPrestadorId(dto.getPrestadorId());
+        entity.setTransportistaId(dto.getTransportistaId());
         entity.setEspecialidad(dto.getEspecialidad());
         entity.setDescripcion(dto.getDescripcion());
         entity.setEstado("PENDIENTE");
@@ -63,4 +65,15 @@ public class ServiceServiceImpl implements ServiceService {
                 entity.getFechaSolicitud()
         );
     }
+
+    @Override
+    public List<ServiceDTO> listarSolicitudesTransportista() {
+        return repository.findByEspecialidad("TRANSPORTE_SANITARIO")
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+
+
 }
