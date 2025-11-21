@@ -17,10 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Implementation of medical provider management service.
- * Handles CRUD operations for medical provider entities.
- */
 @Service
 public class ProviderServiceImpl implements ProviderService {
 
@@ -40,57 +36,48 @@ public class ProviderServiceImpl implements ProviderService {
     @Qualifier("mergerMapper")
     private ModelMapper mergerMapper;
 
-    /**
-     * Obtiene todos los prestadores (mapeo manual para evitar errores de ModelMapper).
-     */
+    // =======================================================
+    // MAPPER MANUAL PARA ELIMINAR EL MappingException
+    // =======================================================
+    private ProviderDTO toDTO(ProvidersEntity entity) {
+        if (entity == null) return null;
+
+        ProviderDTO dto = new ProviderDTO();
+        dto.setId(entity.getId());
+        dto.setNombre(entity.getNombre());
+        dto.setApellido(entity.getApellido());
+        dto.setEmail(entity.getCorreoElectronico());
+        dto.setTelefono(entity.getTelefono());
+        dto.setDireccion(entity.getDireccion());
+        dto.setActivo(entity.getActivo());
+
+        if (entity.getEspecialidad() != null) {
+            dto.setCodigoEspecialidad(entity.getEspecialidad().getCodigo());
+        }
+
+        if (entity.getUsersEntity() != null) {
+            dto.setUsuarioId(entity.getUsersEntity().getId());
+            dto.setNombreUsuario(entity.getUsersEntity().getUsuario());
+        }
+
+        return dto;
+    }
+
+    // =======================================================
+    // MÉTODOS DEL SERVICIO
+    // =======================================================
+
     @Override
     public List<ProviderDTO> findAll() {
         return providersRepository.findAll().stream()
-                .map(entity -> {
-                    ProviderDTO dto = new ProviderDTO();
-                    dto.setId(entity.getId());
-                    dto.setNombre(entity.getNombre());
-                    dto.setApellido(entity.getApellido());
-                    dto.setEmail(entity.getCorreoElectronico());
-                    dto.setTelefono(entity.getTelefono());
-                    dto.setDireccion(entity.getDireccion());
-                    dto.setActivo(entity.getActivo());
-                    dto.setCodigoEspecialidad(
-                            entity.getEspecialidad() != null ? entity.getEspecialidad().getCodigo() : null
-                    );
-                    if (entity.getUsersEntity() != null) {
-                        dto.setUsuarioId(entity.getUsersEntity().getId());
-                        dto.setNombreUsuario(entity.getUsersEntity().getUsuario());
-                    }
-                    return dto;
-                })
+                .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Obtiene un prestador por ID (mapeo manual).
-     */
     @Override
     public ProviderDTO findById(Long id) {
         return providersRepository.findById(id)
-                .map(entity -> {
-                    ProviderDTO dto = new ProviderDTO();
-                    dto.setId(entity.getId());
-                    dto.setNombre(entity.getNombre());
-                    dto.setApellido(entity.getApellido());
-                    dto.setEmail(entity.getCorreoElectronico());
-                    dto.setTelefono(entity.getTelefono());
-                    dto.setDireccion(entity.getDireccion());
-                    dto.setActivo(entity.getActivo());
-                    dto.setCodigoEspecialidad(
-                            entity.getEspecialidad() != null ? entity.getEspecialidad().getCodigo() : null
-                    );
-                    if (entity.getUsersEntity() != null) {
-                        dto.setUsuarioId(entity.getUsersEntity().getId());
-                        dto.setNombreUsuario(entity.getUsersEntity().getUsuario());
-                    }
-                    return dto;
-                })
+                .map(this::toDTO)
                 .orElse(null);
     }
 
@@ -98,18 +85,15 @@ public class ProviderServiceImpl implements ProviderService {
     public ProviderDTO create(ProviderCreateDTO providerCreateDTO) {
         validateProviderCreation(providerCreateDTO);
 
-        // Buscar usuario
         UsersEntity usuarioEntity = usersRepository.findById(providerCreateDTO.getUsuarioId())
                 .orElseThrow(() -> new IllegalArgumentException("El usuario asociado no existe"));
 
-        // Buscar la especialidad por su código o nombre
         SpecialtyEntity especialidad = specialtyRepository.findByCodigo(providerCreateDTO.getCodigoEspecialidad())
                 .orElseGet(() -> specialtyRepository.findByNombre(providerCreateDTO.getCodigoEspecialidad())
                         .orElseThrow(() -> new IllegalArgumentException(
                                 "Especialidad no encontrada: " + providerCreateDTO.getCodigoEspecialidad()))
                 );
 
-        // Crear manualmente el provider
         ProvidersEntity entity = new ProvidersEntity();
         entity.setNombre(providerCreateDTO.getNombre());
         entity.setApellido(providerCreateDTO.getApellido());
@@ -121,7 +105,7 @@ public class ProviderServiceImpl implements ProviderService {
         entity.setUsersEntity(usuarioEntity);
 
         ProvidersEntity saved = providersRepository.saveAndFlush(entity);
-        return modelMapper.map(saved, ProviderDTO.class);
+        return toDTO(saved);
     }
 
     @Override
@@ -131,7 +115,7 @@ public class ProviderServiceImpl implements ProviderService {
                     validateProviderUpdate(providerDTO, existing);
                     mergerMapper.map(providerDTO, existing);
                     ProvidersEntity updated = providersRepository.save(existing);
-                    return modelMapper.map(updated, ProviderDTO.class);
+                    return toDTO(updated);
                 })
                 .orElse(null);
     }
@@ -147,7 +131,7 @@ public class ProviderServiceImpl implements ProviderService {
                 .map(provider -> {
                     provider.setActivo(activo);
                     ProvidersEntity updated = providersRepository.save(provider);
-                    return modelMapper.map(updated, ProviderDTO.class);
+                    return toDTO(updated);
                 })
                 .orElse(null);
     }
@@ -158,7 +142,7 @@ public class ProviderServiceImpl implements ProviderService {
                 .orElseThrow(() -> new IllegalArgumentException("Especialidad no encontrada: " + nombreEspecialidad));
 
         return providersRepository.findByEspecialidad(especialidad).stream()
-                .map(entity -> modelMapper.map(entity, ProviderDTO.class))
+                .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -168,39 +152,42 @@ public class ProviderServiceImpl implements ProviderService {
                 .orElseThrow(() -> new IllegalArgumentException("Especialidad no encontrada: " + nombreEspecialidad));
 
         return providersRepository.findByEspecialidadAndActivoTrue(especialidad).stream()
-                .map(entity -> modelMapper.map(entity, ProviderDTO.class))
+                .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public ProviderDTO findByEmail(String email) {
         return providersRepository.findByEmail(email)
-                .map(entity -> modelMapper.map(entity, ProviderDTO.class))
+                .map(this::toDTO)
                 .orElse(null);
     }
 
     @Override
     public ProviderDTO findByUsuarioId(Long usuarioId) {
         return providersRepository.findByUsuarioId(usuarioId)
-                .map(entity -> modelMapper.map(entity, ProviderDTO.class))
+                .map(this::toDTO)
                 .orElse(null);
     }
 
     @Override
     public List<ProviderDTO> findByNombreOrApellidoContaining(String nombre) {
         return providersRepository.findByNombreOrApellidoContainingIgnoreCase(nombre).stream()
-                .map(entity -> modelMapper.map(entity, ProviderDTO.class))
+                .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ProviderDTO> findByActivo(Boolean activo) {
         return providersRepository.findByActivo(activo).stream()
-                .map(entity -> modelMapper.map(entity, ProviderDTO.class))
+                .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
+    // =======================================================
     // VALIDACIONES
+    // =======================================================
+
     private void validateProviderCreation(ProviderCreateDTO providerCreateDTO) {
         if (providerCreateDTO.getNombre() == null || providerCreateDTO.getNombre().trim().isEmpty())
             throw new IllegalArgumentException("El nombre no puede estar vacío");

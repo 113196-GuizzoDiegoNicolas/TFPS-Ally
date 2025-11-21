@@ -1,6 +1,5 @@
 package Ally.Scafolding.configs;
 
-import Ally.Scafolding.entities.ProvidersEntity;
 import Ally.Scafolding.entities.UsersEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -17,7 +16,9 @@ public class MappersConfig {
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
-        // USERS ↔ MODELS
+        // =====================================================
+        // USERS ENTITY -> DOMAIN MODEL
+        // =====================================================
         modelMapper.addMappings(new PropertyMap<UsersEntity, Ally.Scafolding.models.User>() {
             @Override
             protected void configure() {
@@ -34,6 +35,7 @@ public class MappersConfig {
             }
         });
 
+        // DOMAIN MODEL -> USERS ENTITY
         modelMapper.addMappings(new PropertyMap<Ally.Scafolding.models.User, UsersEntity>() {
             @Override
             protected void configure() {
@@ -50,7 +52,9 @@ public class MappersConfig {
             }
         });
 
-        // USERS ↔ DTOs
+        // =====================================================
+        // USERS ENTITY ↔ USER DTO
+        // =====================================================
         modelMapper.addMappings(new PropertyMap<UsersEntity, Ally.Scafolding.dtos.common.login.UserDTO>() {
             @Override
             protected void configure() {
@@ -75,7 +79,9 @@ public class MappersConfig {
             }
         });
 
-        // USERCREATE DTO → ENTITY
+        // =====================================================
+        // USER CREATE DTO → USERS ENTITY
+        // =====================================================
         modelMapper.addMappings(new PropertyMap<Ally.Scafolding.dtos.common.login.UserCreateDTO, UsersEntity>() {
             @Override
             protected void configure() {
@@ -86,7 +92,9 @@ public class MappersConfig {
             }
         });
 
-        // USER ↔ DTO
+        // =====================================================
+        // USER DOMAIN ↔ USER DTO
+        // =====================================================
         modelMapper.addMappings(new PropertyMap<Ally.Scafolding.models.User, Ally.Scafolding.dtos.common.login.UserDTO>() {
             @Override
             protected void configure() {
@@ -111,55 +119,16 @@ public class MappersConfig {
             }
         });
 
-             // FIX: PROVIDERSENTITY → PROVIDERDTO (usando lambdas, sin ifs)
-        modelMapper.typeMap(ProvidersEntity.class, Ally.Scafolding.dtos.common.provider.ProviderDTO.class)
-                .addMappings(mapper -> {
-                    mapper.map(ProvidersEntity::getId, Ally.Scafolding.dtos.common.provider.ProviderDTO::setId);
-                    mapper.map(ProvidersEntity::getNombre, Ally.Scafolding.dtos.common.provider.ProviderDTO::setNombre);
-                    mapper.map(ProvidersEntity::getApellido, Ally.Scafolding.dtos.common.provider.ProviderDTO::setApellido);
-                    mapper.map(ProvidersEntity::getCorreoElectronico, Ally.Scafolding.dtos.common.provider.ProviderDTO::setEmail);
-                    mapper.map(ProvidersEntity::getTelefono, Ally.Scafolding.dtos.common.provider.ProviderDTO::setTelefono);
-                    mapper.map(ProvidersEntity::getDireccion, Ally.Scafolding.dtos.common.provider.ProviderDTO::setDireccion);
-                    mapper.map(ProvidersEntity::getActivo, Ally.Scafolding.dtos.common.provider.ProviderDTO::setActivo);
-
-                    mapper.map(src -> src.getUsersEntity() != null ? src.getUsersEntity().getId() : null,
-                            Ally.Scafolding.dtos.common.provider.ProviderDTO::setUsuarioId);
-
-                    mapper.map(src -> src.getUsersEntity() != null ? src.getUsersEntity().getUsuario() : null,
-                            Ally.Scafolding.dtos.common.provider.ProviderDTO::setNombreUsuario);
-
-                    mapper.map(src -> src.getEspecialidad() != null ? src.getEspecialidad().getCodigo() : null,
-                            Ally.Scafolding.dtos.common.provider.ProviderDTO::setCodigoEspecialidad);
-                });
-
-        // PROVIDER DTOs → ENTITY
-        modelMapper.addMappings(new PropertyMap<Ally.Scafolding.dtos.common.provider.ProviderCreateDTO, ProvidersEntity>() {
-            @Override
-            protected void configure() {
-                map().setNombre(source.getNombre());
-                map().setApellido(source.getApellido());
-                map().setCorreoElectronico(source.getEmail());
-                map().setTelefono(source.getTelefono());
-                map().setDireccion(source.getDireccion());
-            }
-        });
-
-        modelMapper.addMappings(new PropertyMap<Ally.Scafolding.dtos.common.provider.ProviderDTO, ProvidersEntity>() {
-            @Override
-            protected void configure() {
-                map().setId(source.getId());
-                map().setNombre(source.getNombre());
-                map().setApellido(source.getApellido());
-                map().setCorreoElectronico(source.getEmail());
-                map().setTelefono(source.getTelefono());
-                map().setDireccion(source.getDireccion());
-                map().setActivo(source.getActivo());
-            }
-        });
+        // IMPORTANTE:
+        // YA NO MAPEAMOS PROVIDERS AQUÍ
+        // Ahora el mapeo es 100% manual en ProviderServiceImpl
 
         return modelMapper;
     }
 
+    // =====================================================
+    // MERGER MAPPER (solo copia campos NO nulos)
+    // =====================================================
     @Bean("mergerMapper")
     public ModelMapper mergerMapper() {
         ModelMapper mapper = new ModelMapper();
@@ -177,22 +146,12 @@ public class MappersConfig {
             }
         });
 
-        mapper.addMappings(new PropertyMap<Ally.Scafolding.dtos.common.provider.ProviderDTO, ProvidersEntity>() {
-            @Override
-            protected void configure() {
-                map().setId(source.getId());
-                map().setNombre(source.getNombre());
-                map().setApellido(source.getApellido());
-                map().setCorreoElectronico(source.getEmail());
-                map().setTelefono(source.getTelefono());
-                map().setDireccion(source.getDireccion());
-                map().setActivo(source.getActivo());
-            }
-        });
-
         return mapper;
     }
 
+    // =====================================================
+    // JACKSON (JavaTimeModule)
+    // =====================================================
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
