@@ -1,23 +1,24 @@
 package Ally.Scafolding.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.envers.Audited;
 
 @Entity
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "specialties")
-@Audited
 public class SpecialtyEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nombre", nullable = false)
+    @Column(nullable = false, unique = true, length = 50)
+    private String codigo;   // <-- este campo soluciona el error
+
+    @Column(nullable = false, unique = true, length = 100)
     private String nombre;
 }
