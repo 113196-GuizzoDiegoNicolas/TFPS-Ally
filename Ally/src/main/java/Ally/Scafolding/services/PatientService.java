@@ -1,5 +1,6 @@
 package Ally.Scafolding.services;
 
+import Ally.Scafolding.dtos.common.patient.UpdatePatientDTO;
 import Ally.Scafolding.models.Patient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,4 +58,9 @@ public interface PatientService {
      * @return true if the patient was successfully deleted, false otherwise
      */
     boolean deletePatient(Long id);
+    // NUEVO-MÉTODO
+    Patient getPatientByUsuarioId(Long usuarioId);
+    // NUEVO-MÉTODO
+    Patient updatePatientPartial(UpdatePatientDTO dto);
+
 }

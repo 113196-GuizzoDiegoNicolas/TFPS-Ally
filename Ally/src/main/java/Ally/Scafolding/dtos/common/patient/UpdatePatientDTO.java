@@ -5,23 +5,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO for updating a contact's value.
- * <p>
- * Encapsulates the contact's ID and the new value.
- * </p>
+ * DTO para actualización parcial del Paciente.
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdatePatientDTO {
 
-    /**
-     * The unique identifier of the contact.
-     */
     private Long id;
 
-    /**
-     * The new value for the contact.
-     */
-    private String value;
+    private String nombre;
+    private String apellido;
+    private String telefono;
+    private String direccion;
+    private String tipoDiscapacidad;
+
+    private String codigoObraSocial;
+    private String nroAfiliadoObraSocial;
 }
