@@ -2,6 +2,7 @@ package Ally.Scafolding.services;
 
 import Ally.Scafolding.dtos.common.provider.ProviderDTO;
 import Ally.Scafolding.dtos.common.provider.ProviderCreateDTO;
+import Ally.Scafolding.models.Provider;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface ProviderService {
     /**
      * Creates a new medical provider.
      */
-    ProviderDTO create(ProviderCreateDTO providerCreateDTO);
+    Provider create(Provider providerCreate);
 
     /**
      * Updates an existing medical provider.

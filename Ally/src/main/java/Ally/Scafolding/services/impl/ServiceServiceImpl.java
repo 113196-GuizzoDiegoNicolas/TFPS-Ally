@@ -2,7 +2,7 @@ package Ally.Scafolding.services.impl;
 
 import Ally.Scafolding.dtos.common.service.ServiceCreateDTO;
 import Ally.Scafolding.dtos.common.service.ServiceDTO;
-import Ally.Scafolding.models.ServiceEntity;
+import Ally.Scafolding.entities.ServiceEntity;
 import Ally.Scafolding.repositories.ServiceRepository;
 import Ally.Scafolding.services.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;

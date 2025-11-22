@@ -1,4 +1,4 @@
-package Ally.Scafolding.models;
+package Ally.Scafolding.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -37,4 +37,7 @@ public interface SpecialtyRepository extends JpaRepository<SpecialtyEntity, Long
      */
     @Query("SELECT COUNT(p) FROM ProvidersEntity p WHERE p.especialidad.id = :especialidadId")
     Long countProvidersByEspecialidad(@Param("especialidadId") Long especialidadId);
+
+    List<SpecialtyEntity> findAll();
+
 }

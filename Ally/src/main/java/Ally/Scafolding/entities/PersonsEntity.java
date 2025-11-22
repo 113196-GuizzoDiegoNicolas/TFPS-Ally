@@ -31,7 +31,7 @@ public abstract class PersonsEntity {
     /**
      * date of birth.
      */
-    @Column(name = "fecha_nacimiento", nullable = false)
+    @Column(name = "fecha_nacimiento", nullable = true)
     private LocalDate fechaNacimiento;
 
     /**

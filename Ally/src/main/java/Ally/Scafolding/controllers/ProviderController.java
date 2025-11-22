@@ -2,6 +2,7 @@ package Ally.Scafolding.controllers;
 
 import Ally.Scafolding.dtos.common.provider.ProviderCreateDTO;
 import Ally.Scafolding.dtos.common.provider.ProviderDTO;
+import Ally.Scafolding.models.Provider;
 import Ally.Scafolding.services.ProviderService;
 import Ally.Scafolding.services.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +37,8 @@ public class ProviderController {
     }
 
     @PostMapping
-    public ResponseEntity<ProviderDTO> createPrestador(@RequestBody ProviderCreateDTO prestadorCreateDTO) {
-        try {
-            ProviderDTO createdPrestador = providerService.create(prestadorCreateDTO);
-            return ResponseEntity.ok(createdPrestador);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<Provider> createPrestador(@RequestBody Provider prestadorCreate) {
+        return ResponseEntity.ok(providerService.create(prestadorCreate));
     }
 
     @PutMapping("/{id}")
