@@ -11,4 +11,6 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
 
     List<ServiceEntity> findByPacienteId(Long pacienteId);
     List<ServiceEntity> findByPrestadorId(Long prestadorId);
+    List<ServiceEntity> findByEspecialidadAndPrestadorIdIsNull(String especialidad);
+    List<ServiceEntity> findByEspecialidad(String especialidad);
 }
