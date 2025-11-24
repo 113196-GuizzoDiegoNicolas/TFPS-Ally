@@ -1,9 +1,6 @@
 package Ally.Scafolding.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -16,6 +13,13 @@ import java.time.LocalDate;
 @Data
 public abstract class PersonsEntity {
 
+    /**
+     * Primary key for the person.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
     /**
      * First name of the person.
      */
