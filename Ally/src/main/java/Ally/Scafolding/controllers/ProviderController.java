@@ -5,6 +5,7 @@ import Ally.Scafolding.dtos.common.provider.ProviderDTO;
 import Ally.Scafolding.models.Provider;
 import Ally.Scafolding.services.ProviderService;
 import Ally.Scafolding.services.ProviderService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class ProviderController {
     }
 
     @PostMapping
-    public ResponseEntity<Provider> createPrestador(@RequestBody Provider prestadorCreate) {
+    public ResponseEntity<Provider> createPrestador(@RequestBody @Valid Provider prestadorCreate) {
         return ResponseEntity.ok(providerService.create(prestadorCreate));
     }
 
