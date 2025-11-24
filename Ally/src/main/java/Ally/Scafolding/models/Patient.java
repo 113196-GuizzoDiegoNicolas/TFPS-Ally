@@ -1,5 +1,6 @@
 package Ally.Scafolding.models;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,11 +14,14 @@ public class Patient {
     private Long id;
 
     // Datos personales
+    @NotNull(message = "El nombre no puede ser nulo")
     private String nombre;
+    @NotNull(message = "El apellido no puede ser nulo")
     private String apellido;
     private LocalDate fechaNacimiento;
     private String direccion;
     private String telefono;
+
     private String telegram;
     private String correoElectronico;
 

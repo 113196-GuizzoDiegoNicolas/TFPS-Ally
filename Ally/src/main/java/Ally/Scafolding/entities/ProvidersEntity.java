@@ -41,4 +41,11 @@ public class ProvidersEntity extends PersonsEntity {
      */
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;
+
+    /**
+     * Bank account details (CBU) of the provider.
+     */
+    @Column(name = "cbu_bancaria", nullable = true)
+    private String CBUBancaria;
+
 }

@@ -28,11 +28,14 @@ public class Provider {
     private String apellido;
     @Email(message = "El correo electrónico no es válido")
     private String email;
+    private String telegram;
     private String telefono;
     private String direccion;
     // Datos médicos
+    @NotNull(message = "El código de especialidad no puede ser nulo")
     private String codigoEspecialidad;
     private Boolean activo;
+    private String CBUBancaria;
     private LocalDateTime fechaRegistro;
     // Relación con usuario
     private Long idUsuario;
