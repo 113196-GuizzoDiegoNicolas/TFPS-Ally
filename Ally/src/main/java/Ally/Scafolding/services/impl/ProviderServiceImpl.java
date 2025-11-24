@@ -5,6 +5,7 @@ import Ally.Scafolding.dtos.common.provider.ProviderDTO;
 import Ally.Scafolding.entities.ProvidersEntity;
 import Ally.Scafolding.entities.SpecialtyEntity;
 import Ally.Scafolding.entities.UsersEntity;
+import Ally.Scafolding.models.Provider;
 import Ally.Scafolding.repositories.ProvidersRepository;
 import Ally.Scafolding.repositories.SpecialtyRepository;
 import Ally.Scafolding.repositories.UsersRepository;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,30 +84,69 @@ public class ProviderServiceImpl implements ProviderService {
     }
 
     @Override
-    public ProviderDTO create(ProviderCreateDTO providerCreateDTO) {
-        validateProviderCreation(providerCreateDTO);
+    public Provider create(Provider provider) {
+        validateProviderCreation(provider);
 
-        UsersEntity usuarioEntity = usersRepository.findById(providerCreateDTO.getUsuarioId())
+        UsersEntity usuarioEntity = usersRepository.findById(provider.getIdUsuario())
                 .orElseThrow(() -> new IllegalArgumentException("El usuario asociado no existe"));
 
-        SpecialtyEntity especialidad = specialtyRepository.findByCodigo(providerCreateDTO.getCodigoEspecialidad())
-                .orElseGet(() -> specialtyRepository.findByNombre(providerCreateDTO.getCodigoEspecialidad())
+        SpecialtyEntity especialidad = specialtyRepository.findByCodigo(provider.getCodigoEspecialidad())
+                .orElseGet(() -> specialtyRepository.findByCodigo(provider.getCodigoEspecialidad())
                         .orElseThrow(() -> new IllegalArgumentException(
-                                "Especialidad no encontrada: " + providerCreateDTO.getCodigoEspecialidad()))
+                                "Especialidad no encontrada: " + provider.getCodigoEspecialidad()))
                 );
 
         ProvidersEntity entity = new ProvidersEntity();
-        entity.setNombre(providerCreateDTO.getNombre());
-        entity.setApellido(providerCreateDTO.getApellido());
-        entity.setCorreoElectronico(providerCreateDTO.getEmail());
-        entity.setTelefono(providerCreateDTO.getTelefono());
-        entity.setDireccion(providerCreateDTO.getDireccion());
+        entity.setNombre(provider.getNombre());
+        entity.setApellido(provider.getApellido());
+        entity.setCorreoElectronico(provider.getEmail());
+        entity.setTelefono(provider.getTelefono());
+        entity.setDireccion(provider.getDireccion());
         entity.setEspecialidad(especialidad);
         entity.setActivo(true);
         entity.setUsersEntity(usuarioEntity);
 
         ProvidersEntity saved = providersRepository.saveAndFlush(entity);
-        return toDTO(saved);
+        return toDomainModel(saved);
+    }
+
+    // Método para convertir Entity a Modelo de Dominio
+    private Provider toDomainModel(ProvidersEntity entity) {
+        Provider provider = new Provider();
+        provider.setId(entity.getId());
+        provider.setNombre(entity.getNombre());
+        provider.setApellido(entity.getApellido());
+        provider.setEmail(entity.getCorreoElectronico());
+        provider.setTelefono(entity.getTelefono());
+        provider.setDireccion(entity.getDireccion());
+        provider.setCodigoEspecialidad(entity.getEspecialidad().getCodigo());
+        provider.setActivo(entity.getActivo());
+        provider.setFechaRegistro(LocalDateTime.now()); // O entity.getFechaCreacion() si existe
+        provider.setIdUsuario(entity.getUsersEntity().getId());
+
+        return provider;
+    }
+
+    // Método para convertir Modelo de Dominio a Entity (para updates)
+    private ProvidersEntity toEntity(Provider provider) {
+        UsersEntity usuarioEntity = usersRepository.findById(provider.getIdUsuario())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        SpecialtyEntity especialidad = specialtyRepository.findByCodigo(provider.getCodigoEspecialidad())
+                .orElseThrow(() -> new IllegalArgumentException("Especialidad no encontrada"));
+
+        ProvidersEntity entity = new ProvidersEntity();
+        entity.setId(provider.getId()); // Para updates
+        entity.setNombre(provider.getNombre());
+        entity.setApellido(provider.getApellido());
+        entity.setCorreoElectronico(provider.getEmail());
+        entity.setTelefono(provider.getTelefono());
+        entity.setDireccion(provider.getDireccion());
+        entity.setEspecialidad(especialidad);
+        entity.setActivo(provider.getActivo());
+        entity.setUsersEntity(usuarioEntity);
+
+        return entity;
     }
 
     @Override
@@ -188,7 +229,7 @@ public class ProviderServiceImpl implements ProviderService {
     // VALIDACIONES
     // =======================================================
 
-    private void validateProviderCreation(ProviderCreateDTO providerCreateDTO) {
+    private void validateProviderCreation(Provider providerCreateDTO) {
         if (providerCreateDTO.getNombre() == null || providerCreateDTO.getNombre().trim().isEmpty())
             throw new IllegalArgumentException("El nombre no puede estar vacío");
 
@@ -201,7 +242,7 @@ public class ProviderServiceImpl implements ProviderService {
         if (providerCreateDTO.getCodigoEspecialidad() == null || providerCreateDTO.getCodigoEspecialidad().trim().isEmpty())
             throw new IllegalArgumentException("El código de especialidad no puede estar vacío");
 
-        if (providerCreateDTO.getUsuarioId() == null)
+        if (providerCreateDTO.getIdUsuario() == null)
             throw new IllegalArgumentException("El ID de usuario no puede estar vacío");
 
         if (!isValidEmail(providerCreateDTO.getEmail()))

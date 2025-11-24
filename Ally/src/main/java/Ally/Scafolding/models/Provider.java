@@ -30,6 +30,6 @@ public class Provider {
     private Boolean activo;
     private LocalDateTime fechaRegistro;
     // Relación con usuario
-    private User usuario;
+    private Long idUsuario;
 
 }
