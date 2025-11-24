@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +23,9 @@ import java.time.format.DateTimeFormatter;
 @Hidden
 @AllArgsConstructor
 public class GlobalExceptionHandler {
+
+
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorApi> handleAllExceptions(Exception ex) {
@@ -59,6 +63,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorApi, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorApi> handleError(ResponseStatusException ex) {
+        ErrorApi error = builderError(ex.getReason(), HttpStatus.valueOf(ex.getStatusCode().value()));
+        return  ResponseEntity.status(ex.getStatusCode()).body(error);
+    }
+
     @ExceptionHandler(InvalidSubscriptionException.class)
     public ResponseEntity<ErrorApi> handleInvalidSubscriptionException(InvalidSubscriptionException ex) {
         ErrorApi errorApi = ErrorApi.builder()
@@ -81,5 +91,14 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(errorApi, HttpStatus.BAD_REQUEST);
+    }
+
+    private ErrorApi builderError(String reason, HttpStatus status) {
+        return ErrorApi.builder()
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .status(status.value())
+                .error(status.getReasonPhrase())
+                .message(reason)
+                .build();
     }
 }

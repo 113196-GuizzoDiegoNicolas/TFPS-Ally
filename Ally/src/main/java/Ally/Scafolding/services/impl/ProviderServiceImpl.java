@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,28 +87,31 @@ public class ProviderServiceImpl implements ProviderService {
     @Override
     public Provider create(Provider provider) {
         validateProviderCreation(provider);
+        Optional<ProvidersEntity> existingProvider = providersRepository.findByEmail(provider.getEmail());
+if (existingProvider.isEmpty()) {
+    UsersEntity usuarioEntity = usersRepository.findById(provider.getIdUsuario())
+            .orElseThrow(() -> new IllegalArgumentException("El usuario asociado no existe"));
 
-        UsersEntity usuarioEntity = usersRepository.findById(provider.getIdUsuario())
-                .orElseThrow(() -> new IllegalArgumentException("El usuario asociado no existe"));
+    SpecialtyEntity especialidad = specialtyRepository.findByCodigo(provider.getCodigoEspecialidad())
+            .orElseGet(() -> specialtyRepository.findByCodigo(provider.getCodigoEspecialidad())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Especialidad no encontrada: " + provider.getCodigoEspecialidad()))
+            );
 
-        SpecialtyEntity especialidad = specialtyRepository.findByCodigo(provider.getCodigoEspecialidad())
-                .orElseGet(() -> specialtyRepository.findByCodigo(provider.getCodigoEspecialidad())
-                        .orElseThrow(() -> new IllegalArgumentException(
-                                "Especialidad no encontrada: " + provider.getCodigoEspecialidad()))
-                );
+    ProvidersEntity entity = new ProvidersEntity();
+    entity.setNombre(provider.getNombre());
+    entity.setApellido(provider.getApellido());
+    entity.setCorreoElectronico(provider.getEmail());
+    entity.setTelefono(provider.getTelefono());
+    entity.setDireccion(provider.getDireccion());
+    entity.setEspecialidad(especialidad);
+    entity.setActivo(true);
+    entity.setUsersEntity(usuarioEntity);
 
-        ProvidersEntity entity = new ProvidersEntity();
-        entity.setNombre(provider.getNombre());
-        entity.setApellido(provider.getApellido());
-        entity.setCorreoElectronico(provider.getEmail());
-        entity.setTelefono(provider.getTelefono());
-        entity.setDireccion(provider.getDireccion());
-        entity.setEspecialidad(especialidad);
-        entity.setActivo(true);
-        entity.setUsersEntity(usuarioEntity);
+    ProvidersEntity saved = providersRepository.saveAndFlush(entity);
+    return toDomainModel(saved);
+        } else { return null; }
 
-        ProvidersEntity saved = providersRepository.saveAndFlush(entity);
-        return toDomainModel(saved);
     }
 
     // Método para convertir Entity a Modelo de Dominio
@@ -247,6 +251,7 @@ public class ProviderServiceImpl implements ProviderService {
 
         if (!isValidEmail(providerCreateDTO.getEmail()))
             throw new IllegalArgumentException("El formato del email no es válido");
+
     }
 
     private void validateProviderUpdate(ProviderDTO providerDTO, ProvidersEntity existing) {

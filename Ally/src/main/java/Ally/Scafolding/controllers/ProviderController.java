@@ -7,10 +7,14 @@ import Ally.Scafolding.services.ProviderService;
 import Ally.Scafolding.services.ProviderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Controller for medical provider management operations.
@@ -39,7 +43,11 @@ public class ProviderController {
 
     @PostMapping
     public ResponseEntity<Provider> createPrestador(@RequestBody @Valid Provider prestadorCreate) {
-        return ResponseEntity.ok(providerService.create(prestadorCreate));
+        Provider providerSaved = providerService.create(prestadorCreate);
+        if (Objects.isNull(providerSaved)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email ya existe registrado como Prestador");
+        }
+        return ResponseEntity.ok(providerSaved);
     }
 
     @PutMapping("/{id}")
