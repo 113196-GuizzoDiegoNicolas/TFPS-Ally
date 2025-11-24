@@ -1,5 +1,6 @@
 package Ally.Scafolding.entities;
 
+import Ally.Scafolding.models.Rol;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,8 @@ public class UsersEntity {
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
+    /**
+     * @Enumerated(EnumType.STRING)*/
     @Column(name = "rol", nullable = false)
     private String rol;
 

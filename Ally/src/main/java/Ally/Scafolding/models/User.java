@@ -1,6 +1,7 @@
 
 package Ally.Scafolding.models;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class User {
 
     private Long id;
     private String username;
+    @NotNull(message = "Password cannot be null")
     private String password;
     private String email;
     private String role; // PACIENTE, PRESTADOR, TRANSPORTISTA, ADMIN
