@@ -1,5 +1,6 @@
 package Ally.Scafolding.models;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class Patient {
     private String telefono;
 
     private String telegram;
+    @Email(message = "El correo electrónico no es válido")
     private String correoElectronico;
 
     // Relación con usuario
@@ -32,6 +34,7 @@ public class Patient {
     private String numeroHistoriaClinica;
     private String codigoObraSocial;
     private String nroAfiliadoObraSocial;
+    @NotNull(message = "El tipo de discapacidad no puede ser nulo")
     private String tipoDiscapacidad;
 }
 
