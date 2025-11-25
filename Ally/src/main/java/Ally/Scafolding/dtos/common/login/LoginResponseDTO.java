@@ -21,7 +21,7 @@ public class LoginResponseDTO {
     /**
      * User information.
      */
-    private UserDTO user;
+    private UserDTO usuario;
 
     /**
      * Role of the authenticated user.
