@@ -8,6 +8,7 @@ import java.util.List;
 public interface ServiceService {
     ServiceDTO crear(ServiceCreateDTO dto);
     List<ServiceDTO> listarPorPaciente(Long pacienteId);
+    List<ServiceDTO> listarPorPacienteAceptadas(Long pacienteId);
     List<ServiceDTO> listarPorPrestador(Long prestadorId);
     ServiceDTO actualizarEstado(Long id, String nuevoEstado);
     List<ServiceDTO> listarSolicitudesTransportista();

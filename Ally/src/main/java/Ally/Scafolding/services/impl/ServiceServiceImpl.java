@@ -3,6 +3,7 @@ package Ally.Scafolding.services.impl;
 import Ally.Scafolding.dtos.common.service.ServiceCreateDTO;
 import Ally.Scafolding.dtos.common.service.ServiceDTO;
 import Ally.Scafolding.entities.ServiceEntity;
+import Ally.Scafolding.models.PagoEstado;
 import Ally.Scafolding.repositories.ServiceRepository;
 import Ally.Scafolding.services.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class ServiceServiceImpl implements ServiceService {
         entity.setEspecialidad(dto.getEspecialidad());
         entity.setDescripcion(dto.getDescripcion());
         entity.setEstado("PENDIENTE");
+        entity.setEstadoPago(PagoEstado.PENDIENTE);
         entity.setFechaSolicitud(LocalDateTime.now());
 
         ServiceEntity saved = repository.save(entity);
@@ -37,6 +39,12 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public List<ServiceDTO> listarPorPaciente(Long pacienteId) {
         return repository.findByPacienteId(pacienteId)
+                .stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ServiceDTO> listarPorPacienteAceptadas(Long pacienteId) {
+        return repository.findServiciosAceptadosPorPaciente(pacienteId, "ACEPTADO")
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
@@ -62,6 +70,7 @@ public class ServiceServiceImpl implements ServiceService {
                 entity.getEspecialidad(),
                 entity.getDescripcion(),
                 entity.getEstado(),
+                entity.getEstadoPago().name(),
                 entity.getFechaSolicitud()
         );
     }

@@ -1,5 +1,6 @@
 package Ally.Scafolding.dtos.common.service;
 
+import Ally.Scafolding.models.PagoEstado;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +16,6 @@ public class ServiceDTO {
     private String especialidad;
     private String descripcion;
     private String estado;
+    private String estadoPago;
     private LocalDateTime fechaSolicitud;
 }

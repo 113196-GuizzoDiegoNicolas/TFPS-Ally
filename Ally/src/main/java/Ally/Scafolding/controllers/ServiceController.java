@@ -27,6 +27,10 @@ public class ServiceController {
         return ResponseEntity.ok(serviceService.listarPorPaciente(idPaciente));
     }
 
+    @GetMapping("/paciente-aceptadas/{idPaciente}")
+    public ResponseEntity<List<ServiceDTO>> listarPorPacienteAceptadas(@PathVariable Long idPaciente) {
+        return ResponseEntity.ok(serviceService.listarPorPacienteAceptadas(idPaciente));
+    }
     @GetMapping("/prestador/{idPrestador}")
     public ResponseEntity<List<ServiceDTO>> listarPorPrestador(@PathVariable Long idPrestador) {
         return ResponseEntity.ok(serviceService.listarPorPrestador(idPrestador));

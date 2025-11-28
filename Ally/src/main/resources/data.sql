@@ -1,18 +1,18 @@
 -- =====================================
--- USUARIOS BASE
+-- USUARIOS BASE (CONTRASEÑAS EN TEXTO PLANO)
 -- =====================================
 INSERT INTO usuarios (usuario, password, email, activo, bloqueado, intentos_fallidos, fecha_creacion, rol)
 VALUES
-    ('maria_paciente', '$2a$10$exampleHashedPassword1', 'maria@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
-    ('roberto_prestador', '$2a$10$exampleHashedPassword2', 'roberto@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'),
-    ('laura_prestador', '$2a$10$exampleHashedPassword3', 'laura@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'),
-    ('juan_transportista', '$2a$10$exampleHashedPassword4', 'juan@email.com', true, false, 0, CURRENT_TIMESTAMP, 'TRANSPORTISTA'),
-    ('carla_transportista', '$2a$10$exampleHashedPassword5', 'carla@email.com', true, false, 0, CURRENT_TIMESTAMP, 'TRANSPORTISTA'),
-    ('marcos_transportista', '$2a$10$exampleHashedPassword6', 'marcos@email.com', true, false, 0, CURRENT_TIMESTAMP, 'TRANSPORTISTA'),
-    ('carlos_paciente', '$2a$10$exampleHashedPassword7', 'carlos@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
-    ('lucia_paciente', '$2a$10$exampleHashedPassword8', 'lucia@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
-    ('pedro_paciente', '$2a$10$exampleHashedPassword9', 'pedro@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
-    ('ana_paciente', '$2a$10$exampleHashedPassword10', 'ana.paciente@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE');
+    ('maria_paciente', 'password123', 'maria@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
+    ('roberto_prestador', 'password123', 'roberto@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'),
+    ('laura_prestador', 'password123', 'laura@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PRESTADOR'),
+    ('juan_transportista', 'password123', 'juan@email.com', true, false, 0, CURRENT_TIMESTAMP, 'TRANSPORTISTA'),
+    ('carla_transportista', 'password123', 'carla@email.com', true, false, 0, CURRENT_TIMESTAMP, 'TRANSPORTISTA'),
+    ('marcos_transportista', 'password123', 'marcos@email.com', true, false, 0, CURRENT_TIMESTAMP, 'TRANSPORTISTA'),
+    ('carlos_paciente', 'password123', 'carlos@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
+    ('lucia_paciente', 'password123', 'lucia@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
+    ('pedro_paciente', 'password123', 'pedro@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE'),
+    ('ana_paciente', 'password123', 'ana.paciente@email.com', true, false, 0, CURRENT_TIMESTAMP, 'PACIENTE');
 
 -- =====================================
 -- ESPECIALIDADES
@@ -81,28 +81,46 @@ INSERT INTO transportistas (
       );
 
 -- =====================================
--- SERVICIOS (opcional)
+-- SERVICIOS - MÚLTIPLES CASOS CON DIFERENTES ESTADOS
 -- =====================================
-INSERT INTO services (paciente_id, prestador_id, especialidad, descripcion, estado, fecha_solicitud)
+INSERT INTO services (paciente_id, prestador_id, especialidad, descripcion, estado, estado_pago, fecha_solicitud)
 VALUES
-    (1, 1, 'KINESIOLOGIA', 'Rehabilitación post operatoria rodilla derecha', 'PENDIENTE', CURRENT_TIMESTAMP),
-    (2, 2, 'TERAPIA_OCUPACIONAL', 'Terapia para mejora de habilidades motoras finas', 'CONFIRMADO', CURRENT_TIMESTAMP);
+    -- Servicios PENDIENTES con PENDIENTE de pago
+    (1, 1, 'KINESIOLOGIA', 'Rehabilitación post operatoria rodilla derecha', 'PENDIENTE', 'PENDIENTE', CURRENT_TIMESTAMP - INTERVAL '5' DAY),
+    (2, 2, 'TERAPIA_OCUPACIONAL', 'Terapia para mejora de habilidades motoras finas', 'PENDIENTE', 'PENDIENTE', CURRENT_TIMESTAMP - INTERVAL '4' DAY),
+
+    -- Servicios CONFIRMADOS con PENDIENTE de pago
+    (3, 1, 'KINESIOLOGIA', 'Sesión de ejercicios para fortalecimiento muscular', 'ACEPTADO', 'PENDIENTE', CURRENT_TIMESTAMP - INTERVAL '3' DAY),
+    (4, 2, 'TERAPIA_OCUPACIONAL', 'Evaluación inicial de capacidades funcionales', 'ACEPTADO', 'PENDIENTE', CURRENT_TIMESTAMP - INTERVAL '2' DAY),
+
+    -- Servicios EN_CURSO con PROCESANDO pago
+    (5, 1, 'KINESIOLOGIA', 'Tratamiento para lumbalgia crónica', 'EN_CURSO', 'PROCESANDO', CURRENT_TIMESTAMP - INTERVAL '1' DAY),
+    (1, 2, 'TERAPIA_OCUPACIONAL', 'Terapia de integración sensorial', 'EN_CURSO', 'PROCESANDO', CURRENT_TIMESTAMP),
+
+    -- Servicios COMPLETADOS con COMPLETADO pago
+    (2, 1, 'KINESIOLOGIA', 'Rehabilitación de hombro post fractura', 'ACEPTADO', 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '10' DAY),
+    (3, 2, 'TERAPIA_OCUPACIONAL', 'Entrenamiento en actividades de la vida diaria', 'COMPLETADO', 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '8' DAY),
+
+    -- Servicios CANCELADOS con diferentes estados de pago
+    (4, 1, 'KINESIOLOGIA', 'Sesión cancelada por enfermedad del paciente', 'CANCELADO', 'CANCELADO', CURRENT_TIMESTAMP - INTERVAL '7' DAY),
+    (5, 2, 'TERAPIA_OCUPACIONAL', 'Cancelado por conflicto de horarios', 'CANCELADO', 'REEMBOLSADO', CURRENT_TIMESTAMP - INTERVAL '6' DAY),
+
+    -- Servicios con pago FALLIDO
+    (1, 1, 'KINESIOLOGIA', 'Sesión de electroterapia - pago rechazado', 'COMPLETADO', 'FALLIDO', CURRENT_TIMESTAMP - INTERVAL '3' DAY),
+
+    -- Servicios con REEMBOLSADO
+    (2, 2, 'TERAPIA_OCUPACIONAL', 'Terapia no realizada - reembolso procesado', 'CANCELADO', 'REEMBOLSADO', CURRENT_TIMESTAMP - INTERVAL '2' DAY),
+
+    -- Más servicios para testing
+    (3, 1, 'KINESIOLOGIA', 'Control de evolución post tratamiento', 'PENDIENTE', 'PENDIENTE', CURRENT_TIMESTAMP + INTERVAL '1' DAY),
+    (4, 2, 'TERAPIA_OCUPACIONAL', 'Taller de habilidades sociales', 'ACEPTADO', 'PENDIENTE', CURRENT_TIMESTAMP + INTERVAL '2' DAY),
+    (5, 1, 'KINESIOLOGIA', 'Masaje descontracturante', 'EN_CURSO', 'PROCESANDO', CURRENT_TIMESTAMP + INTERVAL '3' DAY);
 
 -- =====================================
--- COMENTADO: SERVICIOS DE TRANSPORTE
--- Esta tabla no existe en el schema actual
+-- TURNOS (OPCIONAL - SI LA TABLA EXISTE)
 -- =====================================
--- INSERT INTO transport_services (
---     paciente_id, transportista_id, origen, destino, fecha_servicio,
---     estado, tipo_vehiculo, observaciones
--- ) VALUES
---     (
---         1, 1, 'Córdoba 500', 'Av. Colón 1234',
---         CURRENT_TIMESTAMP + INTERVAL '1' DAY, 'PENDIENTE',
---         'Ambulancia', 'Paciente con movilidad reducida - requiere silla de ruedas'
---     ),
---     (
---         2, 2, 'Av. Rafael Núñez 4587', 'Bv. San Juan 345',
---         CURRENT_TIMESTAMP + INTERVAL '2' DAY, 'CONFIRMADO',
---         'Vehículo adaptado', 'Traslado para terapia ocupacional'
---     );
+-- INSERT INTO turnos (paciente_id, prestador_id, transportista_id, fecha_hora, fecha_creacion, estado, observaciones)
+-- VALUES
+--     (1, 1, 1, CURRENT_TIMESTAMP + INTERVAL '1' DAY, CURRENT_TIMESTAMP, 'CONFIRMADO', 'Paciente requiere silla de ruedas'),
+--     (2, 2, 2, CURRENT_TIMESTAMP + INTERVAL '2' DAY, CURRENT_TIMESTAMP, 'PENDIENTE', 'Traer estudios médicos'),
+--     (3, 1, NULL, CURRENT_TIMESTAMP + INTERVAL '3' DAY, CURRENT_TIMESTAMP, 'CONFIRMADO', 'Control rutinario');

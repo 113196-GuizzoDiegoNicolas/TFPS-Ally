@@ -1,5 +1,6 @@
 package Ally.Scafolding.entities;
 
+import Ally.Scafolding.models.PagoEstado;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,9 @@ public class ServiceEntity {
     @Column(length = 500)
     private String descripcion;
 
-    private String estado; // PENDIENTE, ACEPTADA, EN_CURSO, FINALIZADA
+    private String estado; // PENDIENTE, ACEPTADA
     private LocalDateTime fechaSolicitud;
+
+    @Enumerated(EnumType.STRING)
+    private PagoEstado estadoPago;
 }
