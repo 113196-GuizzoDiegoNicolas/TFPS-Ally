@@ -5,6 +5,7 @@ import Ally.Scafolding.dtos.common.service.ServiceDTO;
 import Ally.Scafolding.entities.ServiceEntity;
 import Ally.Scafolding.models.PagoEstado;
 import Ally.Scafolding.repositories.ServiceRepository;
+import Ally.Scafolding.services.PaymentService;
 import Ally.Scafolding.services.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

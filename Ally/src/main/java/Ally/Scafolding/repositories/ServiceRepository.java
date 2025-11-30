@@ -7,14 +7,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
 
     // ✅ Solicitudes de un paciente específico
     List<ServiceEntity> findByPacienteId(Long pacienteId);
-
-
+    // ✅ Solicitudes de un servicio específico
+    Optional<ServiceEntity> findById(Long id);
 
     // ✅ Solicitudes asignadas a un prestador
     List<ServiceEntity> findByPrestadorId(Long prestadorId);

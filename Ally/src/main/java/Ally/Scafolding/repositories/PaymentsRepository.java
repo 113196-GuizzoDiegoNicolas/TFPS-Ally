@@ -1,0 +1,32 @@
+package Ally.Scafolding.repositories;
+
+import Ally.Scafolding.entities.PaymentsEntity;
+import Ally.Scafolding.models.PagoEstado;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface PaymentsRepository extends JpaRepository<PaymentsEntity, Long> {
+
+    // Encontrar pagos por servicio
+    List<PaymentsEntity> findByServicioId(Long servicioId);
+
+    // Encontrar pagos por estado
+    List<PaymentsEntity> findByEstado(PagoEstado estado);
+
+    // Encontrar pagos por paciente (a través del servicio)
+    @Query("SELECT p FROM PaymentsEntity p WHERE p.servicio.pacienteId = :pacienteId")
+    List<PaymentsEntity> findByPacienteId(@Param("pacienteId") Long pacienteId);
+
+    // Encontrar pagos aceptados por paciente
+    @Query("SELECT p FROM PaymentsEntity p WHERE p.servicio.pacienteId = :pacienteId AND p.estado = 'COMPLETADO'")
+    List<PaymentsEntity> findPagosAceptadosByPacienteId(@Param("pacienteId") Long pacienteId);
+
+    // Encontrar pago por ID de transacción
+    Optional<PaymentsEntity> findByIdTransaccion(String idTransaccion);
+}

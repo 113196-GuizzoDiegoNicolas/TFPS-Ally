@@ -30,7 +30,7 @@ public class ServiceEntity {
     @Column(length = 500)
     private String descripcion;
 
-    private String estado; // PENDIENTE, ACEPTADA
+    private String estado; // PENDIENTE, ACEPTADO, RECHAZADO
     private LocalDateTime fechaSolicitud;
 
     @Enumerated(EnumType.STRING)
@@ -38,6 +38,6 @@ public class ServiceEntity {
 
     private double precio;
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "codigo_especialidad")
+    @JoinColumn(name = "id_metodo_pago")
     private MetodosPagosEntity metodoPago;
 }

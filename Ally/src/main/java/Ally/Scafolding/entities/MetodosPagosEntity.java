@@ -1,5 +1,6 @@
 package Ally.Scafolding.entities;
 
+import Ally.Scafolding.models.MetodoPago;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,13 +11,15 @@ import org.hibernate.envers.Audited;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "meodos_pagos")
+@Table(name = "metodos_pagos")
 @Audited
 public class MetodosPagosEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "metodo_pago_id")
     private Long id;
-    private String metodoPago;
+    @Enumerated(EnumType.STRING)
+    private MetodoPago metodoPago;
 
 }
