@@ -35,4 +35,9 @@ public class ServiceEntity {
 
     @Enumerated(EnumType.STRING)
     private PagoEstado estadoPago;
+
+    private double precio;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "codigo_especialidad")
+    private MetodosPagosEntity metodoPago;
 }

@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "specialties")
+@Audited
 public class SpecialtyEntity {
 
     @Id
@@ -21,4 +23,8 @@ public class SpecialtyEntity {
 
     @Column(nullable = false, unique = true, length = 100)
     private String nombre;
+
+    @Column(nullable = false)
+    private Double valorHora;
+
 }
