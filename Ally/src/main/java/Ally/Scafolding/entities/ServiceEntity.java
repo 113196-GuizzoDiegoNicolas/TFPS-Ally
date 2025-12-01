@@ -36,8 +36,8 @@ public class ServiceEntity {
     @Enumerated(EnumType.STRING)
     private PagoEstado estadoPago;
 
-    private double precio;
-    @OneToOne(fetch = FetchType.EAGER)
+    private Double precio;
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_metodo_pago")
     private MetodosPagosEntity metodoPago;
 }

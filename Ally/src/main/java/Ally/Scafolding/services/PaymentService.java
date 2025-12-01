@@ -5,14 +5,29 @@ import Ally.Scafolding.dtos.common.payment.PaymentResponseDTO;
 import Ally.Scafolding.dtos.common.service.ServiceCreateDTO;
 import Ally.Scafolding.dtos.common.service.ServiceDTO;
 import Ally.Scafolding.entities.PaymentsEntity;
+import Ally.Scafolding.models.PagoEstado;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface PaymentService {
-Optional <PaymentResponseDTO> procesarPago(PaymentRequestDTO paymentRequest);
+    // Métodos principales de procesamiento
+    PaymentResponseDTO procesarPago(PaymentRequestDTO paymentRequest);
+    PaymentResponseDTO reembolsarPago(Long pagoId);
+    PaymentResponseDTO cancelarPago(Long pagoId);
+
+    // Métodos de consulta
+    PaymentResponseDTO getPagoById(Long pagoId);
     List<PaymentResponseDTO> getPagosAceptadosPorPaciente(Long pacienteId);
-    Optional <PaymentResponseDTO> getPagoById(Long pagoId);
-    List<ServiceDTO> listarPorPacienteAceptadas(Long pacienteId);
-    void procesarPagoExterno(PaymentRequestDTO request, PaymentsEntity pago);
+    List<PaymentResponseDTO> getPagosPorServicio(Long servicioId);
+    List<PaymentResponseDTO> getPagosPorEstado(PagoEstado estado);
+    List<PaymentResponseDTO> getPagosPorPacienteYEstado(Long pacienteId, PagoEstado estado);
+
+    // Métodos de validación
+    Boolean validarMontoPago(Long servicioId, Double monto);
+    Boolean servicioPuedeSerPagado(Long servicioId);
+
+    // Métodos de reporte
+    Double getTotalPagadoPorPaciente(Long pacienteId);
+    Integer getCantidadPagosPorEstado(PagoEstado estado);
 }
