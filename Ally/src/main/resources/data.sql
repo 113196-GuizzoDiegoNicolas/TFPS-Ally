@@ -73,40 +73,40 @@ INSERT INTO services (fecha_solicitud, paciente_id, prestador_id, descripcion, e
 INSERT INTO payments (servicio_id, monto, estado_pago, fecha_creacion, fecha_pago, id_transaccion, metodo_pago_id, mensaje_error) VALUES
 -- 1. PAGO CON MERCADO_PAGO (Pendiente - para crear preferencia)
 (1, 18000.00, 'PENDIENTE', CURRENT_TIMESTAMP - INTERVAL '2' DAY, NULL, 'MP_PREF_001',
- (SELECT id FROM metodos_pagos WHERE metodo_pago = 'MERCADO_PAGO'),
+ (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'MERCADO_PAGO'),
  '{"email_pagador": "maria.gomez@email.com", "nombre_pagador": "María Gómez"}'),
 
 -- 2. PAGO CON MERCADO_PAGO (Pendiente - otro servicio)
 (2, 20000.00, 'PENDIENTE', CURRENT_TIMESTAMP - INTERVAL '1' DAY, NULL, 'MP_PREF_002',
- (SELECT id FROM metodos_pagos WHERE metodo_pago = 'MERCADO_PAGO'),
+ (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'MERCADO_PAGO'),
  '{"email_pagador": "carlos.lopez@email.com", "nombre_pagador": "Carlos López"}'),
 
 -- 3. PAGO CON CONTADO (Completado)
 (3, 18000.00, 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '5' DAY, CURRENT_TIMESTAMP - INTERVAL '4' DAY, 'CONT-001',
- (SELECT id FROM metodos_pagos WHERE metodo_pago = 'CONTADO'),
+ (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'CONTADO'),
  'Pago en efectivo al momento de la consulta'),
 
 -- 4. PAGO CON CONTADO (Completado)
 (4, 20000.00, 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '4' DAY, CURRENT_TIMESTAMP - INTERVAL '3' DAY, 'CONT-002',
- (SELECT id FROM metodos_pagos WHERE metodo_pago = 'CONTADO'),
+ (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'CONTADO'),
  'Pago en efectivo'),
 
 -- 5. PAGO CON TRANSFERENCIA_BANCARIA (Completado)
 (5, 20000.00, 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '3' DAY, CURRENT_TIMESTAMP - INTERVAL '2' DAY, 'TRANS-001',
- (SELECT id FROM metodos_pagos WHERE metodo_pago = 'TRANSFERENCIA_BANCARIA'),
+ (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'TRANSFERENCIA_BANCARIA'),
  'Transferencia bancaria confirmada - CBU: 0720123456789012345678'),
 
 -- 6. PAGO CON TRANSFERENCIA_BANCARIA (Pendiente)
 (6, 18000.00, 'PENDIENTE', CURRENT_TIMESTAMP - INTERVAL '2' DAY, NULL, 'TRANS-002',
- (SELECT id FROM metodos_pagos WHERE metodo_pago = 'TRANSFERENCIA_BANCARIA'),
+ (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'TRANSFERENCIA_BANCARIA'),
  'Esperando confirmación de transferencia'),
 
 -- 7. PAGO CON OBRA_SOCIAL (Completado - cobertura total)
 (7, 0.00, 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '6' DAY, CURRENT_TIMESTAMP - INTERVAL '5' DAY, 'OS-001',
- (SELECT id FROM metodos_pagos WHERE metodo_pago = 'OBRA_SOCIAL'),
+ (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'OBRA_SOCIAL'),
  'Cobertura 100% por obra social - N° autorización: OSDE-20241204-001'),
 
 -- 8. PAGO CON OBRA_SOCIAL (Completado - con copago)
 (8, 5000.00, 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '5' DAY, CURRENT_TIMESTAMP - INTERVAL '4' DAY, 'OS-002',
- (SELECT id FROM metodos_pagos WHERE metodo_pago = 'OBRA_SOCIAL'),
+ (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'OBRA_SOCIAL'),
  'Cobertura parcial - Copago paciente: $5000 - Autorización: OMINT-20241204-002');
