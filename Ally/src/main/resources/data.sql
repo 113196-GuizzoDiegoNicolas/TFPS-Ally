@@ -110,3 +110,19 @@ INSERT INTO payments (servicio_id, monto, estado_pago, fecha_creacion, fecha_pag
 (8, 5000.00, 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '5' DAY, CURRENT_TIMESTAMP - INTERVAL '4' DAY, 'OS-002',
  (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'OBRA_SOCIAL'),
  'Cobertura parcial - Copago paciente: $5000 - Autorización: OMINT-20241204-002');
+
+-- ===========================================
+-- USUARIO ADMIN
+-- ===========================================
+INSERT INTO usuarios (
+    usuario, password, email, activo, bloqueado, intentos_fallidos, fecha_creacion, rol
+) VALUES (
+             'admin_ally',
+             'password123',              -- misma clave que el resto
+             'admin@ally.com',
+             true,
+             false,
+             0,
+             CURRENT_TIMESTAMP,
+             'ADMIN'
+         );

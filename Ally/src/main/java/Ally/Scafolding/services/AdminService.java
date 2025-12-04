@@ -1,0 +1,12 @@
+package Ally.Scafolding.services;
+
+import Ally.Scafolding.dtos.common.admin.AdminMetricsDTO;
+import Ally.Scafolding.dtos.common.admin.AdminUserDTO;
+
+import java.util.List;
+
+public interface AdminService {
+    AdminMetricsDTO getMetrics();
+    List<AdminUserDTO> getUsers();
+    void toggleUser(Long id);
+}

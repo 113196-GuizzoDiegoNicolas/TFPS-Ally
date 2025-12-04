@@ -45,4 +45,6 @@ public interface UsersRepository extends JpaRepository<UsersEntity, Long>,
      * @param rol the role to search for
      */
     List<UsersEntity> findByRolAndActivoTrue(String rol);
+
+    long countByRol(String rol); // <-- Agregado
 }
