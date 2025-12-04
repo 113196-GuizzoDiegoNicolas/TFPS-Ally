@@ -3,9 +3,7 @@ package Ally.Scafolding.services.impl;
 import Ally.Scafolding.dtos.common.service.ServiceCreateDTO;
 import Ally.Scafolding.dtos.common.service.ServiceDTO;
 import Ally.Scafolding.entities.ServiceEntity;
-import Ally.Scafolding.models.PagoEstado;
 import Ally.Scafolding.repositories.ServiceRepository;
-import Ally.Scafolding.services.PaymentService;
 import Ally.Scafolding.services.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +28,7 @@ public class ServiceServiceImpl implements ServiceService {
         entity.setEspecialidad(dto.getEspecialidad());
         entity.setDescripcion(dto.getDescripcion());
         entity.setEstado("PENDIENTE");
-        entity.setEstadoPago(PagoEstado.PENDIENTE);
         entity.setFechaSolicitud(LocalDateTime.now());
-
         ServiceEntity saved = repository.save(entity);
         return mapToDTO(saved);
     }
@@ -71,8 +67,8 @@ public class ServiceServiceImpl implements ServiceService {
                 entity.getEspecialidad(),
                 entity.getDescripcion(),
                 entity.getEstado(),
-                entity.getEstadoPago().name(),
                 entity.getFechaSolicitud()
+
         );
     }
 

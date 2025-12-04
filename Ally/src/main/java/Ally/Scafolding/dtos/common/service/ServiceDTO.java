@@ -16,6 +16,6 @@ public class ServiceDTO {
     private String especialidad;
     private String descripcion;
     private String estado;
-    private String estadoPago;
     private LocalDateTime fechaSolicitud;
+
 }

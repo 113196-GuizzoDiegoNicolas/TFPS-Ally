@@ -33,11 +33,6 @@ public class ServiceEntity {
     private String estado; // PENDIENTE, ACEPTADO, RECHAZADO
     private LocalDateTime fechaSolicitud;
 
-    @Enumerated(EnumType.STRING)
-    private PagoEstado estadoPago;
 
-    private Double precio;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_metodo_pago")
-    private MetodosPagosEntity metodoPago;
+
 }

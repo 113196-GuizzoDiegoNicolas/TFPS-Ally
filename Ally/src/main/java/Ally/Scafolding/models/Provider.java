@@ -39,5 +39,6 @@ public class Provider {
     private LocalDateTime fechaRegistro;
     // Relación con usuario
     private Long idUsuario;
+    private String matricula;
 
 }

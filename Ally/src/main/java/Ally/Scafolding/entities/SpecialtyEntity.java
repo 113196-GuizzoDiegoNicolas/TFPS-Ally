@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -25,6 +27,6 @@ public class SpecialtyEntity {
     private String nombre;
 
     @Column(nullable = false)
-    private Double valorHora;
+    private BigDecimal importeConsulta;
 
 }

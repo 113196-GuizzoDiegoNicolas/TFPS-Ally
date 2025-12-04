@@ -16,15 +16,15 @@ public interface PaymentsRepository extends JpaRepository<PaymentsEntity, Long> 
     // Encontrar pagos por servicio
     List<PaymentsEntity> findByServicioId(Long servicioId);
 
-    // Encontrar pagos por estado
-    List<PaymentsEntity> findByEstado(PagoEstado estado);
+    // Encontrar pagos por estado - CORREGIDO: usar el nombre correcto del campo
+    List<PaymentsEntity> findByEstadoPago(PagoEstado estadoPago);
 
     // Encontrar pagos por paciente (a través del servicio)
     @Query("SELECT p FROM PaymentsEntity p WHERE p.servicio.pacienteId = :pacienteId")
     List<PaymentsEntity> findByPacienteId(@Param("pacienteId") Long pacienteId);
 
-    // Encontrar pagos aceptados por paciente
-    @Query("SELECT p FROM PaymentsEntity p WHERE p.servicio.pacienteId = :pacienteId AND p.estado = 'COMPLETADO'")
+    // Encontrar pagos aceptados por paciente - CORREGIDO: usar estadoPago
+    @Query("SELECT p FROM PaymentsEntity p WHERE p.servicio.pacienteId = :pacienteId AND p.estadoPago = 'COMPLETADO'")
     List<PaymentsEntity> findPagosAceptadosByPacienteId(@Param("pacienteId") Long pacienteId);
 
     // Encontrar pago por ID de transacción

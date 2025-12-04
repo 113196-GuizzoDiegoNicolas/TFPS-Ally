@@ -2,6 +2,7 @@ package Ally.Scafolding.repositories;
 
 import Ally.Scafolding.entities.MetodosPagosEntity;
 import Ally.Scafolding.entities.PatientsEntity;
+import Ally.Scafolding.models.MetodoPago;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -11,4 +12,6 @@ public interface MetodosPagosRepository extends JpaRepository<MetodosPagosEntity
         JpaSpecificationExecutor<MetodosPagosEntity> {
 
     Optional<MetodosPagosEntity> findById(Long aLong);
+
+    Optional<MetodosPagosEntity> findByMetodoPago(MetodoPago metodoPago);
 }

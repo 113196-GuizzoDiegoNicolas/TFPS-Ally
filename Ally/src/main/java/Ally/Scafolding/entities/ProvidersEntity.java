@@ -48,4 +48,6 @@ public class ProvidersEntity extends PersonsEntity {
     @Column(name = "cbu_bancaria", nullable = true)
     private String CBUBancaria;
 
+    @Column(name = "matricula")
+    private String matricula;
 }
