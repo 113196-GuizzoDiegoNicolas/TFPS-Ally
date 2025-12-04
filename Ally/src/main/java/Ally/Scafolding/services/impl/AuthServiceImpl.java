@@ -35,7 +35,8 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public LoginResponseDTO login(LoginDTO loginDTO) {
-        UsersEntity usuario = usuarioRepository.findByUsuario(loginDTO.getUsuario())
+
+        UsersEntity usuario = usuarioRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         if (!usuario.getActivo()) {
@@ -46,15 +47,14 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Credenciales inválidas");
         }
 
-        // Generar token (en un sistema real, usar JWT)
         String token = generateToken(usuario);
 
         UserDTO userDTO = new UserDTO(
                 usuario.getId(),
-              usuario.getUsuario(),
+                usuario.getUsuario(),
                 usuario.getEmail(),
                 usuario.getRol(),
-                usuario.getPassword(),
+                null,
                 usuario.getActivo(),
                 usuario.getBloqueado()
         );

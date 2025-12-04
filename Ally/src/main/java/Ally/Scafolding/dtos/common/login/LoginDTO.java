@@ -15,7 +15,7 @@ public class LoginDTO {
     /**
      * Username for system access.
      */
-    private String usuario;
+
 
     /**
      * Password for system access.

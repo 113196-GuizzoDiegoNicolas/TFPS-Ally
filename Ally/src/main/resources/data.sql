@@ -88,6 +88,49 @@ VALUES
     (1, 1, 'KINESIOLOGIA', 'Rehabilitación post operatoria rodilla derecha', 'PENDIENTE', CURRENT_TIMESTAMP),
     (2, 2, 'TERAPIA_OCUPACIONAL', 'Terapia para mejora de habilidades motoras finas', 'CONFIRMADO', CURRENT_TIMESTAMP);
 
+
+
+-- =====================================
+-- ADMIN
+-- =====================================
+INSERT INTO usuarios (
+    usuario, password, email, activo, bloqueado, intentos_fallidos, fecha_creacion, rol
+) VALUES (
+             'admin',
+             '$2a$10$jl3YtFrH9iXWqgD3a8uVhecYC6BvTcrHmu8n6NrR9JgYtU1WKeG.m', -- 1234A en BCrypt
+             'admin@ally.com',
+             true,
+             false,
+             0,
+             CURRENT_TIMESTAMP,
+             'ADMIN'
+         );
+-- =====================================
+-- USUARIOS
+-- =====================================
+UPDATE usuarios
+SET password = '$2a$10$jl3YtFrH9iXWqgD3a8uVhecYC6BvTcrHmu8n6NrR9JgYtU1WKeG.m'
+WHERE email IN (
+                'maria@email.com',
+                'roberto@email.com',
+                'laura@email.com',
+                'juan@email.com',
+                'carla@email.com',
+                'marcos@email.com',
+                'carlos@email.com',
+                'lucia@email.com',
+                'pedro@email.com',
+                'ana.paciente@email.com',
+                'admin@ally.com'
+    );
+
+
+
+
+
+
+
+
 -- =====================================
 -- COMENTADO: SERVICIOS DE TRANSPORTE
 -- Esta tabla no existe en el schema actual
