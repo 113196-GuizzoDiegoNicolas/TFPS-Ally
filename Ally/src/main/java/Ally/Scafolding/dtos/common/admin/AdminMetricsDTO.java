@@ -12,4 +12,6 @@ public class AdminMetricsDTO {
     private long prestadores;
     private long transportistas;
     private long admins;
+    private long solicitudesPendientes;
+    private long serviciosAceptados;
 }
