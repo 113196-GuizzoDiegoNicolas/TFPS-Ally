@@ -3,6 +3,7 @@ package Ally.Scafolding.services.impl;
 import Ally.Scafolding.dtos.common.admin.AdminMetricsDTO;
 import Ally.Scafolding.dtos.common.admin.AdminUserDTO;
 import Ally.Scafolding.entities.UsersEntity;
+import Ally.Scafolding.repositories.ServiceRepository;
 import Ally.Scafolding.repositories.ServiceRequestRepository;
 import Ally.Scafolding.repositories.UsersRepository;
 import Ally.Scafolding.services.AdminService;
@@ -15,15 +16,16 @@ import java.util.List;
 public class AdminServiceImpl implements AdminService {
 
     private final UsersRepository usersRepository;
-    private final ServiceRequestRepository serviceRequestRepository;
+    private final ServiceRepository serviceRepository;
+
     @Override
     public AdminMetricsDTO getMetrics() {
         long pacientes = usersRepository.countByRol("PACIENTE");
         long prestadores = usersRepository.countByRol("PRESTADOR");
         long transportistas = usersRepository.countByRol("TRANSPORTISTA");
         long admins = usersRepository.countByRol("ADMIN");
-        long solicitudesPendientes = serviceRequestRepository.countByEstado("PENDIENTE");
-        long serviciosAceptados = serviceRequestRepository.countByEstado("ACEPTADO");
+        long solicitudesPendientes = serviceRepository.countByEstado("PENDIENTE");
+        long serviciosAceptados = serviceRepository.countByEstadoIn(List.of("ACEPTADO", "PAGO_PENDIENTE"));
         return new AdminMetricsDTO(
                 pacientes,
                 prestadores,
