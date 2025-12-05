@@ -31,19 +31,27 @@ public class AdminServiceImpl implements AdminService {
                 .map(u -> new AdminUserDTO(
                         u.getId(),
                         u.getUsuario(),    // Nombre real del usuario
-                        u.getRol(),         // Ya es String
+                        u.getRol().toString(),         // Ya es String
                         u.getActivo()       // Boolean
                 ))
                 .toList();
     }
 
     @Override
-    public void toggleUser(Long id) {
+    public AdminUserDTO toggleUser(Long id) {
+
         UsersEntity user = usersRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         user.setActivo(!user.getActivo());
-        usersRepository.save(user);
+        UsersEntity updated = usersRepository.save(user);
+
+        return new AdminUserDTO(
+                updated.getId(),
+                updated.getUsuario(),
+                updated.getRol(), //  ya es String, sin .name()
+                updated.getActivo()
+        );
     }
 }
 

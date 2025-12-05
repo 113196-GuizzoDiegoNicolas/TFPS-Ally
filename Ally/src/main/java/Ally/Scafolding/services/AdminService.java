@@ -8,5 +8,6 @@ import java.util.List;
 public interface AdminService {
     AdminMetricsDTO getMetrics();
     List<AdminUserDTO> getUsers();
-    void toggleUser(Long id);
+
+    AdminUserDTO toggleUser(Long id);
 }

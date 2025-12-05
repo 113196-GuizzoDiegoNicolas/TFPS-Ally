@@ -32,10 +32,10 @@ public class AdminController {
     }
 
     @PatchMapping("/users/{id}/toggle")
-    public ResponseEntity<String> toggleUser(@PathVariable Long id) {
+    public ResponseEntity<AdminUserDTO> toggleUser(@PathVariable Long id) {
         log.warn("Cambiando estado del usuario con id {}", id);
-        adminService.toggleUser(id);
-        return ResponseEntity.ok("Estado del usuario actualizado correctamente");
+        AdminUserDTO updatedUser = adminService.toggleUser(id);
+        return ResponseEntity.ok(updatedUser);
     }
 }
 
