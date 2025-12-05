@@ -67,7 +67,7 @@ public class ServiceServiceImpl implements ServiceService {
                 entity.getEspecialidad(),
                 entity.getDescripcion(),
                 entity.getEstado(),
-                entity.getFechaSolicitud()
+                entity.getFechaSolicitud().toString() // 👈 Esto genera ISO-8601 válido
 
         );
     }
