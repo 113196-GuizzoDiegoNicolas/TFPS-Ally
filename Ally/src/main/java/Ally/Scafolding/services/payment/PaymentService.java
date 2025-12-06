@@ -191,7 +191,7 @@ public class PaymentService {
         if (request.getMetodoPago() == null || request.getMetodoPago().trim().isEmpty()) {
             throw new IllegalArgumentException("Método de pago es requerido");
         }
-        if (request.getMonto() == null || request.getMonto().compareTo(BigDecimal.ZERO) <= 0) {
+       if (request.getMonto().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Monto inválido. Debe ser mayor a 0");
         }
     }

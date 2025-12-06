@@ -22,6 +22,7 @@ public class ProviderDTO {
     private String telefono;
     private String direccion;
     private String codigoEspecialidad;
+    private String CBUBancaria;
     private Boolean activo;
     private Long usuarioId;
     private String nombreUsuario;

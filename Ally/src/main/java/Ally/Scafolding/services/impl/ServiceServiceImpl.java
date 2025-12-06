@@ -2,7 +2,9 @@ package Ally.Scafolding.services.impl;
 
 import Ally.Scafolding.dtos.common.service.ServiceCreateDTO;
 import Ally.Scafolding.dtos.common.service.ServiceDTO;
+import Ally.Scafolding.entities.PatientsEntity;
 import Ally.Scafolding.entities.ServiceEntity;
+import Ally.Scafolding.repositories.PatientsRepository;
 import Ally.Scafolding.repositories.ServiceRepository;
 import Ally.Scafolding.services.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,11 +21,17 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Autowired
     private ServiceRepository repository;
+    @Autowired
+    private PatientsRepository patientsRepository;
 
     @Override
     public ServiceDTO crear(ServiceCreateDTO dto) {
+        // Busca el patient usando el usuarioId
+        long usuarioId = dto.getPacienteId();
+        PatientsEntity patientEntity = patientsRepository.findByUsersEntityId(usuarioId)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró paciente para el usuario ID: " + usuarioId));
         ServiceEntity entity = new ServiceEntity();
-        entity.setPacienteId(dto.getPacienteId());
+        entity.setPacienteId(patientEntity.getId());
         entity.setPrestadorId(dto.getPrestadorId());
         entity.setTransportistaId(dto.getTransportistaId());
         entity.setEspecialidad(dto.getEspecialidad());
@@ -35,13 +44,23 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public List<ServiceDTO> listarPorPaciente(Long pacienteId) {
-        return repository.findByPacienteId(pacienteId)
+        // Busca el patient usando el usuarioId
+        long usuarioId = pacienteId;
+        PatientsEntity patientEntity = patientsRepository.findByUsersEntityId(usuarioId)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró paciente para el usuario ID: " + usuarioId));
+        long patientId = patientEntity.getId();
+        return repository.findByPacienteId(patientId)
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<ServiceDTO> listarPorPacienteAceptadas(Long pacienteId) {
-        return repository.findServiciosAceptadosPorPaciente(pacienteId, "ACEPTADO")
+        // Busca el patient usando el usuarioId
+        long usuarioId = pacienteId;
+        PatientsEntity patientEntity = patientsRepository.findByUsersEntityId(usuarioId)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró paciente para el usuario ID: " + usuarioId));
+                long patientId = patientEntity.getId();
+        return repository.findServiciosAceptadosPorPaciente(patientId, "ACEPTADO")
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 

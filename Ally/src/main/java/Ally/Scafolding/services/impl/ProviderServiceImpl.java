@@ -53,6 +53,7 @@ public class ProviderServiceImpl implements ProviderService {
         dto.setTelefono(entity.getTelefono());
         dto.setDireccion(entity.getDireccion());
         dto.setActivo(entity.getActivo());
+        dto.setCBUBancaria(entity.getCBUBancaria());
 
         if (entity.getEspecialidad() != null) {
             dto.setCodigoEspecialidad(entity.getEspecialidad().getCodigo());
@@ -105,6 +106,7 @@ if (existingProvider.isEmpty()) {
     entity.setTelefono(provider.getTelefono());
     entity.setDireccion(provider.getDireccion());
     entity.setEspecialidad(especialidad);
+    entity.setCBUBancaria(provider.getCBUBancaria());
     entity.setActivo(true);
     entity.setUsersEntity(usuarioEntity);
 
@@ -124,6 +126,7 @@ if (existingProvider.isEmpty()) {
         provider.setTelefono(entity.getTelefono());
         provider.setDireccion(entity.getDireccion());
         provider.setCodigoEspecialidad(entity.getEspecialidad().getCodigo());
+        provider.setCBUBancaria(entity.getCBUBancaria());
         provider.setActivo(entity.getActivo());
         provider.setFechaRegistro(LocalDateTime.now()); // O entity.getFechaCreacion() si existe
         provider.setIdUsuario(entity.getUsersEntity().getId());
@@ -147,6 +150,7 @@ if (existingProvider.isEmpty()) {
         entity.setTelefono(provider.getTelefono());
         entity.setDireccion(provider.getDireccion());
         entity.setEspecialidad(especialidad);
+        entity.setCBUBancaria(provider.getCBUBancaria());
         entity.setActivo(provider.getActivo());
         entity.setUsersEntity(usuarioEntity);
 

@@ -1322,3 +1322,29 @@ INSERT INTO payments (servicio_id, monto, estado_pago, fecha_creacion, fecha_pag
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
 	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+2025-12-05 21:28:22.205952-03:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT * FROM SERVICES \000d\000a\000d\000a[*]SELECT * FROM  USUARIOS"
+Syntax error in SQL statement "SELECT * FROM SERVICES \000d\000a\000d\000a[*]SELECT * FROM  USUARIOS"; SQL statement:
+SELECT * FROM SERVICES 
+
+SELECT * FROM  USUARIOS [42000-232]
+2025-12-05 21:28:28.983692-03:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT * FROM SERVICES,\000d\000a\000d\000a[*]SELECT * FROM  USUARIOS"; se esperaba "identifier"
+Syntax error in SQL statement "SELECT * FROM SERVICES,\000d\000a\000d\000a[*]SELECT * FROM  USUARIOS"; expected "identifier"; SQL statement:
+SELECT * FROM SERVICES,
+
+SELECT * FROM  USUARIOS [42001-232]
+2025-12-05 21:29:20.958668-03:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "USUARIO" no encontrada
+Table "USUARIO" not found; SQL statement:
+SELECT * FROM  USUARIO [42102-232]
+2025-12-05 23:37:50.852074-03:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SEVICES" no encontrada
+Table "SEVICES" not found; SQL statement:
+SELECT * FROM sevices [42102-232]
+2025-12-06 00:49:28.713271-03:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT * FROM USUARIOS \000d\000a\000d\000a[*]SELECT * FROM services"
+Syntax error in SQL statement "SELECT * FROM USUARIOS \000d\000a\000d\000a[*]SELECT * FROM services"; SQL statement:
+SELECT * FROM USUARIOS 
+
+SELECT * FROM services [42000-232]

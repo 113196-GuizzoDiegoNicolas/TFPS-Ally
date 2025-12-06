@@ -1,8 +1,12 @@
 package Ally.Scafolding.repositories;
 
 import Ally.Scafolding.entities.PatientsEntity;
+import Ally.Scafolding.entities.ProvidersEntity;
+import Ally.Scafolding.entities.UsersEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -53,4 +57,6 @@ public interface PatientsRepository extends JpaRepository<PatientsEntity, Long>,
      */
     List<PatientsEntity> findByCodigoObraSocial(String codigoObraSocial);
     Optional<PatientsEntity> findByUsersEntityId(Long usuarioId);
+
+
 }

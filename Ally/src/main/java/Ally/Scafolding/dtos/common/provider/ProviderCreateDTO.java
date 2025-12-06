@@ -27,6 +27,7 @@ public class ProviderCreateDTO {
     private String direccion;
     // Datos médicos
     private String codigoEspecialidad;
+    private String CBUBancaria;
     private Boolean activo;
     // Relación con usuario
     private Long idUsuario;

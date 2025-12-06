@@ -30,7 +30,7 @@ public class PaymentRequestDTO {
     private String metodoPago;
 
     @NotNull(message = "El monto es requerido")
-    @DecimalMin(value = "0.01", message = "El monto debe ser mayor a 0")
+    @DecimalMin(value = "0.00", message = "El monto debe ser mayor a 0")
     @Schema(description = "Monto total a pagar", example = "25000.50")
     private BigDecimal monto;
 
