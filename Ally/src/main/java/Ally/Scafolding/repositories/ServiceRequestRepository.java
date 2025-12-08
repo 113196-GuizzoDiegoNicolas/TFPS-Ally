@@ -14,8 +14,7 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequestEn
 
     List<ServiceRequestEntity> findByPaciente_IdAndActivoTrue(Long pacienteId);
 
-    List<ServiceRequestEntity> findByEstado(String estado);
-    long countByEstado(String estado);
+
 }
 
 
