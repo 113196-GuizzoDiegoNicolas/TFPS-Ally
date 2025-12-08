@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Represents a medical provider in the business domain.
@@ -35,10 +37,12 @@ public class Provider {
     @NotNull(message = "El código de especialidad no puede ser nulo")
     private String codigoEspecialidad;
     private Boolean activo;
-    private String CBUBancaria;
+    private String cbuBancaria;
     private LocalDateTime fechaRegistro;
     // Relación con usuario
     private Long idUsuario;
     private String matricula;
+    private Boolean coberturaObraSocial;
+    private LocalDate fechaNacimiento;
 
 }

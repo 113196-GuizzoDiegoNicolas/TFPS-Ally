@@ -50,4 +50,7 @@ public class ProvidersEntity extends PersonsEntity {
 
     @Column(name = "matricula")
     private String matricula;
+
+    @Column(name = "cobertura_obra_social")
+    private Boolean coberturaObraSocial;
 }
