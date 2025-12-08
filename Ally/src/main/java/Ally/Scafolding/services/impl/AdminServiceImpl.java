@@ -3,12 +3,16 @@ package Ally.Scafolding.services.impl;
 import Ally.Scafolding.dtos.common.admin.AdminMetricsDTO;
 import Ally.Scafolding.dtos.common.admin.AdminUserDTO;
 import Ally.Scafolding.entities.UsersEntity;
+import Ally.Scafolding.repositories.PaymentsRepository;
 import Ally.Scafolding.repositories.ServiceRepository;
-import Ally.Scafolding.repositories.ServiceRequestRepository;
+
 import Ally.Scafolding.repositories.UsersRepository;
 import Ally.Scafolding.services.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+
 import java.util.List;
 
 @Service
@@ -17,7 +21,8 @@ public class AdminServiceImpl implements AdminService {
 
     private final UsersRepository usersRepository;
     private final ServiceRepository serviceRepository;
-
+    @Autowired
+    private PaymentsRepository paymentsRepository;
     @Override
     public AdminMetricsDTO getMetrics() {
         long pacientes = usersRepository.countByRol("PACIENTE");
@@ -25,14 +30,18 @@ public class AdminServiceImpl implements AdminService {
         long transportistas = usersRepository.countByRol("TRANSPORTISTA");
         long admins = usersRepository.countByRol("ADMIN");
         long solicitudesPendientes = serviceRepository.countByEstado("PENDIENTE");
-        long serviciosAceptados = serviceRepository.countByEstadoIn(List.of("ACEPTADO", "PAGO_PENDIENTE"));
+        long serviciosAceptados = serviceRepository.countByEstado("ACEPTADO");
+        long pagosProcesados = paymentsRepository.count();
+
+
         return new AdminMetricsDTO(
                 pacientes,
                 prestadores,
                 transportistas,
                 admins,
                 solicitudesPendientes,
-                serviciosAceptados
+                serviciosAceptados,
+                pagosProcesados
         );
     }
 

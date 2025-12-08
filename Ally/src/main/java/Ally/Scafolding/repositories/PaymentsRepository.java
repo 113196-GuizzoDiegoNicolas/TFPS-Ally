@@ -29,4 +29,6 @@ public interface PaymentsRepository extends JpaRepository<PaymentsEntity, Long> 
 
     // Encontrar pago por ID de transacción
     Optional<PaymentsEntity> findByIdTransaccion(String idTransaccion);
+
+
 }
