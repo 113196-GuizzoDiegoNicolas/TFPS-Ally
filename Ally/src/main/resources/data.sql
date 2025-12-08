@@ -48,24 +48,30 @@ INSERT INTO providers (nombre, apellido, correo_electronico, direccion, telefono
                                                                                                                                                  ('Laura', 'Sosa', 'laura.psicologa@email.com', 'Bv. San Juan 345', '3515552222', true, 6, 3, '1985-08-25');
 
 -- ===========================================
--- SERVICIOS DE PRUEBA PARA DIFERENTES MÉTODOS DE PAGO
+-- SERVICIOS DE PRUEBA CON MONTO INCLUIDO
 -- ===========================================
-INSERT INTO services (fecha_solicitud, paciente_id, prestador_id, descripcion, especialidad, estado) VALUES
+INSERT INTO services (fecha_solicitud, paciente_id, prestador_id, descripcion, especialidad, estado, monto) VALUES
 -- Servicios con MERCADO_PAGO (Pendientes de pago)
-(CURRENT_TIMESTAMP - INTERVAL '2' DAY, 1, 1, 'Consulta inicial de kinesiología', 'KINESIOLOGIA', 'PAGO_PENDIENTE'),
-(CURRENT_TIMESTAMP - INTERVAL '1' DAY, 2, 2, 'Terapia psicológica semanal', 'PSICOLOGIA', 'PAGO_PENDIENTE'),
+(CURRENT_TIMESTAMP - INTERVAL '2' DAY, 1, 1, 'Consulta inicial de kinesiología', 'KINESIOLOGIA', 'PAGO_PENDIENTE', 18000.00),
+(CURRENT_TIMESTAMP - INTERVAL '1' DAY, 2, 2, 'Terapia psicológica semanal', 'PSICOLOGIA', 'PAGO_PENDIENTE', 20000.00),
 
 -- Servicios con CONTADO (Ya pagados)
-(CURRENT_TIMESTAMP - INTERVAL '5' DAY, 3, 1, 'Sesión de rehabilitación', 'KINESIOLOGIA', 'ACEPTADO'),
-(CURRENT_TIMESTAMP - INTERVAL '4' DAY, 4, 2, 'Consulta psicológica', 'PSICOLOGIA', 'ACEPTADO'),
+(CURRENT_TIMESTAMP - INTERVAL '5' DAY, 3, 1, 'Sesión de rehabilitación', 'KINESIOLOGIA', 'ACEPTADO', 18000.00),
+(CURRENT_TIMESTAMP - INTERVAL '4' DAY, 4, 2, 'Consulta psicológica', 'PSICOLOGIA', 'ACEPTADO', 20000.00),
 
 -- Servicios con TRANSFERENCIA_BANCARIA (En proceso)
-(CURRENT_TIMESTAMP - INTERVAL '3' DAY, 1, 2, 'Terapia grupal', 'PSICOLOGIA', 'ACEPTADO'),
-(CURRENT_TIMESTAMP - INTERVAL '2' DAY, 3, 1, 'Seguimiento kinesiológico', 'KINESIOLOGIA', 'ACEPTADO'),
+(CURRENT_TIMESTAMP - INTERVAL '3' DAY, 1, 2, 'Terapia grupal', 'PSICOLOGIA', 'ACEPTADO', 20000.00),
+(CURRENT_TIMESTAMP - INTERVAL '2' DAY, 3, 1, 'Seguimiento kinesiológico', 'KINESIOLOGIA', 'ACEPTADO', 18000.00),
 
 -- Servicios con OBRA_SOCIAL (Cobertura total)
-(CURRENT_TIMESTAMP - INTERVAL '6' DAY, 2, 1, 'Rehabilitación por obra social', 'KINESIOLOGIA', 'ACEPTADO'),
-(CURRENT_TIMESTAMP - INTERVAL '5' DAY, 4, 2, 'Atención psicológica por cobertura', 'PSICOLOGIA', 'ACEPTADO');
+(CURRENT_TIMESTAMP - INTERVAL '6' DAY, 2, 1, 'Rehabilitación por obra social', 'KINESIOLOGIA', 'ACEPTADO', 18000.00),
+(CURRENT_TIMESTAMP - INTERVAL '5' DAY, 4, 2, 'Atención psicológica por cobertura', 'PSICOLOGIA', 'ACEPTADO', 20000.00),
+
+-- Servicios de otras especialidades
+(CURRENT_TIMESTAMP - INTERVAL '3' DAY, 1, 1, 'Consulta fonoaudiológica', 'FONOAUDIOLOGIA', 'ACEPTADO', 17000.00),
+(CURRENT_TIMESTAMP - INTERVAL '2' DAY, 2, 2, 'Terapia ocupacional', 'TERAPIA_OCUPACIONAL', 'ACEPTADO', 19000.00),
+(CURRENT_TIMESTAMP - INTERVAL '1' DAY, 3, 1, 'Asistencia terapéutica', 'ASISTENTE_TERAPEUTICO', 'ACEPTADO', 15000.00),
+(CURRENT_TIMESTAMP, 4, 2, 'Transporte sanitario', 'TRANSPORTE_SANITARIO', 'ACEPTADO', 8000.00);
 
 -- ===========================================
 -- PAGOS DE EJEMPLO PARA CADA MÉTODO
@@ -118,7 +124,7 @@ INSERT INTO usuarios (
     usuario, password, email, activo, bloqueado, intentos_fallidos, fecha_creacion, rol
 ) VALUES (
              'admin_ally',
-             'password123',              -- misma clave que el resto
+             'password123',
              'admin@ally.com',
              true,
              false,
@@ -126,3 +132,17 @@ INSERT INTO usuarios (
              CURRENT_TIMESTAMP,
              'ADMIN'
          );
+
+-- ===========================================
+-- ACTUALIZAR SERVICIOS EXISTENTES SI NO TIENEN MONTO
+-- ===========================================
+-- Esta consulta actualiza los servicios que no tienen monto
+-- asignando el monto según la especialidad
+UPDATE services s
+SET monto = (
+    SELECT importe_consulta
+    FROM specialties sp
+    WHERE sp.codigo = s.especialidad
+       OR sp.nombre = s.especialidad
+)
+WHERE s.monto IS NULL OR s.monto = 0;

@@ -14,4 +14,7 @@ public class AdminMetricsDTO {
     private long admins;
     private long solicitudesPendientes;
     private long serviciosAceptados;
+    private long pagosProcesados; // NUEVO
+
+
 }

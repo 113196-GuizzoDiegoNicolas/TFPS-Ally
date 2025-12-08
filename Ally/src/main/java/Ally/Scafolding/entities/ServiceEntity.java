@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,7 +35,8 @@ public class ServiceEntity {
 
     private String estado; // PENDIENTE, ACEPTADO, RECHAZADO
     private LocalDateTime fechaSolicitud;
-
+    @Column(name = "monto", precision = 10, scale = 2)
+    private BigDecimal monto;
 
 
 }

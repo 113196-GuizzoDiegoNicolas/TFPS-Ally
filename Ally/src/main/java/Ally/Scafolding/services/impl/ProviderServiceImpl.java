@@ -107,7 +107,11 @@ if (existingProvider.isEmpty()) {
     entity.setEspecialidad(especialidad);
     entity.setActivo(true);
     entity.setUsersEntity(usuarioEntity);
-
+    entity.setFechaNacimiento(provider.getFechaNacimiento());
+    entity.setCBUBancaria(provider.getCbuBancaria());
+    entity.setCoberturaObraSocial(provider.getCoberturaObraSocial());
+    entity.setMatricula(provider.getMatricula());
+entity.setTelegram(provider.getTelegram());
     ProvidersEntity saved = providersRepository.saveAndFlush(entity);
     return toDomainModel(saved);
         } else { return null; }
@@ -127,7 +131,11 @@ if (existingProvider.isEmpty()) {
         provider.setActivo(entity.getActivo());
         provider.setFechaRegistro(LocalDateTime.now()); // O entity.getFechaCreacion() si existe
         provider.setIdUsuario(entity.getUsersEntity().getId());
-
+        provider.setFechaNacimiento(entity.getFechaNacimiento());
+        provider.setActivo(true);
+        provider.setCbuBancaria(entity.getCBUBancaria());
+provider.setMatricula(entity.getMatricula());
+provider.setTelegram(entity.getTelegram());
         return provider;
     }
 
@@ -149,7 +157,11 @@ if (existingProvider.isEmpty()) {
         entity.setEspecialidad(especialidad);
         entity.setActivo(provider.getActivo());
         entity.setUsersEntity(usuarioEntity);
-
+        entity.setCoberturaObraSocial(provider.getCoberturaObraSocial());
+        entity.setFechaNacimiento(provider.getFechaNacimiento());
+        entity.setCBUBancaria(provider.getCbuBancaria());
+entity.setMatricula(provider.getMatricula());
+entity.setTelegram(provider.getTelegram());
         return entity;
     }
 
@@ -251,7 +263,8 @@ if (existingProvider.isEmpty()) {
 
         if (!isValidEmail(providerCreateDTO.getEmail()))
             throw new IllegalArgumentException("El formato del email no es válido");
-
+        if (providerCreateDTO.getMatricula() == null || providerCreateDTO.getCbuBancaria().isEmpty())
+            throw new IllegalArgumentException("El código de matricula y CBU no pueden estar vacío");
     }
 
     private void validateProviderUpdate(ProviderDTO providerDTO, ProvidersEntity existing) {
