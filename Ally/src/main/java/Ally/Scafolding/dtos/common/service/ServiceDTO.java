@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
@@ -16,6 +17,7 @@ public class ServiceDTO {
     private String especialidad;
     private String descripcion;
     private String estado;
+    private BigDecimal montoApagar;
     private String fechaSolicitud;
 
 }

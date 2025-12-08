@@ -2,7 +2,12 @@ package Ally.Scafolding.services.impl;
 
 import Ally.Scafolding.dtos.common.service.ServiceCreateDTO;
 import Ally.Scafolding.dtos.common.service.ServiceDTO;
+import Ally.Scafolding.entities.PatientsEntity;
+import Ally.Scafolding.entities.ProvidersEntity;
 import Ally.Scafolding.entities.ServiceEntity;
+import Ally.Scafolding.entities.SpecialtyEntity;
+import Ally.Scafolding.repositories.PatientsRepository;
+import Ally.Scafolding.repositories.ProvidersRepository;
 import Ally.Scafolding.repositories.ServiceRepository;
 import Ally.Scafolding.services.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,15 +26,27 @@ public class ServiceServiceImpl implements ServiceService {
     @Autowired
     private ServiceRepository repository;
 
+    @Autowired
+    private ProvidersRepository repositoryProvider;
+
+    @Autowired
+    private PatientsRepository repositoryPatient;
+
+
     @Override
     public ServiceDTO crear(ServiceCreateDTO dto) {
+        ProvidersEntity providerEntity = repositoryProvider.getById(dto.getPrestadorId());
+        SpecialtyEntity espcialityEntity = providerEntity.getEspecialidad();
+        Optional<PatientsEntity> patientEntity = repositoryPatient.findByUsersEntityId(dto.getPacienteId());
+
         ServiceEntity entity = new ServiceEntity();
-        entity.setPacienteId(dto.getPacienteId());
+        entity.setPacienteId(patientEntity.get().getId());
         entity.setPrestadorId(dto.getPrestadorId());
         entity.setTransportistaId(dto.getTransportistaId());
         entity.setEspecialidad(dto.getEspecialidad());
         entity.setDescripcion(dto.getDescripcion());
         entity.setEstado("PENDIENTE");
+        entity.setMonto(espcialityEntity.getImporteConsulta());
         entity.setFechaSolicitud(LocalDateTime.now());
         ServiceEntity saved = repository.save(entity);
         return mapToDTO(saved);
@@ -36,13 +54,15 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public List<ServiceDTO> listarPorPaciente(Long pacienteId) {
-        return repository.findByPacienteId(pacienteId)
+        Optional<PatientsEntity> patientEntity = repositoryPatient.findByUsersEntityId(pacienteId);
+        return repository.findByPacienteId(patientEntity.get().getId())
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<ServiceDTO> listarPorPacienteAceptadas(Long pacienteId) {
-        return repository.findServiciosAceptadosPorPaciente(pacienteId, "ACEPTADO")
+        Optional<PatientsEntity> patientEntity = repositoryPatient.findByUsersEntityId(pacienteId);
+        return repository.findServiciosAceptadosPorPaciente(patientEntity.get().getId(), "ACEPTADO")
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
@@ -59,11 +79,11 @@ public class ServiceServiceImpl implements ServiceService {
 
         entity.setEstado(nuevoEstado);
 
-        // Si el prestador acepta → asignar monto
+       /* // Si el prestador acepta → asignar monto
         if ("ACEPTADO".equals(nuevoEstado)) {
             BigDecimal monto = BigDecimal.valueOf(4000); // 👈 Default temporal
             entity.setMonto(monto);
-        }
+        }*/
 
         return mapToDTO(repository.save(entity));
     }
@@ -76,6 +96,7 @@ public class ServiceServiceImpl implements ServiceService {
                 entity.getEspecialidad(),
                 entity.getDescripcion(),
                 entity.getEstado(),
+                entity.getMonto(),
                 entity.getFechaSolicitud().toString() // 👈 Esto genera ISO-8601 válido
 
         );
