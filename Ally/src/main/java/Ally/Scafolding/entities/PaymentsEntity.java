@@ -38,7 +38,7 @@ public class PaymentsEntity {
 
     @Enumerated(EnumType.STRING)
     private PagoEstado estadoPago;
-    private Double importe;
+
 
     // ============ NUEVOS CAMPOS NECESARIOS ============
 

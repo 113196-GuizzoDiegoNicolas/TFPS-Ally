@@ -1,5 +1,6 @@
 package Ally.Scafolding.dtos.common.payment;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
@@ -32,6 +33,7 @@ public class PaymentRequestDTO {
     @NotNull(message = "El monto es requerido")
     @DecimalMin(value = "0.01", message = "El monto debe ser mayor a 0")
     @Schema(description = "Monto total a pagar", example = "25000.50")
+    @JsonAlias({"monto", "amount", "total"})  // <- Acepta múltiples nombres
     private BigDecimal monto;
 
     @Schema(description = "Email del pagador (requerido para Mercado Pago)",
