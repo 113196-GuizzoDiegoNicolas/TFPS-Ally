@@ -8,6 +8,7 @@ import Ally.Scafolding.services.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -55,7 +56,15 @@ public class ServiceServiceImpl implements ServiceService {
     public ServiceDTO actualizarEstado(Long id, String nuevoEstado) {
         ServiceEntity entity = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Servicio no encontrado"));
+
         entity.setEstado(nuevoEstado);
+
+        // Si el prestador acepta → asignar monto
+        if ("ACEPTADO".equals(nuevoEstado)) {
+            BigDecimal monto = BigDecimal.valueOf(4000); // 👈 Default temporal
+            entity.setMonto(monto);
+        }
+
         return mapToDTO(repository.save(entity));
     }
 

@@ -126,3 +126,6 @@ INSERT INTO usuarios (
              CURRENT_TIMESTAMP,
              'ADMIN'
          );
+-- ===========================================
+-- PARA PODER GUARDAR EL MONTO EN LA TABLA DE SERVICIOS
+-- ===========================================
