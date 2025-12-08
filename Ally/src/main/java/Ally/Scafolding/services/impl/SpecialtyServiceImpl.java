@@ -29,6 +29,7 @@ public class SpecialtyServiceImpl implements SpecialtyService {
         dto.setId(specialty.getId());
         dto.setCodigo(specialty.getCodigo());
         dto.setNombre(specialty.getNombre());
+        dto.setImporteConsulta(specialty.getImporteConsulta());
 
         return dto;
     }

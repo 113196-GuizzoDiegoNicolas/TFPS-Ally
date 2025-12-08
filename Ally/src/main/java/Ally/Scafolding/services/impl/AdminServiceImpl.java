@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,13 +31,22 @@ public class AdminServiceImpl implements AdminService {
     private PaymentsRepository paymentsRepository;
 
     @Override
-    public AdminMetricsDTO getMetrics() {
+    public AdminMetricsDTO getMetrics(String fechaDesde, String fechaHasta) {
+        LocalDateTime desde = (fechaDesde != null && !fechaDesde.isEmpty())
+                ? LocalDate.parse(fechaDesde).atStartOfDay()
+                : LocalDate.MIN.atStartOfDay();
+
+        LocalDateTime hasta = (fechaHasta != null && !fechaHasta.isEmpty())
+                ? LocalDate.parse(fechaHasta).atTime(23,59,59)
+                : LocalDate.MAX.atTime(23,59,59);
         long pacientes = usersRepository.countByRol("PACIENTE");
         long prestadores = usersRepository.countByRol("PRESTADOR");
         long transportistas = usersRepository.countByRol("TRANSPORTISTA");
         long admins = usersRepository.countByRol("ADMIN");
-        long solicitudesPendientes = serviceRepository.countByEstado("PENDIENTE");
-        long serviciosAceptados = serviceRepository.countByEstado("ACEPTADO");
+        long solicitudesPendientes =
+                serviceRepository.countByEstadoAndFechaBetween("PENDIENTE", desde, hasta);
+        long serviciosAceptados =
+                serviceRepository.countByEstadoAndFechaBetween("ACEPTADO", desde, hasta);
 
         long pagosProcesados = paymentsRepository.count();
 

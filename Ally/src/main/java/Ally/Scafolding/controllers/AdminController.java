@@ -21,9 +21,10 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/metrics")
-    public ResponseEntity<AdminMetricsDTO> getMetrics() {
+    public ResponseEntity<AdminMetricsDTO> getMetrics(@RequestParam(required = false) String fechaDesde,
+                                                      @RequestParam(required = false) String fechaHasta) {
         log.info("Solicitando métricas del sistema");
-        return ResponseEntity.ok(adminService.getMetrics());
+        return ResponseEntity.ok(adminService.getMetrics(fechaDesde, fechaHasta));
     }
 
     @GetMapping("/users")
@@ -39,8 +40,8 @@ public class AdminController {
         return ResponseEntity.ok(updatedUser);
     }
     @GetMapping("/pagos-por-especialidad")
-    public List<PagosEspecialidadDTO> pagosPorEspecialidad() {
-        return adminService.getPagosPorEspecialidad();
+    public ResponseEntity<List<PagosEspecialidadDTO>> pagosPorEspecialidad() {
+        return ResponseEntity.ok(adminService.getPagosPorEspecialidad());
     }
 }
 

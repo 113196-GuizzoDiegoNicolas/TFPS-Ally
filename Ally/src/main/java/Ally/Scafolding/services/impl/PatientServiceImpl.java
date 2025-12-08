@@ -7,6 +7,7 @@ import Ally.Scafolding.repositories.PatientsRepository;
 import Ally.Scafolding.repositories.UsersRepository;
 import Ally.Scafolding.services.PatientService;
 import Ally.Scafolding.dtos.common.exceptions.NotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
  * Implementation of PatientService for managing patients.
  */
 @Service
+@RequiredArgsConstructor
 public class PatientServiceImpl implements PatientService {
 
     @Autowired

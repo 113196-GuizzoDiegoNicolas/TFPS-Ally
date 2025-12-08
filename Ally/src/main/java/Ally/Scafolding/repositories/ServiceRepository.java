@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,11 +43,18 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
 
     //  Solicitudes por estado
     List<ServiceEntity> findByEstado(String estado);
-    long countByEstado(String estado);
+
     long countByEstadoIn(List<String> estados);
 
     long countByEstado(String estado);
     @Query("SELECT s.especialidad, COUNT(s) FROM ServiceEntity s WHERE s.estado = 'PAGADO' GROUP BY s.especialidad")
     List<Object[]> countPagosPorEspecialidad();
-
+    @Query("SELECT COUNT(s) FROM ServiceEntity s " +
+            "WHERE s.estado = :estado " +
+            "AND s.fechaSolicitud BETWEEN :desde AND :hasta")
+    long countByEstadoAndFechaBetween(
+            @Param("estado") String estado,
+            @Param("desde") LocalDateTime desde,
+            @Param("hasta") LocalDateTime hasta
+    );
 }
