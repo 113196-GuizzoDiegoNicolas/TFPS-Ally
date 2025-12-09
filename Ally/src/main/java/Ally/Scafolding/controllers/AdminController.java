@@ -2,6 +2,7 @@ package Ally.Scafolding.controllers;
 
 import Ally.Scafolding.dtos.common.admin.AdminMetricsDTO;
 import Ally.Scafolding.dtos.common.admin.AdminUserDTO;
+import Ally.Scafolding.dtos.common.admin.PagosEspecialidadDTO;
 import Ally.Scafolding.services.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +21,10 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/metrics")
-    public ResponseEntity<AdminMetricsDTO> getMetrics() {
+    public ResponseEntity<AdminMetricsDTO> getMetrics(@RequestParam(required = false) String fechaDesde,
+                                                      @RequestParam(required = false) String fechaHasta) {
         log.info("Solicitando métricas del sistema");
-        return ResponseEntity.ok(adminService.getMetrics());
+        return ResponseEntity.ok(adminService.getMetrics(fechaDesde, fechaHasta));
     }
 
     @GetMapping("/users")
@@ -36,6 +38,10 @@ public class AdminController {
         log.warn("Cambiando estado del usuario con id {}", id);
         AdminUserDTO updatedUser = adminService.toggleUser(id);
         return ResponseEntity.ok(updatedUser);
+    }
+    @GetMapping("/pagos-por-especialidad")
+    public ResponseEntity<List<PagosEspecialidadDTO>> pagosPorEspecialidad() {
+        return ResponseEntity.ok(adminService.getPagosPorEspecialidad());
     }
 }
 
