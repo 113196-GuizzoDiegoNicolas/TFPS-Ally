@@ -2,6 +2,7 @@ package Ally.Scafolding.controllers;
 
 import Ally.Scafolding.dtos.common.service.ServiceCreateDTO;
 import Ally.Scafolding.dtos.common.service.ServiceDTO;
+import Ally.Scafolding.entities.ServiceEntity;
 import Ally.Scafolding.services.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ public class ServiceController {
 
     @Autowired
     private ServiceService serviceService;
+
 
     @PostMapping
     public ResponseEntity<ServiceDTO> crear(@RequestBody ServiceCreateDTO dto) {
@@ -54,7 +56,15 @@ public class ServiceController {
     public ResponseEntity<ServiceDTO> rechazar(@PathVariable Long id) {
         return ResponseEntity.ok(serviceService.actualizarEstado(id, "RECHAZADO"));
     }
+    @GetMapping("/pendientes")
+    public List<ServiceEntity> getPendientes() {
+        return serviceService.findByEstado("PENDIENTE");
+    }
 
+    @GetMapping("/aceptados")
+    public List<ServiceEntity> getAceptados() {
+        return serviceService.findByEstado("ACEPTADO");
+    }
 
 
 

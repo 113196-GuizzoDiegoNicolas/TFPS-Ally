@@ -62,5 +62,20 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
             @Param("desde") LocalDateTime desde,
             @Param("hasta") LocalDateTime hasta
     );
+    @Query("SELECT s.id, CONCAT(p.nombre, ' ', p.apellido), " +
+            "CONCAT(pr.nombre, ' ', pr.apellido), s.especialidad, s.estado, s.fechaSolicitud " +
+            "FROM ServiceEntity s " +
+            "JOIN PatientsEntity p ON s.pacienteId = p.id " +
+            "LEFT JOIN ProvidersEntity pr ON s.prestadorId = pr.id " +
+            "WHERE s.estado = 'PAGO_PENDIENTE'")
+    List<Object[]> findServiciosPendientesDetalle();
+
+    @Query("SELECT s.id, CONCAT(p.nombre, ' ', p.apellido), " +
+            "CONCAT(pr.nombre, ' ', pr.apellido), s.especialidad, s.estado, s.fechaSolicitud " +
+            "FROM ServiceEntity s " +
+            "JOIN PatientsEntity p ON s.pacienteId = p.id " +
+            "LEFT JOIN ProvidersEntity pr ON s.prestadorId = pr.id " +
+            "WHERE s.estado = 'ACEPTADO'")
+    List<Object[]> findServiciosAceptadosDetalle();
 
 }

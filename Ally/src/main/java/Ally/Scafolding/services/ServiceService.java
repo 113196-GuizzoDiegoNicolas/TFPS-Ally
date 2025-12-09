@@ -12,6 +12,6 @@ public interface ServiceService {
     List<ServiceDTO> listarPorPrestador(Long prestadorId);
     ServiceDTO actualizarEstado(Long id, String nuevoEstado);
     List<ServiceDTO> listarSolicitudesTransportista();
-
+    List<ServiceEntity> findByEstado(String estado);
 
 }

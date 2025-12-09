@@ -10,6 +10,7 @@ import Ally.Scafolding.repositories.ServiceRepository;
 import Ally.Scafolding.services.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +24,12 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;
-    private final ServiceRepository serviceRepository;
-    private final PaymentsRepository paymentsRepository;
+
+    @Autowired
+    private ServiceRepository serviceRepository;
+
+    @Autowired
+    private PaymentsRepository paymentsRepository;
     @GetMapping("/metrics")
     public ResponseEntity<AdminMetricsDTO> getMetrics(@RequestParam(required = false) String fechaDesde,
                                                       @RequestParam(required = false) String fechaHasta) {
@@ -49,13 +54,35 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getPagosPorEspecialidad());
     }
     @GetMapping("/services")
-    public List<ServiceEntity> getServicesByEstado(@RequestParam String estado) {
-        return serviceRepository.findByEstado(estado);
+    public ResponseEntity<List<ServiceEntity>> getServicesByEstado(@RequestParam String estado) {
+        return ResponseEntity.ok(serviceRepository.findByEstado(estado));
     }
 
+
     @GetMapping("/pagos")
-    public List<PaymentsEntity> getPagos() {
-        return paymentsRepository.findAll();
+    public ResponseEntity<List<PaymentsEntity>> getPagos() {
+        return ResponseEntity.ok(paymentsRepository.findAll());
     }
+
+    @GetMapping("/services/pendientes")
+    public ResponseEntity<List<ServiceEntity>> getPendientes() {
+        return ResponseEntity.ok(serviceRepository.findByEstado("PENDIENTE"));
+    }
+
+    @GetMapping("/services/aceptados")
+    public ResponseEntity<List<ServiceEntity>> getAceptados() {
+        return ResponseEntity.ok(serviceRepository.findByEstado("ACEPTADO"));
+    }
+    @GetMapping("/services/detalle/pendientes")
+    public ResponseEntity<List<Object[]>> getPendientesDetalle() {
+        return ResponseEntity.ok(serviceRepository.findServiciosPendientesDetalle());
+    }
+
+    @GetMapping("/services/detalle/aceptados")
+    public ResponseEntity<List<Object[]>> getAceptadosDetalle() {
+        return ResponseEntity.ok(serviceRepository.findServiciosAceptadosDetalle());
+    }
+
+
 }
 

@@ -31,6 +31,8 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Autowired
     private PatientsRepository repositoryPatient;
+    @Autowired
+    private ServiceRepository serviceRepository;
 
 
     @Override
@@ -109,7 +111,10 @@ public class ServiceServiceImpl implements ServiceService {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
-
+    @Override
+    public List<ServiceEntity> findByEstado(String estado) {
+        return serviceRepository.findByEstado(estado);
+    }
 
 
 }
