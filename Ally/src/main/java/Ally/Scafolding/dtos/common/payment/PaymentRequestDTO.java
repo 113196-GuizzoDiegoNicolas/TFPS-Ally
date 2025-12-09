@@ -33,7 +33,6 @@ public class PaymentRequestDTO {
     @NotNull(message = "El monto es requerido")
     @DecimalMin(value = "0.01", message = "El monto debe ser mayor a 0")
     @Schema(description = "Monto total a pagar", example = "25000.50")
-    @JsonAlias({"monto", "amount", "total"})  // <- Acepta múltiples nombres
     private BigDecimal monto;
 
     @Schema(description = "Email del pagador (requerido para Mercado Pago)",
