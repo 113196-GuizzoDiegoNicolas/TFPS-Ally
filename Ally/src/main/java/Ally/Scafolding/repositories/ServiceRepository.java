@@ -3,9 +3,11 @@ package Ally.Scafolding.repositories;
 import Ally.Scafolding.entities.ServiceEntity;
 import Ally.Scafolding.entities.ServiceRequestEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -77,5 +79,9 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
             "LEFT JOIN ProvidersEntity pr ON s.prestadorId = pr.id " +
             "WHERE s.estado = 'ACEPTADO'")
     List<Object[]> findServiciosAceptadosDetalle();
+    @Modifying
+    @Transactional
+    @Query("UPDATE ServiceEntity s SET s.estado = :estado WHERE s.id = :id")
+    void updateEstadoServicio(@Param("id") Long id, @Param("estado") String estado);
 
 }

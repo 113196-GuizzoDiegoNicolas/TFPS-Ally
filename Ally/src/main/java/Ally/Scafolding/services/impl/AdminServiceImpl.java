@@ -7,14 +7,16 @@ import Ally.Scafolding.entities.UsersEntity;
 
 import Ally.Scafolding.repositories.PaymentsRepository;
 import Ally.Scafolding.repositories.ServiceRepository;
-
+import Ally.Scafolding.entities.PatientsEntity;
+import Ally.Scafolding.entities.ProvidersEntity;
 
 import Ally.Scafolding.repositories.UsersRepository;
 import Ally.Scafolding.services.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,7 +31,8 @@ public class AdminServiceImpl implements AdminService {
     private final ServiceRepository serviceRepository;
     @Autowired
     private PaymentsRepository paymentsRepository;
-
+    @PersistenceContext
+    private EntityManager entityManager;
     @Override
     public AdminMetricsDTO getMetrics(String fechaDesde, String fechaHasta) {
         LocalDateTime desde = (fechaDesde != null && !fechaDesde.isEmpty())
@@ -44,7 +47,7 @@ public class AdminServiceImpl implements AdminService {
         long transportistas = usersRepository.countByRol("TRANSPORTISTA");
         long admins = usersRepository.countByRol("ADMIN");
         long solicitudesPendientes =
-                serviceRepository.countByEstadoAndFechaBetween("PENDIENTE", desde, hasta);
+                serviceRepository.countByEstadoAndFechaBetween("PAGO_PENDIENTE", desde, hasta);
         long serviciosAceptados =
                 serviceRepository.countByEstadoAndFechaBetween("ACEPTADO", desde, hasta);
 
@@ -100,6 +103,37 @@ public class AdminServiceImpl implements AdminService {
                         (Long) r[1]
                 ))
                 .toList();
+    }
+    @Override
+    public List<Object[]> getSolicitudesPendientesDetalle() {
+        return entityManager.createQuery("""
+        SELECT
+            s.id,
+            (SELECT u.usuario FROM UsersEntity u WHERE u.id = s.pacienteId),
+            (SELECT u.usuario FROM UsersEntity u WHERE u.id = s.prestadorId),
+            s.especialidad,
+            s.estado,
+            s.fechaSolicitud
+        FROM ServiceEntity s
+        WHERE s.estado = 'PAGO_PENDIENTE'
+        ORDER BY s.fechaSolicitud DESC
+    """, Object[].class).getResultList();
+    }
+
+    @Override
+    public List<Object[]> getServiciosAceptadosDetalle() {
+        return entityManager.createQuery("""
+        SELECT
+            s.id,
+            (SELECT u.usuario FROM UsersEntity u WHERE u.id = s.pacienteId),
+            (SELECT u.usuario FROM UsersEntity u WHERE u.id = s.prestadorId),
+            s.especialidad,
+            s.estado,
+            s.fechaSolicitud
+        FROM ServiceEntity s
+        WHERE s.estado = 'ACEPTADO'
+        ORDER BY s.fechaSolicitud DESC
+    """, Object[].class).getResultList();
     }
 
 }

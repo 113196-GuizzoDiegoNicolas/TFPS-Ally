@@ -64,23 +64,26 @@ public class AdminController {
         return ResponseEntity.ok(paymentsRepository.findAll());
     }
 
-    @GetMapping("/services/pendientes")
-    public ResponseEntity<List<ServiceEntity>> getPendientes() {
-        return ResponseEntity.ok(serviceRepository.findByEstado("PENDIENTE"));
-    }
 
-    @GetMapping("/services/aceptados")
-    public ResponseEntity<List<ServiceEntity>> getAceptados() {
-        return ResponseEntity.ok(serviceRepository.findByEstado("ACEPTADO"));
-    }
+    //  Solicitudes Detalladas
     @GetMapping("/services/detalle/pendientes")
     public ResponseEntity<List<Object[]>> getPendientesDetalle() {
-        return ResponseEntity.ok(serviceRepository.findServiciosPendientesDetalle());
+        return ResponseEntity.ok(adminService.getSolicitudesPendientesDetalle());
     }
 
     @GetMapping("/services/detalle/aceptados")
     public ResponseEntity<List<Object[]>> getAceptadosDetalle() {
-        return ResponseEntity.ok(serviceRepository.findServiciosAceptadosDetalle());
+        return ResponseEntity.ok(adminService.getServiciosAceptadosDetalle());
+    }
+
+    //  Cambiar estado del servicio
+    @PatchMapping("/services/{id}/estado")
+    public ResponseEntity<Void> actualizarEstado(
+            @PathVariable Long id,
+            @RequestParam String estado) {
+
+        serviceRepository.updateEstadoServicio(id, estado);
+        return ResponseEntity.ok().build();
     }
 
 

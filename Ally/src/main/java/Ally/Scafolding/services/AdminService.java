@@ -15,4 +15,6 @@ public interface AdminService {
     AdminUserDTO toggleUser(Long id);
 
     List<PagosEspecialidadDTO> getPagosPorEspecialidad();
+    List<Object[]> getSolicitudesPendientesDetalle();
+    List<Object[]> getServiciosAceptadosDetalle();
 }

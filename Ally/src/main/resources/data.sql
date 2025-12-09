@@ -240,3 +240,6 @@ FROM services s
 WHERE s.fecha_solicitud >= DATEADD('MONTH', -6, CURRENT_DATE);
 
 UPDATE SERVICES SET estado='ACEPTADO' WHERE estado='ACEPTO';
+UPDATE services
+SET estado = 'PAGO_PENDIENTE'
+WHERE estado = 'PENDIENTE';
