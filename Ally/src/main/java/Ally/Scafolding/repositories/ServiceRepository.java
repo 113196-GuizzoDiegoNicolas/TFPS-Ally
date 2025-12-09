@@ -48,8 +48,12 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
 
     long countByEstado(String estado);
 
-    @Query("SELECT s.especialidad, COUNT(s) FROM ServiceEntity s WHERE s.estado = 'PAGADO' GROUP BY s.especialidad")
+    @Query("SELECT s.especialidad, COUNT(s) " +
+            "FROM ServiceEntity s " +
+            "WHERE s.estado = 'ACEPTADO' " +
+            "GROUP BY s.especialidad")
     List<Object[]> countPagosPorEspecialidad();
+
     @Query("SELECT COUNT(s) FROM ServiceEntity s " +
             "WHERE s.estado = :estado " +
             "AND s.fechaSolicitud BETWEEN :desde AND :hasta")
@@ -58,4 +62,5 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
             @Param("desde") LocalDateTime desde,
             @Param("hasta") LocalDateTime hasta
     );
+
 }

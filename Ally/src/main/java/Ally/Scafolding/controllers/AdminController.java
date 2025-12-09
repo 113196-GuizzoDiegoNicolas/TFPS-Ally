@@ -3,6 +3,10 @@ package Ally.Scafolding.controllers;
 import Ally.Scafolding.dtos.common.admin.AdminMetricsDTO;
 import Ally.Scafolding.dtos.common.admin.AdminUserDTO;
 import Ally.Scafolding.dtos.common.admin.PagosEspecialidadDTO;
+import Ally.Scafolding.entities.PaymentsEntity;
+import Ally.Scafolding.entities.ServiceEntity;
+import Ally.Scafolding.repositories.PaymentsRepository;
+import Ally.Scafolding.repositories.ServiceRepository;
 import Ally.Scafolding.services.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +23,8 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;
-
+    private final ServiceRepository serviceRepository;
+    private final PaymentsRepository paymentsRepository;
     @GetMapping("/metrics")
     public ResponseEntity<AdminMetricsDTO> getMetrics(@RequestParam(required = false) String fechaDesde,
                                                       @RequestParam(required = false) String fechaHasta) {
@@ -42,6 +47,15 @@ public class AdminController {
     @GetMapping("/pagos-por-especialidad")
     public ResponseEntity<List<PagosEspecialidadDTO>> pagosPorEspecialidad() {
         return ResponseEntity.ok(adminService.getPagosPorEspecialidad());
+    }
+    @GetMapping("/services")
+    public List<ServiceEntity> getServicesByEstado(@RequestParam String estado) {
+        return serviceRepository.findByEstado(estado);
+    }
+
+    @GetMapping("/pagos")
+    public List<PaymentsEntity> getPagos() {
+        return paymentsRepository.findAll();
     }
 }
 

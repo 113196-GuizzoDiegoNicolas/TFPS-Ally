@@ -238,3 +238,5 @@ SELECT
 FROM services s
          LEFT JOIN payments p ON p.servicio_id = s.id
 WHERE s.fecha_solicitud >= DATEADD('MONTH', -6, CURRENT_DATE);
+
+UPDATE SERVICES SET estado='ACEPTADO' WHERE estado='ACEPTO';
