@@ -47,6 +47,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
     long countByEstadoIn(List<String> estados);
 
     long countByEstado(String estado);
+
     @Query("SELECT s.especialidad, COUNT(s) FROM ServiceEntity s WHERE s.estado = 'PAGADO' GROUP BY s.especialidad")
     List<Object[]> countPagosPorEspecialidad();
     @Query("SELECT COUNT(s) FROM ServiceEntity s " +

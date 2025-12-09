@@ -52,25 +52,25 @@ INSERT INTO providers (nombre, apellido, correo_electronico, direccion, telefono
 -- ===========================================
 INSERT INTO services (fecha_solicitud, paciente_id, prestador_id, descripcion, especialidad, estado, monto) VALUES
 -- Servicios con MERCADO_PAGO (Pendientes de pago)
-(CURRENT_TIMESTAMP - INTERVAL '2' DAY, 1, 1, 'Consulta inicial de kinesiología', 'KINESIOLOGIA', 'PAGO_PENDIENTE', 18000.00),
-(CURRENT_TIMESTAMP - INTERVAL '1' DAY, 2, 2, 'Terapia psicológica semanal', 'PSICOLOGIA', 'PAGO_PENDIENTE', 20000.00),
+(DATEADD('DAY', -2, CURRENT_TIMESTAMP), 1, 1, 'Consulta inicial de kinesiología', 'KINESIOLOGIA', 'PAGO_PENDIENTE', 18000.00),
+(DATEADD('DAY', -1, CURRENT_TIMESTAMP), 2, 2, 'Terapia psicológica semanal', 'PSICOLOGIA', 'PAGO_PENDIENTE', 20000.00),
 
 -- Servicios con CONTADO (Ya pagados)
-(CURRENT_TIMESTAMP - INTERVAL '5' DAY, 3, 1, 'Sesión de rehabilitación', 'KINESIOLOGIA', 'ACEPTADO', 18000.00),
-(CURRENT_TIMESTAMP - INTERVAL '4' DAY, 4, 2, 'Consulta psicológica', 'PSICOLOGIA', 'ACEPTADO', 20000.00),
+(DATEADD('DAY', -5, CURRENT_TIMESTAMP), 3, 1, 'Sesión de rehabilitación', 'KINESIOLOGIA', 'ACEPTADO', 18000.00),
+(DATEADD('DAY', -4, CURRENT_TIMESTAMP), 4, 2, 'Consulta psicológica', 'PSICOLOGIA', 'ACEPTADO', 20000.00),
 
 -- Servicios con TRANSFERENCIA_BANCARIA (En proceso)
-(CURRENT_TIMESTAMP - INTERVAL '3' DAY, 1, 2, 'Terapia grupal', 'PSICOLOGIA', 'ACEPTADO', 20000.00),
-(CURRENT_TIMESTAMP - INTERVAL '2' DAY, 3, 1, 'Seguimiento kinesiológico', 'KINESIOLOGIA', 'ACEPTADO', 18000.00),
+(DATEADD('DAY', -3, CURRENT_TIMESTAMP), 1, 2, 'Terapia grupal', 'PSICOLOGIA', 'ACEPTADO', 20000.00),
+(DATEADD('DAY', -2, CURRENT_TIMESTAMP), 3, 1, 'Seguimiento kinesiológico', 'KINESIOLOGIA', 'ACEPTADO', 18000.00),
 
 -- Servicios con OBRA_SOCIAL (Cobertura total)
-(CURRENT_TIMESTAMP - INTERVAL '6' DAY, 2, 1, 'Rehabilitación por obra social', 'KINESIOLOGIA', 'ACEPTADO', 18000.00),
-(CURRENT_TIMESTAMP - INTERVAL '5' DAY, 4, 2, 'Atención psicológica por cobertura', 'PSICOLOGIA', 'ACEPTADO', 20000.00),
+(DATEADD('DAY', -6, CURRENT_TIMESTAMP), 2, 1, 'Rehabilitación por obra social', 'KINESIOLOGIA', 'ACEPTADO', 18000.00),
+(DATEADD('DAY', -5, CURRENT_TIMESTAMP), 4, 2, 'Atención psicológica por cobertura', 'PSICOLOGIA', 'ACEPTADO', 20000.00),
 
 -- Servicios de otras especialidades
-(CURRENT_TIMESTAMP - INTERVAL '3' DAY, 1, 1, 'Consulta fonoaudiológica', 'FONOAUDIOLOGIA', 'ACEPTADO', 17000.00),
-(CURRENT_TIMESTAMP - INTERVAL '2' DAY, 2, 2, 'Terapia ocupacional', 'TERAPIA_OCUPACIONAL', 'ACEPTADO', 19000.00),
-(CURRENT_TIMESTAMP - INTERVAL '1' DAY, 3, 1, 'Asistencia terapéutica', 'ASISTENTE_TERAPEUTICO', 'ACEPTADO', 15000.00),
+(DATEADD('DAY', -3, CURRENT_TIMESTAMP), 1, 1, 'Consulta fonoaudiológica', 'FONOAUDIOLOGIA', 'ACEPTADO', 17000.00),
+(DATEADD('DAY', -2, CURRENT_TIMESTAMP), 2, 2, 'Terapia ocupacional', 'TERAPIA_OCUPACIONAL', 'ACEPTADO', 19000.00),
+(DATEADD('DAY', -1, CURRENT_TIMESTAMP), 3, 1, 'Asistencia terapéutica', 'ASISTENTE_TERAPEUTICO', 'ACEPTADO', 15000.00),
 (CURRENT_TIMESTAMP, 4, 2, 'Transporte sanitario', 'TRANSPORTE_SANITARIO', 'ACEPTADO', 8000.00);
 
 -- ===========================================
@@ -78,42 +78,42 @@ INSERT INTO services (fecha_solicitud, paciente_id, prestador_id, descripcion, e
 -- ===========================================
 INSERT INTO payments (servicio_id, monto, estado_pago, fecha_creacion, fecha_pago, id_transaccion, metodo_pago_id, mensaje_error) VALUES
 -- 1. PAGO CON MERCADO_PAGO (Pendiente - para crear preferencia)
-(1, 18000.00, 'PENDIENTE', CURRENT_TIMESTAMP - INTERVAL '2' DAY, NULL, 'MP_PREF_001',
+(1, 18000.00, 'PENDIENTE', DATEADD('DAY', -2, CURRENT_TIMESTAMP), NULL, 'MP_PREF_001',
  (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'MERCADO_PAGO'),
  '{"email_pagador": "maria.gomez@email.com", "nombre_pagador": "María Gómez"}'),
 
 -- 2. PAGO CON MERCADO_PAGO (Pendiente - otro servicio)
-(2, 20000.00, 'PENDIENTE', CURRENT_TIMESTAMP - INTERVAL '1' DAY, NULL, 'MP_PREF_002',
+(2, 20000.00, 'PENDIENTE', DATEADD('DAY', -1, CURRENT_TIMESTAMP), NULL, 'MP_PREF_002',
  (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'MERCADO_PAGO'),
  '{"email_pagador": "carlos.lopez@email.com", "nombre_pagador": "Carlos López"}'),
 
 -- 3. PAGO CON CONTADO (Completado)
-(3, 18000.00, 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '5' DAY, CURRENT_TIMESTAMP - INTERVAL '4' DAY, 'CONT-001',
+(3, 18000.00, 'COMPLETADO', DATEADD('DAY', -5, CURRENT_TIMESTAMP), DATEADD('DAY', -4, CURRENT_TIMESTAMP), 'CONT-001',
  (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'CONTADO'),
  'Pago en efectivo al momento de la consulta'),
 
 -- 4. PAGO CON CONTADO (Completado)
-(4, 20000.00, 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '4' DAY, CURRENT_TIMESTAMP - INTERVAL '3' DAY, 'CONT-002',
+(4, 20000.00, 'COMPLETADO', DATEADD('DAY', -4, CURRENT_TIMESTAMP), DATEADD('DAY', -3, CURRENT_TIMESTAMP), 'CONT-002',
  (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'CONTADO'),
  'Pago en efectivo'),
 
 -- 5. PAGO CON TRANSFERENCIA_BANCARIA (Completado)
-(5, 20000.00, 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '3' DAY, CURRENT_TIMESTAMP - INTERVAL '2' DAY, 'TRANS-001',
+(5, 20000.00, 'COMPLETADO', DATEADD('DAY', -3, CURRENT_TIMESTAMP), DATEADD('DAY', -2, CURRENT_TIMESTAMP), 'TRANS-001',
  (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'TRANSFERENCIA_BANCARIA'),
  'Transferencia bancaria confirmada - CBU: 0720123456789012345678'),
 
 -- 6. PAGO CON TRANSFERENCIA_BANCARIA (Pendiente)
-(6, 18000.00, 'PENDIENTE', CURRENT_TIMESTAMP - INTERVAL '2' DAY, NULL, 'TRANS-002',
+(6, 18000.00, 'PENDIENTE', DATEADD('DAY', -2, CURRENT_TIMESTAMP), NULL, 'TRANS-002',
  (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'TRANSFERENCIA_BANCARIA'),
  'Esperando confirmación de transferencia'),
 
 -- 7. PAGO CON OBRA_SOCIAL (Completado - cobertura total)
-(7, 0.00, 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '6' DAY, CURRENT_TIMESTAMP - INTERVAL '5' DAY, 'OS-001',
+(7, 0.00, 'COMPLETADO', DATEADD('DAY', -6, CURRENT_TIMESTAMP), DATEADD('DAY', -5, CURRENT_TIMESTAMP), 'OS-001',
  (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'OBRA_SOCIAL'),
  'Cobertura 100% por obra social - N° autorización: OSDE-20241204-001'),
 
 -- 8. PAGO CON OBRA_SOCIAL (Completado - con copago)
-(8, 5000.00, 'COMPLETADO', CURRENT_TIMESTAMP - INTERVAL '5' DAY, CURRENT_TIMESTAMP - INTERVAL '4' DAY, 'OS-002',
+(8, 5000.00, 'COMPLETADO', DATEADD('DAY', -5, CURRENT_TIMESTAMP), DATEADD('DAY', -4, CURRENT_TIMESTAMP), 'OS-002',
  (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'OBRA_SOCIAL'),
  'Cobertura parcial - Copago paciente: $5000 - Autorización: OMINT-20241204-002');
 
@@ -146,3 +146,95 @@ SET monto = (
        OR sp.nombre = s.especialidad
 )
 WHERE s.monto IS NULL OR s.monto = 0;
+
+
+-- ===========================================
+-- Añadir datos de servicios distribuidos en los últimos 6 meses (varios estados)
+-- ===========================================
+INSERT INTO services (fecha_solicitud, paciente_id, prestador_id, descripcion, especialidad, estado, monto) VALUES
+                                                                                                                (DATEADD('MONTH', -1, CURRENT_TIMESTAMP), 1, 1, 'Seguimiento mensual - kinesiología', 'KINESIOLOGIA', 'ACEPTO', 18000.00),
+                                                                                                                (DATEADD('MONTH', -2, CURRENT_TIMESTAMP), 2, 2, 'Consulta psicológica - seguimiento', 'PSICOLOGIA', 'ACEPTO', 20000.00),
+                                                                                                                (DATEADD('MONTH', -3, CURRENT_TIMESTAMP), 3, 1, 'Sesión fonoaudiología', 'FONOAUDIOLOGIA', 'RECHAZADO', 17000.00),
+                                                                                                                (DATEADD('MONTH', -4, CURRENT_TIMESTAMP), 4, 2, 'Terapia ocupacional', 'TERAPIA_OCUPACIONAL', 'PAGO_PENDIENTE', 19000.00),
+                                                                                                                (DATEADD('MONTH', -5, CURRENT_TIMESTAMP), 1, 1, 'Rehabilitación intensiva', 'KINESIOLOGIA', 'ACEPTO', 18000.00),
+                                                                                                                (DATEADD('MONTH', -6, CURRENT_TIMESTAMP), 2, 2, 'Atención por obra social', 'TRANSPORTE_SANITARIO', 'ACEPTO', 8000.00);
+
+-- ===========================================
+-- Añadir pagos asociados a esos servicios (métodos variados)
+-- ===========================================
+INSERT INTO payments (servicio_id, monto, estado_pago, fecha_creacion, fecha_pago, id_transaccion, metodo_pago_id, mensaje_error) VALUES
+                                                                                                                                      ((SELECT id FROM services WHERE descripcion = 'Seguimiento mensual - kinesiología' LIMIT 1), 18000.00, 'COMPLETADO',
+    DATEADD('MONTH', -1, CURRENT_TIMESTAMP), DATEADD('HOUR', 1, DATEADD('MONTH', -1, CURRENT_TIMESTAMP)),
+    'TXN_CONT_1001', (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'CONTADO'), 'Pago contado'),
+
+                                                                                                                                      ((SELECT id FROM services WHERE descripcion = 'Consulta psicológica - seguimiento' LIMIT 1), 20000.00, 'COMPLETADO',
+                                                                                                                                       DATEADD('MONTH', -2, CURRENT_TIMESTAMP), DATEADD('HOUR', 2, DATEADD('MONTH', -2, CURRENT_TIMESTAMP)),
+                                                                                                                                       'MP_PREF_1002', (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'MERCADO_PAGO'), '{"email_pagador":"carlos.lopez@email.com"}'),
+
+                                                                                                                                      ((SELECT id FROM services WHERE descripcion = 'Sesión fonoaudiología' LIMIT 1), 17000.00, 'FALLIDO',
+                                                                                                                                       DATEADD('MONTH', -3, CURRENT_TIMESTAMP), NULL,
+                                                                                                                                       'TXN_FAIL_1003', (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'MERCADO_PAGO'), 'Error en gateway'),
+
+                                                                                                                                      ((SELECT id FROM services WHERE descripcion = 'Terapia ocupacional' LIMIT 1), 19000.00, 'PENDIENTE',
+                                                                                                                                       DATEADD('MONTH', -4, CURRENT_TIMESTAMP), NULL,
+                                                                                                                                       'TRANS_1004', (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'TRANSFERENCIA_BANCARIA'), 'Esperando acreditación'),
+
+                                                                                                                                      ((SELECT id FROM services WHERE descripcion = 'Rehabilitación intensiva' LIMIT 1), 18000.00, 'COMPLETADO',
+                                                                                                                                       DATEADD('MONTH', -5, CURRENT_TIMESTAMP), DATEADD('HOUR', 1, DATEADD('MONTH', -5, CURRENT_TIMESTAMP)),
+                                                                                                                                       'OS_1005', (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'OBRA_SOCIAL'), 'Cobertura total');
+
+-- ===========================================
+-- Consultas útiles para los gráficos del admin
+-- ===========================================
+
+-- 1) Conteo de servicios por estado (barras/pie)
+SELECT s.estado, COUNT(*) AS cantidad
+FROM services s
+GROUP BY s.estado
+ORDER BY cantidad DESC;
+
+-- 2) Totales y cantidad de pagos por método de pago (barra)
+SELECT mp.metodo_pago, COALESCE(SUM(p.monto),0) AS total_monto, COUNT(p.id) AS cantidad_pagos
+FROM metodos_pagos mp
+         LEFT JOIN payments p ON p.metodo_pago_id = mp.metodo_pago_id
+GROUP BY mp.metodo_pago
+ORDER BY total_monto DESC;
+
+-- 3) Tendencia mensual de pagos (últimos 6 meses) - (línea)
+-- Para H2, usamos EXTRACT y FORMATDATETIME
+SELECT FORMATDATETIME(COALESCE(p.fecha_pago, p.fecha_creacion), 'yyyy-MM') AS mes,
+       COALESCE(SUM(p.monto),0) AS total_mes,
+       COUNT(p.id) AS cantidad_pagos
+FROM payments p
+WHERE COALESCE(p.fecha_pago, p.fecha_creacion) >= DATEADD('MONTH', -6, CURRENT_DATE)
+GROUP BY FORMATDATETIME(COALESCE(p.fecha_pago, p.fecha_creacion), 'yyyy-MM')
+ORDER BY mes;
+
+-- 4) Servicios por especialidad (pie/bar)
+SELECT s.especialidad, COUNT(*) AS cantidad_servicios
+FROM services s
+GROUP BY s.especialidad
+ORDER BY cantidad_servicios DESC;
+
+-- 5) Proveedores activos por especialidad (barra)
+SELECT sp.nombre AS especialidad, COUNT(pv.id) AS cantidad_prestadores
+FROM providers pv
+         JOIN specialties sp ON pv.codigo_especialidad = sp.id
+WHERE pv.activo = true
+GROUP BY sp.nombre
+ORDER BY cantidad_prestadores DESC;
+
+-- 6) Usuarios nuevos por rol en los últimos 6 meses (stacked-bar por mes)
+SELECT u.rol, FORMATDATETIME(u.fecha_creacion, 'yyyy-MM') AS mes, COUNT(*) AS cantidad
+FROM usuarios u
+WHERE u.fecha_creacion >= DATEADD('MONTH', -6, CURRENT_DATE)
+GROUP BY u.rol, FORMATDATETIME(u.fecha_creacion, 'yyyy-MM')
+ORDER BY mes, u.rol;
+
+-- 7) Tasa de conversión: servicios con pago completado / total servicios (últimos 6 meses)
+SELECT
+    SUM(CASE WHEN p.estado_pago = 'COMPLETADO' THEN 1 ELSE 0 END) * 1.0 /
+    NULLIF(COUNT(DISTINCT s.id),0) AS tasa_conversion
+FROM services s
+         LEFT JOIN payments p ON p.servicio_id = s.id
+WHERE s.fecha_solicitud >= DATEADD('MONTH', -6, CURRENT_DATE);

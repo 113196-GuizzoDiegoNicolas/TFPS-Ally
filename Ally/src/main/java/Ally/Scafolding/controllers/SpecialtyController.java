@@ -1,8 +1,10 @@
 package Ally.Scafolding.controllers;
 
+import Ally.Scafolding.dtos.common.admin.PagosEspecialidadDTO;
 import Ally.Scafolding.dtos.common.login.UserCreateDTO;
 import Ally.Scafolding.dtos.common.login.UserDTO;
 import Ally.Scafolding.dtos.common.specialty.SpecialtyDTO;
+import Ally.Scafolding.services.AdminService;
 import Ally.Scafolding.services.SpecialtyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +24,16 @@ public class SpecialtyController {
 
     @Autowired
     private SpecialtyService specialtyService;
+    @Autowired
+    private AdminService adminService;
 
     @GetMapping
     public List<SpecialtyDTO> getAllUsers() {
         return specialtyService.findAll();
     }
-
+    @GetMapping("/pagos-por-especialidad")
+    public ResponseEntity<List<PagosEspecialidadDTO>> pagosPorEspecialidad() {
+        return ResponseEntity.ok(adminService.getPagosPorEspecialidad());
+    }
 
 }
