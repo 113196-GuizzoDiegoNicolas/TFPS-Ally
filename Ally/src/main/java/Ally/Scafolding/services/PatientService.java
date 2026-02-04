@@ -62,5 +62,8 @@ public interface PatientService {
     Patient getPatientByUsuarioId(Long usuarioId);
     // NUEVO-MÉTODO
     Patient updatePatientPartial(UpdatePatientDTO dto);
-
+    /**
+     * Devuelve la cantidad total de pacientes registrados.
+     */
+    long countPatients();
 }

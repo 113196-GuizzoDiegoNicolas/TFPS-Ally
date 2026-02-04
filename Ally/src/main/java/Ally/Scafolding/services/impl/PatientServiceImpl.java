@@ -139,4 +139,8 @@ public class PatientServiceImpl implements PatientService {
 
         return modelMapper.map(actualizado, Patient.class);
     }
+    @Override
+    public long countPatients() {
+        return patientsRepository.count();
+    }
 }

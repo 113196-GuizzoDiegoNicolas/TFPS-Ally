@@ -57,7 +57,15 @@ public class PatientController {
         Patient actualizado = patientService.updatePatientPartial(dto);
         return ResponseEntity.ok(actualizado);
     }
-
+    /**
+     * Endpoint para obtener la cantidad total de pacientes.
+     * Ejemplo: GET /api/patients/count
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countPatients() {
+        long total = patientService.countPatients();
+        return ResponseEntity.ok(total);
+    }
 }
 
 
