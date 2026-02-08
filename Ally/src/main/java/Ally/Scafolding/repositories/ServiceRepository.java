@@ -84,4 +84,34 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
     @Query("UPDATE ServiceEntity s SET s.estado = :estado WHERE s.id = :id")
     void updateEstadoServicio(@Param("id") Long id, @Param("estado") String estado);
 
+
+
+
+
+    @Query("""
+SELECT s.estado, COUNT(s)
+FROM ServiceEntity s
+WHERE s.pacienteId = :pacienteId
+  AND s.fechaSolicitud >= :desde
+GROUP BY s.estado
+""")
+    List<Object[]> countByEstadoPacienteDesde(@Param("pacienteId") Long pacienteId,
+                                              @Param("desde") LocalDateTime desde);
+
+
+
+
+
+    @Query("""
+SELECT s.especialidad, COUNT(s)
+FROM ServiceEntity s
+WHERE s.pacienteId = :pacienteId
+  AND s.fechaSolicitud >= :desde
+GROUP BY s.especialidad
+ORDER BY COUNT(s) DESC
+""")
+    List<Object[]> countByEspecialidadPacienteDesde(@Param("pacienteId") Long pacienteId,
+                                                    @Param("desde") LocalDateTime desde);
+
+
 }
