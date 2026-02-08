@@ -1,14 +1,12 @@
 package Ally.Scafolding.controllers;
 
-import Ally.Scafolding.dtos.common.provider.ProviderCreateDTO;
+import Ally.Scafolding.dtos.common.provider.ProviderReportsDTO;
 import Ally.Scafolding.dtos.common.provider.ProviderDTO;
 import Ally.Scafolding.models.Provider;
 import Ally.Scafolding.services.ProviderService;
-import Ally.Scafolding.services.ProviderService;
+import Ally.Scafolding.services.payment.ProviderReportsService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,19 +14,19 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Controller for medical provider management operations.
- * <p>
- *     Handles CRUD operations for medical provider entities.
- * </p>
- */
 @RestController
 @RequestMapping("/api/prestadores")
 @CrossOrigin(origins = "*")
 public class ProviderController {
 
-    @Autowired
-    private ProviderService providerService;
+    private final ProviderService providerService;
+    private final ProviderReportsService providerReportsService;
+
+    public ProviderController(ProviderService providerService,
+                              ProviderReportsService providerReportsService) {
+        this.providerService = providerService;
+        this.providerReportsService = providerReportsService;
+    }
 
     @GetMapping
     public List<ProviderDTO> getAllPrestadores() {
@@ -51,9 +49,10 @@ public class ProviderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProviderDTO> updatePrestador(@PathVariable Long id, @RequestBody ProviderDTO ProviderDTO) {
+    public ResponseEntity<ProviderDTO> updatePrestador(@PathVariable Long id,
+                                                       @RequestBody ProviderDTO providerDTO) {
         try {
-            ProviderDTO updated = providerService.update(id, ProviderDTO);
+            ProviderDTO updated = providerService.update(id, providerDTO);
             return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -67,7 +66,8 @@ public class ProviderController {
     }
 
     @PatchMapping("/{id}/activation")
-    public ResponseEntity<ProviderDTO> changeActivation(@PathVariable Long id, @RequestParam Boolean activo) {
+    public ResponseEntity<ProviderDTO> changeActivation(@PathVariable Long id,
+                                                        @RequestParam Boolean activo) {
         ProviderDTO updated = providerService.changeActivation(id, activo);
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
@@ -97,5 +97,13 @@ public class ProviderController {
     public ResponseEntity<ProviderDTO> getPrestadorByUsuarioId(@PathVariable Long usuarioId) {
         ProviderDTO prestador = providerService.findByUsuarioId(usuarioId);
         return prestador != null ? ResponseEntity.ok(prestador) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{prestadorId}/reportes")
+    public ResponseEntity<ProviderReportsDTO> reportesPrestador(
+            @PathVariable Long prestadorId,
+            @RequestParam(defaultValue = "6M") String periodo
+    ) {
+        return ResponseEntity.ok(providerReportsService.getReports(prestadorId, periodo));
     }
 }

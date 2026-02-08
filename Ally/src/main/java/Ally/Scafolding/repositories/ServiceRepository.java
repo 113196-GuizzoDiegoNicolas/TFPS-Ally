@@ -113,5 +113,35 @@ ORDER BY COUNT(s) DESC
     List<Object[]> countByEspecialidadPacienteDesde(@Param("pacienteId") Long pacienteId,
                                                     @Param("desde") LocalDateTime desde);
 
+    @Query("""
+SELECT COUNT(s)
+FROM ServiceEntity s
+WHERE s.prestadorId = :prestadorId
+  AND (:desde IS NULL OR s.fechaSolicitud >= :desde)
+""")
+    long countByPrestadorDesde(@Param("prestadorId") Long prestadorId,
+                               @Param("desde") LocalDateTime desde);
 
+    @Query("""
+SELECT COUNT(s)
+FROM ServiceEntity s
+WHERE s.prestadorId = :prestadorId
+  AND s.estado = :estado
+  AND (:desde IS NULL OR s.fechaSolicitud >= :desde)
+""")
+    long countByPrestadorAndEstadoDesde(@Param("prestadorId") Long prestadorId,
+                                        @Param("estado") String estado,
+                                        @Param("desde") LocalDateTime desde);
+
+    @Query("""
+SELECT s.especialidad, COUNT(s)
+FROM ServiceEntity s
+WHERE s.prestadorId = :prestadorId
+  AND s.estado = 'ACEPTADO'
+  AND (:desde IS NULL OR s.fechaSolicitud >= :desde)
+GROUP BY s.especialidad
+ORDER BY COUNT(s) DESC
+""")
+    List<Object[]> countAceptadosPorEspecialidadPrestador(@Param("prestadorId") Long prestadorId,
+                                                          @Param("desde") LocalDateTime desde);
 }
