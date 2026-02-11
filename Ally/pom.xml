@@ -58,18 +58,23 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- Bases de datos -->
+		<!-- Bases de datos
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
-		</dependency>
+		</dependency>-->
 		<!--	<dependency>
                 <groupId>com.mysql</groupId>
                 <artifactId>mysql-connector-j</artifactId>
                 <scope>runtime</scope>
             </dependency>-->
-
+        <!-- Agregar esta dependencia: -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
