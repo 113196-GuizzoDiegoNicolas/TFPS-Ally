@@ -3,9 +3,10 @@ package Ally.Scafolding.controllers;
 import Ally.Scafolding.dtos.common.login.ForgotPasswordRequest;
 import Ally.Scafolding.dtos.common.login.ResetPasswordRequest;
 import Ally.Scafolding.services.impl.PasswordResetService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,11 +21,15 @@ public class PasswordResetController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<Void> forgotPassword(@RequestBody ForgotPasswordRequest req) {
-        passwordResetService.forgotPassword(req.getEmail());
+        if (req.getEmail() == null || req.getEmail().isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        service.forgotPassword(req.getEmail().trim());
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest req) {
+    public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordRequest req) {
         service.resetPassword(req.token(), req.newPassword());
         return ResponseEntity.ok().build();
     }
