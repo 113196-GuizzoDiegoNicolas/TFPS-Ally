@@ -1,0 +1,7 @@
+@startuml
+
+actor actor
+actor -> ContactController: getContacts()
+actor <- ContactController: (200) List<ContactDTO>
+
+@enduml

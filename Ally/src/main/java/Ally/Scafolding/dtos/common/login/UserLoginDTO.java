@@ -1,0 +1,23 @@
+package Ally.Scafolding.dtos.common.login;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+/**
+ * Represents user login credentials.
+ * <p>
+ *     This DTO is used for user authentication requests.
+ * </p>
+ */
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class UserLoginDTO {
+
+
+    /**
+     * Username for system access.
+     */
+    private String email;
+    private String password;
+
+}
