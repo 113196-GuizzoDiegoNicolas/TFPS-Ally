@@ -47,4 +47,5 @@ public interface UsersRepository extends JpaRepository<UsersEntity, Long>,
     List<UsersEntity> findByRolAndActivoTrue(String rol);
 
     long countByRol(String rol); // <-- Agregado
+    Optional<UsersEntity> findByEmailIgnoreCase(String email);
 }
