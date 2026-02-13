@@ -6,17 +6,16 @@ services:
     container_name: ally_postgres
     environment:
       POSTGRES_DB: allydb
-      POSTGRES_USER: ally_user
-      POSTGRES_PASSWORD: ally_password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - ally_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ally_user -d allydb"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -31,20 +30,14 @@ services:
         condition: service_healthy
     environment:
       DB_URL: jdbc:postgresql://postgres:5432/allydb
-      DB_USERNAME: ally_user
-      DB_PASSWORD: ally_password
-      JPA_DDL_AUTO: create-drop
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      JPA_DDL_AUTO: create
       SERVER_PORT: 8080
-      MP_ACCESS_TOKEN: ${MP_ACCESS_TOKEN:-TEST-12345678901234567890123456789012}
-      MP_PUBLIC_KEY: ${MP_PUBLIC_KEY:-TEST-abcdefgh-ijkl-mnop-qrst-uvwxyz123456}
-      MP_WEBHOOK_SECRET: ${MP_WEBHOOK_SECRET:-your_webhook_secret_change_in_production}
-      TZ: America/Argentina/Buenos_Aires
     ports:
       - "8080:8080"
     networks:
       - ally_network
-    volumes:
-      - ./logs:/app/logs
 
 networks:
   ally_network:
@@ -52,4 +45,3 @@ networks:
 
 volumes:
   postgres_data:
-    driver: local

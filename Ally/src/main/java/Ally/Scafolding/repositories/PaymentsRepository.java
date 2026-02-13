@@ -18,69 +18,88 @@ public interface PaymentsRepository extends JpaRepository<PaymentsEntity, Long> 
     // Encontrar pagos por servicio
     List<PaymentsEntity> findByServicioId(Long servicioId);
 
-    // Encontrar pagos por estado - CORREGIDO: usar el nombre correcto del campo
+    // Encontrar pagos por estado
     List<PaymentsEntity> findByEstadoPago(PagoEstado estadoPago);
 
     // Encontrar pagos por paciente (a través del servicio)
     @Query("SELECT p FROM PaymentsEntity p WHERE p.servicio.pacienteId = :pacienteId")
     List<PaymentsEntity> findByPacienteId(@Param("pacienteId") Long pacienteId);
 
-    // Encontrar pagos aceptados por paciente - CORREGIDO: usar estadoPago
+    // Encontrar pagos aceptados por paciente
     @Query("SELECT p FROM PaymentsEntity p WHERE p.servicio.pacienteId = :pacienteId AND p.estadoPago = 'COMPLETADO'")
     List<PaymentsEntity> findPagosAceptadosByPacienteId(@Param("pacienteId") Long pacienteId);
 
     // Encontrar pago por ID de transacción
     Optional<PaymentsEntity> findByIdTransaccion(String idTransaccion);
+
     List<PaymentsEntity> findAll();
+
+    // ============================================
+    // MÉTODOS CORREGIDOS PARA POSTGRESQL
+    // ============================================
+
+    /**
+     * CORREGIDO: Reemplazado FORMATDATETIME por TO_CHAR de PostgreSQL
+     * CORREGIDO: Eliminado el problema de IS NULL (este método siempre recibe fecha)
+     */
     @Query(value = """
-SELECT FORMATDATETIME(COALESCE(p.fecha_pago, p.fecha_creacion), 'yyyy-MM') AS mes,
-       COALESCE(SUM(p.monto),0) AS total
-FROM payments p
-JOIN services s ON s.id = p.servicio_id
-WHERE s.paciente_id = :pacienteId
-  AND COALESCE(p.fecha_pago, p.fecha_creacion) >= :desde
-  AND p.estado_pago = 'COMPLETADO'
-GROUP BY FORMATDATETIME(COALESCE(p.fecha_pago, p.fecha_creacion), 'yyyy-MM')
-ORDER BY mes
-""", nativeQuery = true)
+        SELECT TO_CHAR(COALESCE(p.fecha_pago, p.fecha_creacion), 'YYYY-MM') AS mes,
+               COALESCE(SUM(p.monto), 0) AS total
+        FROM payments p
+        JOIN services s ON s.id = p.servicio_id
+        WHERE s.paciente_id = :pacienteId
+          AND COALESCE(p.fecha_pago, p.fecha_creacion) >= CAST(:desde AS timestamptz)
+          AND p.estado_pago = 'COMPLETADO'
+        GROUP BY TO_CHAR(COALESCE(p.fecha_pago, p.fecha_creacion), 'YYYY-MM')
+        ORDER BY mes
+        """, nativeQuery = true)
     List<Object[]> pagosPorMesPaciente(@Param("pacienteId") Long pacienteId,
                                        @Param("desde") LocalDateTime desde);
 
-
+    /**
+     * CORREGIDO: CAST explícito para el parámetro de fecha
+     */
     @Query(value = """
-SELECT COALESCE(SUM(p.monto),0)
-FROM payments p
-JOIN services s ON s.id = p.servicio_id
-WHERE s.paciente_id = :pacienteId
-  AND COALESCE(p.fecha_pago, p.fecha_creacion) >= :desde
-  AND p.estado_pago = 'COMPLETADO'
-""", nativeQuery = true)
+        SELECT COALESCE(SUM(p.monto), 0)
+        FROM payments p
+        JOIN services s ON s.id = p.servicio_id
+        WHERE s.paciente_id = :pacienteId
+          AND COALESCE(p.fecha_pago, p.fecha_creacion) >= CAST(:desde AS timestamptz)
+          AND p.estado_pago = 'COMPLETADO'
+        """, nativeQuery = true)
     BigDecimal totalPagadoDesde(@Param("pacienteId") Long pacienteId,
                                 @Param("desde") LocalDateTime desde);
 
+    /**
+     * CORREGIDO: Para métodos que pueden recibir NULL, usamos CASE WHEN en SQL
+     */
     @Query(value = """
-SELECT FORMATDATETIME(COALESCE(p.fecha_pago, p.fecha_creacion), 'yyyy-MM') AS mes,
-       COALESCE(SUM(p.monto),0) AS total
-FROM payments p
-JOIN services s ON s.id = p.servicio_id
-WHERE s.prestador_id = :prestadorId
-  AND (:desde IS NULL OR COALESCE(p.fecha_pago, p.fecha_creacion) >= :desde)
-  AND p.estado_pago = 'COMPLETADO'
-GROUP BY FORMATDATETIME(COALESCE(p.fecha_pago, p.fecha_creacion), 'yyyy-MM')
-ORDER BY mes
-""", nativeQuery = true)
+        SELECT TO_CHAR(COALESCE(p.fecha_pago, p.fecha_creacion), 'YYYY-MM') AS mes,
+               COALESCE(SUM(p.monto), 0) AS total
+        FROM payments p
+        JOIN services s ON s.id = p.servicio_id
+        WHERE s.prestador_id = :prestadorId
+          AND (CAST(:desde AS timestamptz) IS NULL 
+               OR COALESCE(p.fecha_pago, p.fecha_creacion) >= CAST(:desde AS timestamptz))
+          AND p.estado_pago = 'COMPLETADO'
+        GROUP BY TO_CHAR(COALESCE(p.fecha_pago, p.fecha_creacion), 'YYYY-MM')
+        ORDER BY mes
+        """, nativeQuery = true)
     List<Object[]> ingresosPorMesPrestador(@Param("prestadorId") Long prestadorId,
                                            @Param("desde") LocalDateTime desde);
 
+    /**
+     * CORREGIDO: CAST explícito para el parámetro de fecha
+     */
     @Query(value = """
-SELECT COALESCE(SUM(p.monto),0)
-FROM payments p
-JOIN services s ON s.id = p.servicio_id
-WHERE s.prestador_id = :prestadorId
-  AND (:desde IS NULL OR COALESCE(p.fecha_pago, p.fecha_creacion) >= :desde)
-  AND p.estado_pago = 'COMPLETADO'
-""", nativeQuery = true)
+        SELECT COALESCE(SUM(p.monto), 0)
+        FROM payments p
+        JOIN services s ON s.id = p.servicio_id
+        WHERE s.prestador_id = :prestadorId
+          AND (CAST(:desde AS timestamptz) IS NULL 
+               OR COALESCE(p.fecha_pago, p.fecha_creacion) >= CAST(:desde AS timestamptz))
+          AND p.estado_pago = 'COMPLETADO'
+        """, nativeQuery = true)
     BigDecimal totalIngresosPrestadorDesde(@Param("prestadorId") Long prestadorId,
                                            @Param("desde") LocalDateTime desde);
-
 }

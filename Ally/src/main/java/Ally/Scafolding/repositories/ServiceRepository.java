@@ -117,7 +117,7 @@ ORDER BY COUNT(s) DESC
 SELECT COUNT(s)
 FROM ServiceEntity s
 WHERE s.prestadorId = :prestadorId
-  AND (:desde IS NULL OR s.fechaSolicitud >= :desde)
+  AND (cast(:desde as date) IS NULL OR s.fechaSolicitud >= :desde)
 """)
     long countByPrestadorDesde(@Param("prestadorId") Long prestadorId,
                                @Param("desde") LocalDateTime desde);
@@ -127,7 +127,7 @@ SELECT COUNT(s)
 FROM ServiceEntity s
 WHERE s.prestadorId = :prestadorId
   AND s.estado = :estado
-  AND (:desde IS NULL OR s.fechaSolicitud >= :desde)
+  AND (cast(:desde as date) IS NULL OR s.fechaSolicitud >= :desde)
 """)
     long countByPrestadorAndEstadoDesde(@Param("prestadorId") Long prestadorId,
                                         @Param("estado") String estado,
@@ -138,7 +138,7 @@ SELECT s.especialidad, COUNT(s)
 FROM ServiceEntity s
 WHERE s.prestadorId = :prestadorId
   AND s.estado = 'ACEPTADO'
-  AND (:desde IS NULL OR s.fechaSolicitud >= :desde)
+  AND (cast(:desde as date) IS NULL OR s.fechaSolicitud >= :desde)
 GROUP BY s.especialidad
 ORDER BY COUNT(s) DESC
 """)
