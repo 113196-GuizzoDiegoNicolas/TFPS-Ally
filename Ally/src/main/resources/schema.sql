@@ -92,3 +92,24 @@ INSERT INTO payments (servicio_id, monto, estado_pago, fecha_creacion, fecha_pag
                                                                                                                                        (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'CONTADO'), NULL),
                                                                                                                                       (4, 20000.00, 'COMPLETADO', CURRENT_DATE - 4, CURRENT_DATE - 3, 'CONT-002',
                                                                                                                                        (SELECT metodo_pago_id FROM metodos_pagos WHERE metodo_pago = 'CONTADO'), NULL);
+-- ===========================================
+-- UBICACIÓN DE PACIENTES (GEO)
+-- ===========================================
+CREATE TABLE IF NOT EXISTS patient_locations (
+                                                 id BIGSERIAL PRIMARY KEY,
+                                                 paciente_id BIGINT NOT NULL,
+                                                 lat DOUBLE PRECISION NOT NULL,
+                                                 lng DOUBLE PRECISION NOT NULL,
+                                                 address_text VARCHAR(255),
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_patient_locations_paciente
+    FOREIGN KEY (paciente_id) REFERENCES patients(id)
+    ON DELETE CASCADE
+    );
+
+CREATE INDEX IF NOT EXISTS idx_patient_locations_paciente_id
+    ON patient_locations(paciente_id);
+
+CREATE INDEX IF NOT EXISTS idx_patient_locations_updated_at
+    ON patient_locations(updated_at);

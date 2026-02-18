@@ -251,3 +251,11 @@ IF seq_name IS NOT NULL THEN
         EXECUTE 'SELECT setval(''' || seq_name || ''', (SELECT COALESCE(MAX(metodo_pago_id), 1) FROM metodos_pagos))';
 END IF;
 END $$;
+-- ===========================================
+-- UBICACIONES DE PACIENTES (DEMO)
+-- ===========================================
+INSERT INTO patient_locations (paciente_id, lat, lng, address_text, updated_at) VALUES
+                                                                                    (1, -31.4167, -64.1833, 'Centro, Córdoba', CURRENT_TIMESTAMP),
+                                                                                    (2, -31.3789, -64.2331, 'Cerro de las Rosas, Córdoba', CURRENT_TIMESTAMP),
+                                                                                    (3, -31.4201, -64.1888, 'Nueva Córdoba, Córdoba', CURRENT_TIMESTAMP),
+                                                                                    (4, -31.4040, -64.1750, 'General Paz, Córdoba', CURRENT_TIMESTAMP);
