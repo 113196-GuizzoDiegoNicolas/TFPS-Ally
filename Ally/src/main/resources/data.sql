@@ -1,4 +1,24 @@
 -- ===========================================
+-- LIMPIAR DATOS EXISTENTES (AGREGADO PARA EVITAR ERRORES)
+-- ===========================================
+DELETE FROM payments;
+DELETE FROM services;
+DELETE FROM providers;
+DELETE FROM patients;
+DELETE FROM usuarios;
+DELETE FROM metodos_pagos;
+DELETE FROM specialties;
+
+-- Reiniciar secuencias (para H2)
+ALTER TABLE specialties ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE metodos_pagos ALTER COLUMN metodo_pago_id RESTART WITH 1;
+ALTER TABLE usuarios ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE patients ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE providers ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE services ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE payments ALTER COLUMN id RESTART WITH 1;
+
+-- ===========================================
 -- ESPECIALIDADES CON PRECIOS
 -- ===========================================
 INSERT INTO specialties (codigo, nombre, importe_consulta) VALUES
@@ -388,40 +408,40 @@ VALUES
      (SELECT id FROM usuarios WHERE usuario='paciente_035'), 'HC-039','OSDE','OSDE-039-10035','Visual'),
 
     ('León','Morales','1979-06-02','Av. O''Higgins 320','3517000036','paciente_036@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_036'), 'HC-040','OMINT','OMI-040-10036','Ninguna'),
-('Zoe','Paredes','1995-01-30','Av. Carcano 77','3517000037','paciente_037@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_037'), 'HC-041','GALENO','GAL-041-10037','Motora'),
-('Julián','Vidal','1986-10-08','Av. Malvinas 430','3517000038','paciente_038@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_038'), 'HC-042','SWISS_MEDICAL','SM-042-10038','Ninguna'),
-('Clara','Roldán','1993-03-12','Bajada Pucará 500','3517000039','paciente_039@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_039'), 'HC-043','OSDE','OSDE-043-10039','Auditiva'),
-('Santiago','Arias','1980-12-20','Av. Perón 950','3517000040','paciente_040@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_040'), 'HC-044','OMINT','OMI-044-10040','Intelectual'),
+     (SELECT id FROM usuarios WHERE usuario='paciente_036'), 'HC-040','OMINT','OMI-040-10036','Ninguna'),
+    ('Zoe','Paredes','1995-01-30','Av. Carcano 77','3517000037','paciente_037@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_037'), 'HC-041','GALENO','GAL-041-10037','Motora'),
+    ('Julián','Vidal','1986-10-08','Av. Malvinas 430','3517000038','paciente_038@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_038'), 'HC-042','SWISS_MEDICAL','SM-042-10038','Ninguna'),
+    ('Clara','Roldán','1993-03-12','Bajada Pucará 500','3517000039','paciente_039@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_039'), 'HC-043','OSDE','OSDE-043-10039','Auditiva'),
+    ('Santiago','Arias','1980-12-20','Av. Perón 950','3517000040','paciente_040@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_040'), 'HC-044','OMINT','OMI-044-10040','Intelectual'),
 
-('Noa','Medina','2001-04-01','Av. Sagrada Familia 120','3517000041','paciente_041@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_041'), 'HC-045','GALENO','GAL-045-10041','Ninguna'),
-('Gael','Benítez','1989-08-27','Mariano Fragueiro 225','3517000042','paciente_042@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_042'), 'HC-046','SWISS_MEDICAL','SM-046-10042','Motora'),
-('Aitana','Ferreyra','1996-06-05','Av. La Voz del Interior 123','3517000043','paciente_043@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_043'), 'HC-047','OSDE','OSDE-047-10043','Ninguna'),
-('Bautista','Vázquez','1975-02-11','Av. Monseñor Pablo Cabrera 800','3517000044','paciente_044@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_044'), 'HC-048','OMINT','OMI-048-10044','Visual'),
-('Malena','Correa','1992-09-29','La Rioja 302','3517000045','paciente_045@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_045'), 'HC-049','GALENO','GAL-049-10045','Auditiva'),
+    ('Noa','Medina','2001-04-01','Av. Sagrada Familia 120','3517000041','paciente_041@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_041'), 'HC-045','GALENO','GAL-045-10041','Ninguna'),
+    ('Gael','Benítez','1989-08-27','Mariano Fragueiro 225','3517000042','paciente_042@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_042'), 'HC-046','SWISS_MEDICAL','SM-046-10042','Motora'),
+    ('Aitana','Ferreyra','1996-06-05','Av. La Voz del Interior 123','3517000043','paciente_043@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_043'), 'HC-047','OSDE','OSDE-047-10043','Ninguna'),
+    ('Bautista','Vázquez','1975-02-11','Av. Monseñor Pablo Cabrera 800','3517000044','paciente_044@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_044'), 'HC-048','OMINT','OMI-048-10044','Visual'),
+    ('Malena','Correa','1992-09-29','La Rioja 302','3517000045','paciente_045@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_045'), 'HC-049','GALENO','GAL-049-10045','Auditiva'),
 
-('Tiago','Santiago','1984-01-07','Av. Santa Fe 555','3517000046','paciente_046@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_046'), 'HC-050','OSDE','OSDE-050-10046','Ninguna'),
-('Florencia','Márquez','1999-12-22','Av. Corrientes 123','3517000047','paciente_047@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_047'), 'HC-051','SWISS_MEDICAL','SM-051-10047','Motora'),
-('Lucas','Guzmán','1978-07-15','Av. Chacabuco 321','3517000048','paciente_048@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_048'), 'HC-052','OMINT','OMI-052-10048','Ninguna'),
-('Jazmín','Martínez','1991-05-09','Av. Estrada 456','3517000049','paciente_049@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_049'), 'HC-053','GALENO','GAL-053-10049','Intelectual'),
-('Alan','Prieto','1987-11-26','Av. Colón 2222','3517000050','paciente_050@email.com',
- (SELECT id FROM usuarios WHERE usuario='paciente_050'), 'HC-054','OSDE','OSDE-054-10050','Visual');
+    ('Tiago','Santiago','1984-01-07','Av. Santa Fe 555','3517000046','paciente_046@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_046'), 'HC-050','OSDE','OSDE-050-10046','Ninguna'),
+    ('Florencia','Márquez','1999-12-22','Av. Corrientes 123','3517000047','paciente_047@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_047'), 'HC-051','SWISS_MEDICAL','SM-051-10047','Motora'),
+    ('Lucas','Guzmán','1978-07-15','Av. Chacabuco 321','3517000048','paciente_048@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_048'), 'HC-052','OMINT','OMI-052-10048','Ninguna'),
+    ('Jazmín','Martínez','1991-05-09','Av. Estrada 456','3517000049','paciente_049@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_049'), 'HC-053','GALENO','GAL-053-10049','Intelectual'),
+    ('Alan','Prieto','1987-11-26','Av. Colón 2222','3517000050','paciente_050@email.com',
+     (SELECT id FROM usuarios WHERE usuario='paciente_050'), 'HC-054','OSDE','OSDE-054-10050','Visual');
 
 
-        -- ==========================================================
+-- ==========================================================
 -- 100 SERVICIOS EXTRA (últimos 6 meses) PARA 50 PACIENTES
 -- + 100 PAGOS ASOCIADOS (métodos variados)
 -- Sin depender de IDs: se relaciona por correo/descripcion
@@ -472,4 +492,3 @@ INSERT INTO services (fecha_solicitud, paciente_id, prestador_id, descripcion, e
 
 (DATEADD('DAY', -58, CURRENT_TIMESTAMP), (SELECT id FROM patients WHERE correo_electronico='paciente_013@email.com'), 2, 'AUTO_SVC_025 - Asistente terapéutico', 'ASISTENTE_TERAPEUTICO', 'RECHAZADO', 15000.00),
 (DATEADD('DAY', -130, CURRENT_TIMESTAMP), (SELECT id FROM patients WHERE correo_electronico='paciente_013@email.com'), 1, 'AUTO_SVC_026 - Transporte sanitario', 'TRANSPORTE_SANITARIO', 'ACEPTADO', 8000.00);
-
