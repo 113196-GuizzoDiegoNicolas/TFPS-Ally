@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -110,13 +111,28 @@ public class TransporterServiceImpl implements TransporterService {
             throw new IllegalArgumentException("User already has a transporter assigned");
         }
 
-        // Use ModelMapper to convert DTO to Entity
-        TransportersEntity entity = modelMapper.map(transporterCreateDTO, TransportersEntity.class);
+
+
+
+        TransportersEntity entity = new TransportersEntity();
+
+        entity.setNombre(transporterCreateDTO.getNombre());
+        entity.setApellido(transporterCreateDTO.getApellido());
+        entity.setDireccion(transporterCreateDTO.getDireccion());
+        entity.setTelefono(transporterCreateDTO.getTelefono());
+        entity.setTelegram(transporterCreateDTO.getTelegram());
+        entity.setCorreoElectronico(transporterCreateDTO.getCorreoElectronico());
+
+     //  parseo seguro
+        entity.setFechaNacimiento(transporterCreateDTO.getFechaNacimiento());
+
+        entity.setZonaCobertura(transporterCreateDTO.getZonaCobertura());
         entity.setActivo(true);
         entity.setUsersEntity(usuarioEntity);
 
         TransportersEntity saved = transportersRepository.saveAndFlush(entity);
         return modelMapper.map(saved, TransporterDTO.class);
+
     }
 
     /**

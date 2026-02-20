@@ -1,10 +1,10 @@
-package Ally.Scafolding.configs;
+package Ally.Scafolding.security; // O cambiá a .security según tu carpeta
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,10 +16,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                //  Desactiva CSRF (necesario para APIs y Swagger)
                 .csrf(csrf -> csrf.disable())
-
-                //  Configura rutas públicas
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/v3/api-docs/**",
@@ -27,17 +24,16 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/api/auth/**",
                                 "/api/users/**",
-                                "/h2-console/**",     //  necesario para abrir H2 Console
+                                "/h2-console/**",
                                 "/patients/**",
-                                "/ping"
+                                "/ping",
+
+                                // ✅ agrego esto
+                                "/api/transportistas/zonas-cobertura"
                         ).permitAll()
-                        .anyRequest().permitAll() // Todo lo demás abierto por ahora
+                        .anyRequest().permitAll() // todo abierto por ahora
                 )
-
-                //  Permite usar la H2 console en frames
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
-
-                // Permite autenticación básica (útil para probar por Postman)
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();

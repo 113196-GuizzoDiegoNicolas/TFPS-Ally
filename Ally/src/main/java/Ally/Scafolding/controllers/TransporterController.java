@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import Ally.Scafolding.models.ZonaCobertura;
+import java.util.Arrays;
 
 import java.util.List;
 
@@ -248,7 +250,10 @@ public class TransporterController {
      */
     @GetMapping("/zonas-cobertura")
     public ResponseEntity<List<String>> getAllZonasCobertura() {
-        List<String> zonas = transporterService.findAllZonasCobertura();
+        List<String> zonas = Arrays.stream(ZonaCobertura.values())
+                .map(Enum::name)
+                .toList();
+
         return ResponseEntity.ok(zonas);
     }
 }
