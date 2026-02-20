@@ -24,7 +24,9 @@ public class ServiceRequestEntity {
     @ManyToOne
     @JoinColumn(name = "prestador_id", nullable = false)
     private ProvidersEntity prestador;
-
+    @ManyToOne
+    @JoinColumn(name = "transportista_id", nullable = true)
+    private TransportersEntity transportista;
     private String especialidad;
     private String descripcion;
     private String tipo;

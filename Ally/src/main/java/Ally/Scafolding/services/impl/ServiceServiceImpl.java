@@ -37,19 +37,56 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public ServiceDTO crear(ServiceCreateDTO dto) {
-        ProvidersEntity providerEntity = repositoryProvider.getById(dto.getPrestadorId());
-        SpecialtyEntity espcialityEntity = providerEntity.getEspecialidad();
-        Optional<PatientsEntity> patientEntity = repositoryPatient.findByUsersEntityId(dto.getPacienteId());
+
+        // 1) Paciente: vos mandás el ID del usuario logueado (userId)
+        PatientsEntity patientEntity = repositoryPatient.findByUsersEntityId(dto.getPacienteId())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Paciente no encontrado para usuarioId: " + dto.getPacienteId()
+                ));
+
+        boolean esPrestador = dto.getPrestadorId() != null;
+        boolean esTransportista = dto.getTransportistaId() != null;
+
+        // 2) Validación mínima
+        if (!esPrestador && !esTransportista) {
+            throw new IllegalArgumentException("Debe enviar prestadorId o transportistaId");
+        }
 
         ServiceEntity entity = new ServiceEntity();
-        entity.setPacienteId(patientEntity.get().getId());
-        entity.setPrestadorId(dto.getPrestadorId());
-        entity.setTransportistaId(dto.getTransportistaId());
+        entity.setPacienteId(patientEntity.getId());
         entity.setEspecialidad(dto.getEspecialidad());
         entity.setDescripcion(dto.getDescripcion());
         entity.setEstado("PENDIENTE");
-        entity.setMonto(espcialityEntity.getImporteConsulta());
         entity.setFechaSolicitud(LocalDateTime.now());
+
+        // 3) PRESTADOR
+        if (esPrestador) {
+            ProvidersEntity providerEntity = repositoryProvider.findById(dto.getPrestadorId())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Prestador no encontrado con id: " + dto.getPrestadorId()
+                    ));
+
+            SpecialtyEntity specialty = providerEntity.getEspecialidad();
+            if (specialty == null) {
+                throw new IllegalArgumentException("El prestador no tiene especialidad asignada");
+            }
+
+            entity.setPrestadorId(dto.getPrestadorId());
+            entity.setTransportistaId(null);
+            entity.setMonto(specialty.getImporteConsulta()); // ✅ monto desde especialidad
+        }
+
+        // 4) TRANSPORTISTA
+        if (esTransportista) {
+            entity.setPrestadorId(null);
+            entity.setTransportistaId(dto.getTransportistaId());
+
+            // Definí el monto como quieras:
+            // - si todavía no manejás monto transporte -> 0
+            // - o si viene desde el front -> dto.getMontoApagar()
+            entity.setMonto(dto.getMontoApagar() != null ? dto.getMontoApagar() : BigDecimal.ZERO);
+        }
+
         ServiceEntity saved = repository.save(entity);
         return mapToDTO(saved);
     }
@@ -95,12 +132,12 @@ public class ServiceServiceImpl implements ServiceService {
                 entity.getId(),
                 entity.getPacienteId(),
                 entity.getPrestadorId(),
+                entity.getTransportistaId(),   // ✅ NUEVO
                 entity.getEspecialidad(),
                 entity.getDescripcion(),
                 entity.getEstado(),
                 entity.getMonto(),
-                entity.getFechaSolicitud().toString() // 👈 Esto genera ISO-8601 válido
-
+                entity.getFechaSolicitud().toString()
         );
     }
 

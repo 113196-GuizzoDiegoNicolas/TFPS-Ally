@@ -14,6 +14,7 @@ public class ServiceDTO {
     private Long id;
     private Long pacienteId;
     private Long prestadorId;
+    private Long transportistaId;
     private String especialidad;
     private String descripcion;
     private String estado;
